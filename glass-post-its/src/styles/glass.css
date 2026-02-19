@@ -243,13 +243,32 @@
   background: radial-gradient(circle at 30% 30%, rgba(120, 255, 160, 0.9), rgba(40, 180, 80, 0.7));
 }
 
+/* ===== TOOLBAR ROW ===== */
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  z-index: 1;
+  -webkit-app-region: no-drag;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-right: 6px;
+  flex-shrink: 0;
+}
+
 /* ===== FORMAT TOOLBAR ===== */
 .format-toolbar {
   display: flex;
   gap: 2px;
   padding: 4px 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   flex-wrap: wrap;
+  flex: 1;
+  border-bottom: none;
   -webkit-app-region: no-drag;
   position: relative;
   z-index: 1;
@@ -282,4 +301,113 @@
   background: rgba(255, 255, 255, 0.08);
   margin: 2px 4px;
   align-self: stretch;
+}
+
+/* ===== SKIN SYSTEM ===== */
+/* Skins use CSS custom properties set via style attribute */
+.glass-surface[style*="--skin-bg"] {
+  color: var(--skin-text, rgba(255, 255, 255, 0.92));
+}
+
+/* Skin overlay - gradient + texture */
+.glass-surface.skin-ice,
+.glass-surface.skin-magma,
+.glass-surface.skin-sun,
+.glass-surface.skin-orange {
+  background: var(--skin-bg) !important;
+  border-color: var(--skin-border) !important;
+}
+
+.glass-surface.skin-ice::before,
+.glass-surface.skin-magma::before,
+.glass-surface.skin-sun::before,
+.glass-surface.skin-orange::before {
+  background: var(--skin-gradient, none);
+  opacity: 1;
+}
+
+/* ===== SKIN PICKER ===== */
+.skin-picker-wrapper {
+  position: relative;
+}
+
+.skin-toggle-btn {
+  width: 26px;
+  height: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  transition: all 0.2s ease;
+}
+
+.skin-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.skin-picker-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 6px;
+  background: rgba(30, 30, 40, 0.92);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 6px;
+  min-width: 180px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+}
+
+.skin-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 7px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.8);
+  transition: background 0.15s ease;
+  text-align: left;
+}
+
+.skin-option:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.skin-option.active {
+  background: rgba(100, 160, 255, 0.15);
+}
+
+.skin-preview {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+.skin-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.skin-name {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.skin-desc {
+  font-size: 10px;
+  opacity: 0.5;
 }

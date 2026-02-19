@@ -3,6 +3,7 @@ export interface PostIt {
   title: string;
   content: string;
   priority: Priority;
+  skin: string;
   pos_x: number;
   pos_y: number;
   width: number;

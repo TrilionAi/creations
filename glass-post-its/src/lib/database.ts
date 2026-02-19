@@ -13,6 +13,7 @@ export async function getDb() {
         title TEXT NOT NULL DEFAULT '',
         content TEXT NOT NULL DEFAULT '',
         priority TEXT NOT NULL DEFAULT 'glass',
+        skin TEXT NOT NULL DEFAULT 'glass',
         pos_x REAL NOT NULL DEFAULT 100.0,
         pos_y REAL NOT NULL DEFAULT 100.0,
         width REAL NOT NULL DEFAULT 320.0,
@@ -22,6 +23,12 @@ export async function getDb() {
         updated_at TEXT NOT NULL
       )
     `);
+    // Migration: add skin column if missing (for existing DBs)
+    try {
+      await db.execute(`ALTER TABLE postits ADD COLUMN skin TEXT NOT NULL DEFAULT 'glass'`);
+    } catch {
+      // Column already exists, ignore
+    }
   }
   return db;
 }
@@ -40,8 +47,8 @@ export async function getPostIt(id: string): Promise<PostIt | null> {
 export async function createPostIt(postit: PostIt): Promise<void> {
   const database = await getDb();
   await database.execute(
-    'INSERT INTO postits (id, title, content, priority, pos_x, pos_y, width, height, is_pinned, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-    [postit.id, postit.title, postit.content, postit.priority, postit.pos_x, postit.pos_y, postit.width, postit.height, postit.is_pinned, postit.created_at, postit.updated_at]
+    'INSERT INTO postits (id, title, content, priority, skin, pos_x, pos_y, width, height, is_pinned, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    [postit.id, postit.title, postit.content, postit.priority, postit.skin || 'glass', postit.pos_x, postit.pos_y, postit.width, postit.height, postit.is_pinned, postit.created_at, postit.updated_at]
   );
 }
 
@@ -50,7 +57,7 @@ export async function updatePostIt(postit: Partial<PostIt> & { id: string }): Pr
   const fields: string[] = [];
   const values: unknown[] = [];
 
-  const updatableFields = ['title', 'content', 'priority', 'pos_x', 'pos_y', 'width', 'height', 'is_pinned'] as const;
+  const updatableFields = ['title', 'content', 'priority', 'skin', 'pos_x', 'pos_y', 'width', 'height', 'is_pinned'] as const;
 
   for (const field of updatableFields) {
     if (postit[field] !== undefined) {
