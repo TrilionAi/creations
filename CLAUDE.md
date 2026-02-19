@@ -27,6 +27,12 @@ Regras:
 - **Testes são feitos no PC pessoal** (Windows 11) baixando os releases do GitHub
 - O VPS não roda apps gráficos — todo teste visual é via release
 
+## Plataformas Alvo
+
+- **Sempre compilar para Windows E macOS** nos GitHub Actions
+- Mesmo que o teste principal seja no Windows, o build para macOS deve estar sempre disponível
+- Os releases devem conter assets para ambas as plataformas (.exe/.msi para Windows, .dmg para macOS)
+
 ## Git Workflow
 
 ### Branches
@@ -55,7 +61,9 @@ git push origin v0.X.0
 ## Regras para Instaladores Desktop
 
 Quando a criação gera um app instalável:
-- **Desinstalação limpa (hard delete)** — sempre configurar para apagar dados locais do usuário ao desinstalar
+- **Desinstalação limpa (hard delete)** — sempre configurar para apagar dados locais do usuário ao desinstalar (AppData, LocalAppData, etc.)
+- O instalador NSIS já mostra a opção de deletar a pasta de dados ao desinstalar por padrão
+- Além disso, usar NSIS hooks (`nsis-hooks.nsh`) para garantir limpeza automática dos dados do WebView2 e config
 - O usuário não deve ter que caçar pastas manualmente para limpar
 
 ## Checklist para Nova Criação
