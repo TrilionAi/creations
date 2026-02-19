@@ -45,35 +45,35 @@
   gap: 4px;
 }
 
-/* Collapse/expand arrow button */
+/* Collapse/expand arrow - only shown when item has children */
 .task-collapse-btn {
   flex-shrink: 0;
-  width: 18px;
-  height: 20px;
+  width: 20px;
+  height: 22px;
   border: none;
   background: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.35);
-  border-radius: 3px;
+  color: rgba(255, 255, 255, 0.55);
+  border-radius: 4px;
   transition: all 0.15s ease;
-  margin-top: 1px;
   padding: 0;
 }
 
 .task-collapse-btn:hover {
-  color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .task-collapse-btn svg {
   transition: transform 0.2s ease;
 }
 
-.task-collapse-spacer {
-  width: 18px;
+/* Spacer when no arrow (normal checkbox item) */
+.task-no-arrow {
+  width: 6px;
   flex-shrink: 0;
 }
 

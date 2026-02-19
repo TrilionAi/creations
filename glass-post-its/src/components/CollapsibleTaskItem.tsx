@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NodeViewWrapper, NodeViewContent, type NodeViewProps } from '@tiptap/react';
 
-export default function CollapsibleTaskItem({ node, updateAttributes, editor }: NodeViewProps) {
+export default function CollapsibleTaskItem({ node, updateAttributes }: NodeViewProps) {
   const [collapsed, setCollapsed] = useState(false);
   const checked = node.attrs.checked;
 
@@ -24,20 +24,22 @@ export default function CollapsibleTaskItem({ node, updateAttributes, editor }: 
   };
 
   return (
-    <NodeViewWrapper as="li" className={`task-item ${checked ? 'is-checked' : ''} ${collapsed ? 'is-collapsed' : ''}`} data-checked={checked}>
+    <NodeViewWrapper as="li" className={`task-item ${checked ? 'is-checked' : ''} ${collapsed ? 'is-collapsed' : ''} ${hasNestedList ? 'has-children' : ''}`} data-checked={checked}>
       <div className="task-item-row">
-        {hasNestedList && (
+        {hasNestedList ? (
           <button
             className={`task-collapse-btn ${collapsed ? 'collapsed' : 'expanded'}`}
             onClick={toggleCollapsed}
             contentEditable={false}
+            title={collapsed ? 'Expandir' : 'Colapsar'}
           >
             <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
               <path d={collapsed ? 'M3 1L8 5L3 9Z' : 'M1 3L5 8L9 3Z'} />
             </svg>
           </button>
+        ) : (
+          <span className="task-no-arrow" />
         )}
-        {!hasNestedList && <span className="task-collapse-spacer" />}
         <label className="task-checkbox-label" contentEditable={false}>
           <input
             type="checkbox"

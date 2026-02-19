@@ -66,6 +66,46 @@ export default function FormatToolbar({ editor }: Props) {
       >
         {'\u2610'}
       </button>
+      <button
+        className="format-btn"
+        onClick={() => {
+          // Insert a collapsible group: parent task with nested child tasks
+          editor.chain().focus().toggleTaskList().run();
+          // After creating the task list, sink the next items to create nesting
+          setTimeout(() => {
+            editor.chain().focus()
+              .insertContent({
+                type: 'taskList',
+                content: [{
+                  type: 'taskItem',
+                  attrs: { checked: false },
+                  content: [
+                    { type: 'paragraph', content: [{ type: 'text', text: 'Grupo...' }] },
+                    {
+                      type: 'taskList',
+                      content: [
+                        {
+                          type: 'taskItem',
+                          attrs: { checked: false },
+                          content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Sub-tarefa 1' }] }]
+                        },
+                        {
+                          type: 'taskItem',
+                          attrs: { checked: false },
+                          content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Sub-tarefa 2' }] }]
+                        },
+                      ]
+                    }
+                  ]
+                }]
+              })
+              .run();
+          }, 50);
+        }}
+        title="Grupo colapsavel (checklist com sub-itens)"
+      >
+        {'\u25B6'}
+      </button>
       <span className="format-separator" />
       <button
         className={`format-btn ${editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}`}
