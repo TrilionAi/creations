@@ -27,44 +27,110 @@
   font-style: italic;
 }
 
-/* Task list styles */
+/* ===== TASK LIST - Collapsible ===== */
 .tiptap-editor .ProseMirror ul[data-type="taskList"] {
   list-style: none;
   padding: 0;
   margin: 6px 0;
 }
 
-.tiptap-editor .ProseMirror ul[data-type="taskList"] li {
+/* Task item via custom NodeView */
+.task-item {
+  padding: 1px 0;
+}
+
+.task-item-row {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
-  padding: 3px 0;
+  gap: 4px;
 }
 
-.tiptap-editor .ProseMirror ul[data-type="taskList"] li > label {
+/* Collapse/expand arrow button */
+.task-collapse-btn {
   flex-shrink: 0;
-  margin-top: 3px;
+  width: 18px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.35);
+  border-radius: 3px;
+  transition: all 0.15s ease;
+  margin-top: 1px;
+  padding: 0;
 }
 
-.tiptap-editor .ProseMirror ul[data-type="taskList"] li > label input[type="checkbox"] {
+.task-collapse-btn:hover {
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.task-collapse-btn svg {
+  transition: transform 0.2s ease;
+}
+
+.task-collapse-spacer {
+  width: 18px;
+  flex-shrink: 0;
+}
+
+/* Checkbox */
+.task-checkbox-label {
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.task-checkbox-label input[type="checkbox"] {
   width: 15px;
   height: 15px;
   accent-color: #5ddf7a;
   cursor: pointer;
-  border-radius: 3px;
 }
 
-.tiptap-editor .ProseMirror ul[data-type="taskList"] li > div {
+/* Task content */
+.task-item-content {
   flex: 1;
+  min-width: 0;
 }
 
-.tiptap-editor .ProseMirror ul[data-type="taskList"] li[data-checked="true"] > div {
+.task-item-content p {
+  margin: 0;
+}
+
+/* Checked state - strikethrough */
+.task-item.is-checked > .task-item-row > .task-item-content {
   text-decoration: line-through;
   opacity: 0.4;
   color: rgba(255, 255, 255, 0.5);
 }
 
-/* Nested task lists */
+/* Nested task lists - children of a task item */
+.task-item ul[data-type="taskList"] {
+  margin-left: 22px;
+  transition: max-height 0.25s ease, opacity 0.2s ease;
+  overflow: hidden;
+}
+
+/* Collapsed state - hide nested lists */
+.task-item.is-collapsed ul[data-type="taskList"] {
+  max-height: 0 !important;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Expanded state */
+.task-item:not(.is-collapsed) ul[data-type="taskList"] {
+  max-height: 500px;
+  opacity: 1;
+}
+
+/* Legacy fallback for non-custom taskList items */
 .tiptap-editor .ProseMirror ul[data-type="taskList"] ul[data-type="taskList"] {
   margin-left: 22px;
 }

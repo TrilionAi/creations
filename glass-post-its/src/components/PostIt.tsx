@@ -5,7 +5,7 @@ import TitleBar from './TitleBar';
 import Editor from './Editor';
 import FormatToolbar from './FormatToolbar';
 import PriorityPicker from './PriorityPicker';
-import { useEditor } from '@tiptap/react';
+import { useEditor, ReactNodeViewRenderer } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import TaskList from '@tiptap/extension-task-list';
 import TaskItem from '@tiptap/extension-task-item';
@@ -14,6 +14,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import Highlight from '@tiptap/extension-highlight';
 import { TextStyle } from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
+import CollapsibleTaskItem from './CollapsibleTaskItem';
 import { Priority } from '../types/postit';
 import { invoke } from '@tauri-apps/api/core';
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow';
@@ -29,7 +30,11 @@ export default function PostItView({ id }: Props) {
     extensions: [
       StarterKit,
       TaskList,
-      TaskItem.configure({ nested: true }),
+      TaskItem.extend({
+        addNodeView() {
+          return ReactNodeViewRenderer(CollapsibleTaskItem);
+        },
+      }).configure({ nested: true }),
       Underline,
       Placeholder.configure({ placeholder: 'Write something...' }),
       Highlight,
