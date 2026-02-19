@@ -16,6 +16,7 @@ import Highlight from '@tiptap/extension-highlight';
 import { TextStyle } from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
 import CollapsibleTaskItem from './CollapsibleTaskItem';
+import { ToggleBlock } from '../extensions/ToggleBlock';
 import { Priority } from '../types/postit';
 import { SKINS } from '../lib/skins';
 import { invoke } from '@tauri-apps/api/core';
@@ -42,6 +43,7 @@ export default function PostItView({ id }: Props) {
       Highlight,
       TextStyle,
       Color,
+      ToggleBlock,
     ],
     content: postit?.content || '',
     onUpdate: ({ editor }) => {
@@ -80,32 +82,34 @@ export default function PostItView({ id }: Props) {
   const skinClass = postit.skin !== 'glass' ? `skin-${postit.skin}` : '';
 
   return (
-    <div
-      className={`glass-surface priority-${postit.priority} ${skinClass}`}
-      style={skinStyles}
-    >
-      <TitleBar
-        id={id}
-        title={postit.title}
-        isPinned={!!postit.is_pinned}
-        onTitleChange={(title) => updateField('title', title)}
-        onPinToggle={() => updateField('is_pinned', postit.is_pinned ? 0 : 1)}
-      />
-      <div className="toolbar-row">
-        <FormatToolbar editor={editor} />
-        <div className="toolbar-right">
-          <PriorityPicker
-            current={postit.priority}
-            onChange={handlePriorityChange}
-          />
-          <SkinPicker
-            current={postit.skin || 'glass'}
-            onChange={handleSkinChange}
-          />
+    <div className={`postit-container ${skinClass}`}>
+      <div
+        className={`glass-surface priority-${postit.priority} ${skinClass}`}
+        style={skinStyles}
+      >
+        <TitleBar
+          id={id}
+          title={postit.title}
+          isPinned={!!postit.is_pinned}
+          onTitleChange={(title) => updateField('title', title)}
+          onPinToggle={() => updateField('is_pinned', postit.is_pinned ? 0 : 1)}
+        />
+        <div className="toolbar-row">
+          <FormatToolbar editor={editor} />
+          <div className="toolbar-right">
+            <PriorityPicker
+              current={postit.priority}
+              onChange={handlePriorityChange}
+            />
+            <SkinPicker
+              current={postit.skin || 'glass'}
+              onChange={handleSkinChange}
+            />
+          </div>
         </div>
-      </div>
-      <div className="postit-content">
-        <Editor editor={editor} />
+        <div className="postit-content">
+          <Editor editor={editor} />
+        </div>
       </div>
     </div>
   );

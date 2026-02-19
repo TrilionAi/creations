@@ -71,26 +71,16 @@ export default function FormatToolbar({ editor }: Props) {
         onClick={() => {
           editor.chain().focus()
             .insertContent({
-              type: 'taskList',
-              content: [{
-                type: 'taskItem',
-                attrs: { checked: false },
-                content: [
-                  { type: 'paragraph' },
-                  {
-                    type: 'taskList',
-                    content: [{
-                      type: 'taskItem',
-                      attrs: { checked: false },
-                      content: [{ type: 'paragraph' }]
-                    }]
-                  }
-                ]
-              }]
+              type: 'toggleBlock',
+              attrs: { open: true },
+              content: [
+                { type: 'paragraph' },
+                { type: 'paragraph' },
+              ]
             })
             .run();
         }}
-        title="Toggle list (collapsible)"
+        title="Toggle (collapsible section)"
       >
         {'\u25B6'}
       </button>

@@ -229,3 +229,58 @@
   border-top: 1px solid var(--skin-border, rgba(255, 255, 255, 0.1));
   margin: 10px 0;
 }
+
+/* ===== TOGGLE BLOCK - Collapsible section (no checkboxes) ===== */
+.toggle-block {
+  position: relative;
+  padding-left: 24px;
+  margin: 4px 0;
+}
+
+.toggle-arrow-btn {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 20px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--skin-text-secondary, rgba(255, 255, 255, 0.55));
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.toggle-arrow-btn:hover {
+  color: var(--skin-text, rgba(255, 255, 255, 0.9));
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.toggle-arrow-btn svg {
+  transition: transform 0.2s ease;
+}
+
+.toggle-body {
+  min-height: 1.6em;
+}
+
+/* First child = summary/title (always visible) */
+.toggle-body > *:first-child {
+  font-weight: 500;
+}
+
+/* When collapsed, hide everything except the first child (title) */
+.toggle-block.is-closed > .toggle-body > *:not(:first-child) {
+  display: none;
+}
+
+/* Indent the collapsible content (everything after first child) */
+.toggle-body > *:not(:first-child) {
+  margin-left: 4px;
+  padding-left: 10px;
+  border-left: 2px solid var(--skin-border, rgba(255, 255, 255, 0.08));
+}

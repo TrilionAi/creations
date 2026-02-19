@@ -1,3 +1,11 @@
+/* ===== POSTIT CONTAINER - Space for 3D effects & glow ===== */
+.postit-container {
+  height: 100%;
+  width: 100%;
+  padding: 12px;
+  overflow: visible;
+}
+
 /* ===== GLASS SURFACE - Real 3D Glass ===== */
 .glass-surface {
   height: 100%;
@@ -8,34 +16,32 @@
   flex-direction: column;
   position: relative;
 
-  /* Translucent dark base - desktop shows through via native vibrancy */
+  /* Translucent dark base */
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.01) 20%, transparent 50%),
     rgba(18, 18, 30, 0.58);
 
-  /* Crisp bright edge - top/left catch light */
+  /* Glass edge - top/left catch light */
   border: 1.5px solid;
   border-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.18) rgba(255, 255, 255, 0.1) rgba(255, 255, 255, 0.2);
 
-  /* Deep 3D shadow stack */
+  /* Deep 3D shadow */
   box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.15),
     0 2px 8px rgba(0, 0, 0, 0.15),
-    0 12px 40px rgba(0, 0, 0, 0.3),
-    0 24px 80px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 12px 40px rgba(0, 0, 0, 0.25),
+    0 0 1px rgba(255, 255, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
     inset 0 -1px 0 rgba(0, 0, 0, 0.12);
 
   transition: all 0.5s ease;
 }
 
-/* Diagonal reflection stripe - like sunlight hitting a window */
+/* Diagonal reflection stripe */
 .glass-surface::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    /* Main diagonal shine */
     linear-gradient(
       125deg,
       transparent 35%,
@@ -44,14 +50,13 @@
       rgba(255, 255, 255, 0.05) 46%,
       transparent 49%
     ),
-    /* Edge highlight on top */
     linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 25%);
   pointer-events: none;
   z-index: 0;
   border-radius: 14px;
 }
 
-/* Subtle noise texture for glass grain */
+/* Noise texture */
 .glass-surface::after {
   content: '';
   position: absolute;
@@ -64,369 +69,315 @@
 }
 
 /* ===== PRIORITY TINTS ===== */
-.glass-surface.priority-glass {
-  /* Default - already styled above */
-}
-
 .glass-surface.priority-red {
-  background:
-    linear-gradient(180deg, rgba(255, 80, 80, 0.08) 0%, transparent 40%),
-    rgba(50, 12, 12, 0.62);
+  background: linear-gradient(180deg, rgba(255, 80, 80, 0.08) 0%, transparent 40%), rgba(50, 12, 12, 0.62);
   border-color: rgba(255, 100, 100, 0.4) rgba(255, 80, 80, 0.25) rgba(255, 60, 60, 0.15) rgba(255, 90, 90, 0.3);
-  box-shadow:
-    0 0 0 1px rgba(255, 60, 60, 0.1),
-    0 2px 8px rgba(0, 0, 0, 0.2),
-    0 12px 40px rgba(0, 0, 0, 0.3),
-    0 0 40px rgba(255, 50, 50, 0.08),
-    inset 0 1px 0 rgba(255, 150, 150, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 }
 
 .glass-surface.priority-orange {
-  background:
-    linear-gradient(180deg, rgba(255, 160, 60, 0.08) 0%, transparent 40%),
-    rgba(45, 22, 8, 0.62);
+  background: linear-gradient(180deg, rgba(255, 160, 60, 0.08) 0%, transparent 40%), rgba(45, 22, 8, 0.62);
   border-color: rgba(255, 170, 80, 0.4) rgba(255, 150, 60, 0.25) rgba(255, 130, 40, 0.15) rgba(255, 160, 70, 0.3);
-  box-shadow:
-    0 0 0 1px rgba(255, 140, 40, 0.1),
-    0 2px 8px rgba(0, 0, 0, 0.2),
-    0 12px 40px rgba(0, 0, 0, 0.3),
-    0 0 40px rgba(255, 140, 40, 0.08),
-    inset 0 1px 0 rgba(255, 200, 150, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 }
 
 .glass-surface.priority-yellow {
-  background:
-    linear-gradient(180deg, rgba(255, 230, 80, 0.08) 0%, transparent 40%),
-    rgba(40, 38, 10, 0.62);
+  background: linear-gradient(180deg, rgba(255, 230, 80, 0.08) 0%, transparent 40%), rgba(40, 38, 10, 0.62);
   border-color: rgba(255, 230, 100, 0.4) rgba(255, 220, 80, 0.25) rgba(255, 210, 60, 0.15) rgba(255, 225, 90, 0.3);
-  box-shadow:
-    0 0 0 1px rgba(255, 220, 50, 0.1),
-    0 2px 8px rgba(0, 0, 0, 0.2),
-    0 12px 40px rgba(0, 0, 0, 0.3),
-    0 0 40px rgba(255, 220, 50, 0.08),
-    inset 0 1px 0 rgba(255, 245, 180, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 }
 
 .glass-surface.priority-green {
-  background:
-    linear-gradient(180deg, rgba(80, 220, 120, 0.08) 0%, transparent 40%),
-    rgba(8, 35, 18, 0.62);
+  background: linear-gradient(180deg, rgba(80, 220, 120, 0.08) 0%, transparent 40%), rgba(8, 35, 18, 0.62);
   border-color: rgba(80, 220, 120, 0.4) rgba(60, 200, 100, 0.25) rgba(40, 180, 80, 0.15) rgba(70, 210, 110, 0.3);
-  box-shadow:
-    0 0 0 1px rgba(50, 200, 100, 0.1),
-    0 2px 8px rgba(0, 0, 0, 0.2),
-    0 12px 40px rgba(0, 0, 0, 0.3),
-    0 0 40px rgba(50, 200, 100, 0.08),
-    inset 0 1px 0 rgba(150, 255, 180, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 }
 
 /* ==============================================================
-   SKIN: ICE CUBE - Frozen crystal with frost and facets
+   SKIN: ICE CUBE - 3D ice block with frost, crystals, depth
    ============================================================== */
 .glass-surface.skin-ice {
+  border-radius: 6px !important; /* Sharp cube corners */
+  border: 3px solid rgba(180, 235, 255, 0.5) !important;
+
   background:
     /* Frost crystal clusters */
-    radial-gradient(circle at 12% 18%, rgba(200, 235, 255, 0.2) 0%, transparent 25%),
+    radial-gradient(circle at 12% 18%, rgba(200, 235, 255, 0.22) 0%, transparent 25%),
     radial-gradient(circle at 75% 8%, rgba(180, 225, 255, 0.15) 0%, transparent 20%),
     radial-gradient(circle at 88% 55%, rgba(200, 240, 255, 0.18) 0%, transparent 22%),
     radial-gradient(circle at 35% 85%, rgba(170, 215, 255, 0.12) 0%, transparent 30%),
-    radial-gradient(circle at 55% 45%, rgba(190, 230, 255, 0.08) 0%, transparent 40%),
-    /* Ice facets - angular crystal faces */
+    /* Ice facets */
     linear-gradient(135deg, rgba(200, 235, 255, 0.12) 0%, transparent 35%),
     linear-gradient(225deg, rgba(180, 220, 255, 0.08) 0%, transparent 30%),
-    linear-gradient(315deg, rgba(200, 240, 255, 0.06) 0%, transparent 25%),
-    /* Frozen blue gradient base */
-    linear-gradient(180deg, rgba(160, 215, 255, 0.15) 0%, rgba(80, 150, 220, 0.06) 50%, rgba(140, 200, 255, 0.12) 100%),
-    rgba(8, 16, 35, 0.65) !important;
+    /* Frozen blue base */
+    linear-gradient(180deg, rgba(160, 220, 255, 0.18) 0%, rgba(80, 150, 220, 0.06) 50%, rgba(140, 200, 255, 0.14) 100%),
+    rgba(8, 16, 38, 0.7) !important;
 
-  border-color: rgba(160, 225, 255, 0.5) rgba(140, 210, 255, 0.35) rgba(120, 190, 240, 0.25) rgba(150, 218, 255, 0.4) !important;
-
+  /* 3D CUBE DEPTH - layered offset shadows create ice block thickness */
   box-shadow:
-    0 0 0 1px rgba(140, 215, 255, 0.2),
-    0 2px 8px rgba(0, 0, 0, 0.2),
-    0 12px 40px rgba(0, 20, 60, 0.35),
-    0 0 50px rgba(100, 180, 255, 0.12),
-    0 0 100px rgba(80, 160, 255, 0.06),
-    inset 0 1px 0 rgba(220, 245, 255, 0.3),
-    inset 0 -1px 0 rgba(80, 140, 200, 0.15) !important;
+    3px 3px 0 0 rgba(140, 205, 250, 0.3),
+    6px 6px 0 0 rgba(120, 190, 240, 0.22),
+    9px 9px 0 0 rgba(100, 175, 230, 0.15),
+    12px 12px 0 0 rgba(80, 160, 220, 0.1),
+    /* Outer cold glow */
+    0 0 30px rgba(100, 180, 255, 0.15),
+    0 0 60px rgba(80, 160, 255, 0.08),
+    /* Inner frost */
+    inset 0 0 30px rgba(180, 225, 255, 0.08),
+    inset 0 1px 0 rgba(220, 245, 255, 0.35) !important;
+
+  /* Subtle 3D perspective tilt */
+  transform: perspective(800px) rotateY(-1deg) rotateX(0.5deg);
 }
 
 .glass-surface.skin-ice::before {
   background:
-    /* Bright ice diagonal reflection */
-    linear-gradient(
-      120deg,
-      transparent 30%,
-      rgba(200, 235, 255, 0.08) 33%,
-      rgba(220, 245, 255, 0.18) 38%,
-      rgba(200, 235, 255, 0.08) 43%,
-      transparent 46%
-    ),
+    /* Bright diagonal ice reflection */
+    linear-gradient(120deg, transparent 28%, rgba(220, 245, 255, 0.1) 31%, rgba(240, 250, 255, 0.2) 36%, rgba(220, 245, 255, 0.1) 41%, transparent 44%),
     /* Frost sparkles */
-    radial-gradient(1px 1px at 20% 30%, rgba(255, 255, 255, 0.6) 50%, transparent 50%),
-    radial-gradient(1px 1px at 60% 15%, rgba(255, 255, 255, 0.5) 50%, transparent 50%),
-    radial-gradient(1px 1px at 80% 40%, rgba(255, 255, 255, 0.4) 50%, transparent 50%),
-    radial-gradient(1px 1px at 40% 70%, rgba(255, 255, 255, 0.5) 50%, transparent 50%),
-    radial-gradient(1px 1px at 15% 60%, rgba(255, 255, 255, 0.3) 50%, transparent 50%),
-    radial-gradient(1px 1px at 90% 75%, rgba(255, 255, 255, 0.4) 50%, transparent 50%),
-    radial-gradient(1.5px 1.5px at 50% 25%, rgba(200, 240, 255, 0.7) 50%, transparent 50%),
-    radial-gradient(1.5px 1.5px at 70% 60%, rgba(200, 240, 255, 0.5) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 20% 30%, rgba(255, 255, 255, 0.7) 50%, transparent 50%),
+    radial-gradient(1px 1px at 60% 15%, rgba(255, 255, 255, 0.6) 50%, transparent 50%),
+    radial-gradient(2px 2px at 80% 40%, rgba(200, 240, 255, 0.7) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 40% 70%, rgba(255, 255, 255, 0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 15% 60%, rgba(200, 240, 255, 0.5) 50%, transparent 50%),
+    radial-gradient(2px 2px at 90% 75%, rgba(255, 255, 255, 0.6) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 50% 25%, rgba(200, 240, 255, 0.8) 50%, transparent 50%),
     /* Top frost edge */
-    linear-gradient(180deg, rgba(200, 235, 255, 0.12) 0%, transparent 20%) !important;
+    linear-gradient(180deg, rgba(220, 245, 255, 0.15) 0%, transparent 15%) !important;
+  border-radius: 6px !important;
 }
 
 .glass-surface.skin-ice::after {
   background:
-    /* Frost crack patterns */
-    linear-gradient(78deg, transparent 48%, rgba(200, 235, 255, 0.06) 49%, transparent 51%),
-    linear-gradient(142deg, transparent 52%, rgba(180, 220, 255, 0.05) 53%, transparent 55%),
-    linear-gradient(35deg, transparent 65%, rgba(200, 240, 255, 0.04) 66%, transparent 68%),
-    /* Inner frost */
-    radial-gradient(ellipse at 50% 0%, rgba(200, 240, 255, 0.08) 0%, transparent 60%) !important;
+    /* Frost crack lines */
+    linear-gradient(78deg, transparent 48%, rgba(200, 235, 255, 0.08) 49%, transparent 51%),
+    linear-gradient(142deg, transparent 52%, rgba(180, 220, 255, 0.06) 53%, transparent 55%),
+    linear-gradient(35deg, transparent 65%, rgba(200, 240, 255, 0.05) 66%, transparent 68%),
+    radial-gradient(ellipse at 50% 0%, rgba(200, 240, 255, 0.1) 0%, transparent 60%) !important;
   opacity: 1 !important;
+  border-radius: 6px !important;
 }
 
 /* ==============================================================
-   SKIN: MAGMA - Volcanic rock with glowing lava cracks
+   SKIN: MAGMA - Volcanic rock with molten lava, fire aura
    ============================================================== */
 .glass-surface.skin-magma {
+  border-radius: 10px !important;
+  border: 2px solid rgba(255, 80, 20, 0.6) !important;
+
   background:
-    /* Glowing lava cracks - bright thin lines */
-    linear-gradient(42deg, transparent 28%, rgba(255, 80, 15, 0.22) 29%, rgba(255, 120, 30, 0.3) 30%, rgba(255, 80, 15, 0.22) 31%, transparent 32%),
-    linear-gradient(168deg, transparent 44%, rgba(255, 100, 20, 0.18) 45%, rgba(255, 140, 40, 0.25) 45.5%, rgba(255, 100, 20, 0.18) 46%, transparent 47%),
-    linear-gradient(95deg, transparent 58%, rgba(255, 70, 10, 0.2) 59%, rgba(255, 110, 25, 0.28) 59.5%, rgba(255, 70, 10, 0.2) 60%, transparent 61%),
-    linear-gradient(135deg, transparent 70%, rgba(255, 90, 15, 0.15) 71%, rgba(255, 130, 35, 0.22) 71.5%, rgba(255, 90, 15, 0.15) 72%, transparent 73%),
-    linear-gradient(200deg, transparent 18%, rgba(255, 60, 10, 0.16) 19%, rgba(255, 100, 25, 0.22) 19.5%, rgba(255, 60, 10, 0.16) 20%, transparent 21%),
-    /* Ember hot spots - glow from within */
-    radial-gradient(circle at 25% 35%, rgba(255, 100, 20, 0.2) 0%, transparent 35%),
-    radial-gradient(circle at 65% 70%, rgba(255, 80, 10, 0.18) 0%, transparent 30%),
-    radial-gradient(circle at 80% 25%, rgba(255, 120, 30, 0.12) 0%, transparent 25%),
-    radial-gradient(circle at 45% 55%, rgba(255, 60, 5, 0.1) 0%, transparent 40%),
-    /* Dark volcanic rock base */
-    linear-gradient(180deg, rgba(50, 15, 5, 0.75) 0%, rgba(25, 8, 2, 0.85) 100%),
-    rgba(20, 5, 0, 0.7) !important;
+    /* Glowing lava cracks - bright thin veins */
+    linear-gradient(42deg, transparent 28%, rgba(255, 80, 15, 0.25) 29%, rgba(255, 130, 40, 0.35) 29.5%, rgba(255, 80, 15, 0.25) 30%, transparent 31%),
+    linear-gradient(168deg, transparent 44%, rgba(255, 100, 20, 0.2) 45%, rgba(255, 150, 50, 0.3) 45.5%, rgba(255, 100, 20, 0.2) 46%, transparent 47%),
+    linear-gradient(95deg, transparent 58%, rgba(255, 70, 10, 0.22) 59%, rgba(255, 120, 30, 0.32) 59.5%, rgba(255, 70, 10, 0.22) 60%, transparent 61%),
+    linear-gradient(200deg, transparent 18%, rgba(255, 60, 10, 0.18) 19%, rgba(255, 110, 30, 0.26) 19.5%, rgba(255, 60, 10, 0.18) 20%, transparent 21%),
+    linear-gradient(135deg, transparent 70%, rgba(255, 90, 15, 0.16) 71%, rgba(255, 140, 40, 0.24) 71.5%, rgba(255, 90, 15, 0.16) 72%, transparent 73%),
+    /* Ember hot spots */
+    radial-gradient(circle at 25% 35%, rgba(255, 100, 20, 0.22) 0%, transparent 35%),
+    radial-gradient(circle at 65% 70%, rgba(255, 80, 10, 0.2) 0%, transparent 30%),
+    radial-gradient(circle at 80% 25%, rgba(255, 120, 30, 0.14) 0%, transparent 25%),
+    /* Dark volcanic rock */
+    linear-gradient(180deg, rgba(50, 15, 5, 0.8) 0%, rgba(25, 8, 2, 0.9) 100%),
+    rgba(15, 3, 0, 0.75) !important;
 
-  border-color: rgba(255, 100, 30, 0.55) rgba(255, 80, 20, 0.4) rgba(200, 50, 10, 0.3) rgba(255, 90, 25, 0.45) !important;
-
+  /* MASSIVE FIRE AURA - 6 layers of spreading glow */
   box-shadow:
-    0 0 0 1px rgba(255, 60, 10, 0.2),
-    0 2px 8px rgba(0, 0, 0, 0.3),
-    0 12px 40px rgba(0, 0, 0, 0.4),
-    0 0 50px rgba(255, 60, 15, 0.15),
-    0 0 100px rgba(255, 40, 5, 0.08),
-    inset 0 1px 0 rgba(255, 150, 80, 0.15),
-    inset 0 -1px 0 rgba(255, 40, 5, 0.1) !important;
+    0 0 5px rgba(255, 60, 10, 0.5),
+    0 0 15px rgba(255, 60, 10, 0.35),
+    0 0 35px rgba(255, 50, 5, 0.25),
+    0 0 60px rgba(255, 40, 0, 0.18),
+    0 0 100px rgba(255, 30, 0, 0.12),
+    0 0 150px rgba(255, 20, 0, 0.06),
+    inset 0 0 25px rgba(255, 60, 10, 0.1),
+    inset 0 1px 0 rgba(255, 150, 80, 0.15) !important;
 
-  animation: magma-pulse 4s ease-in-out infinite;
+  animation: magma-pulse 3s ease-in-out infinite;
 }
 
 @keyframes magma-pulse {
   0%, 100% {
     box-shadow:
-      0 0 0 1px rgba(255, 60, 10, 0.2),
-      0 2px 8px rgba(0, 0, 0, 0.3),
-      0 12px 40px rgba(0, 0, 0, 0.4),
-      0 0 50px rgba(255, 60, 15, 0.15),
-      0 0 100px rgba(255, 40, 5, 0.08),
-      inset 0 1px 0 rgba(255, 150, 80, 0.15),
-      inset 0 -1px 0 rgba(255, 40, 5, 0.1);
+      0 0 5px rgba(255, 60, 10, 0.5),
+      0 0 15px rgba(255, 60, 10, 0.35),
+      0 0 35px rgba(255, 50, 5, 0.25),
+      0 0 60px rgba(255, 40, 0, 0.18),
+      0 0 100px rgba(255, 30, 0, 0.12),
+      0 0 150px rgba(255, 20, 0, 0.06),
+      inset 0 0 25px rgba(255, 60, 10, 0.1),
+      inset 0 1px 0 rgba(255, 150, 80, 0.15);
   }
   50% {
     box-shadow:
-      0 0 0 1px rgba(255, 70, 15, 0.3),
-      0 2px 8px rgba(0, 0, 0, 0.3),
-      0 12px 40px rgba(0, 0, 0, 0.4),
-      0 0 60px rgba(255, 70, 20, 0.22),
-      0 0 120px rgba(255, 50, 10, 0.12),
-      inset 0 1px 0 rgba(255, 160, 90, 0.2),
-      inset 0 -1px 0 rgba(255, 50, 10, 0.15);
+      0 0 8px rgba(255, 70, 15, 0.6),
+      0 0 22px rgba(255, 70, 15, 0.45),
+      0 0 45px rgba(255, 60, 10, 0.32),
+      0 0 80px rgba(255, 50, 5, 0.22),
+      0 0 120px rgba(255, 40, 0, 0.15),
+      0 0 180px rgba(255, 25, 0, 0.08),
+      inset 0 0 35px rgba(255, 70, 15, 0.15),
+      inset 0 1px 0 rgba(255, 170, 100, 0.2);
   }
 }
 
 .glass-surface.skin-magma::before {
   background:
-    /* Inner ember glow from center */
-    radial-gradient(ellipse at 40% 50%, rgba(255, 80, 15, 0.1) 0%, transparent 60%),
-    /* Hot upper edge */
-    linear-gradient(180deg, rgba(255, 100, 30, 0.08) 0%, transparent 30%),
+    /* Inner ember glow */
+    radial-gradient(ellipse at 40% 50%, rgba(255, 80, 15, 0.12) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(255, 100, 30, 0.1) 0%, transparent 30%),
     /* Embers / sparks */
-    radial-gradient(1.5px 1.5px at 15% 25%, rgba(255, 180, 80, 0.7) 50%, transparent 50%),
-    radial-gradient(1px 1px at 55% 12%, rgba(255, 200, 100, 0.6) 50%, transparent 50%),
-    radial-gradient(1.5px 1.5px at 82% 38%, rgba(255, 160, 60, 0.5) 50%, transparent 50%),
-    radial-gradient(1px 1px at 35% 72%, rgba(255, 180, 80, 0.6) 50%, transparent 50%),
-    radial-gradient(1px 1px at 70% 85%, rgba(255, 200, 100, 0.5) 50%, transparent 50%),
-    radial-gradient(2px 2px at 92% 65%, rgba(255, 150, 50, 0.7) 50%, transparent 50%),
-    radial-gradient(1px 1px at 8% 80%, rgba(255, 170, 70, 0.5) 50%, transparent 50%) !important;
+    radial-gradient(2px 2px at 15% 25%, rgba(255, 200, 100, 0.8) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 55% 12%, rgba(255, 220, 120, 0.7) 50%, transparent 50%),
+    radial-gradient(2px 2px at 82% 38%, rgba(255, 180, 80, 0.7) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 35% 72%, rgba(255, 200, 100, 0.6) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 70% 85%, rgba(255, 220, 120, 0.6) 50%, transparent 50%),
+    radial-gradient(2.5px 2.5px at 92% 65%, rgba(255, 170, 60, 0.8) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 8% 80%, rgba(255, 190, 80, 0.6) 50%, transparent 50%) !important;
+  border-radius: 10px !important;
 }
 
 .glass-surface.skin-magma::after {
   background:
-    /* Additional smaller cracks */
-    linear-gradient(65deg, transparent 35%, rgba(255, 90, 20, 0.1) 36%, transparent 37%),
-    linear-gradient(150deg, transparent 55%, rgba(255, 70, 10, 0.08) 56%, transparent 57%),
-    linear-gradient(20deg, transparent 75%, rgba(255, 100, 25, 0.08) 76%, transparent 77%),
-    /* Smoke/haze at top */
-    linear-gradient(180deg, rgba(80, 30, 10, 0.15) 0%, transparent 40%) !important;
+    linear-gradient(65deg, transparent 35%, rgba(255, 90, 20, 0.12) 36%, transparent 37%),
+    linear-gradient(150deg, transparent 55%, rgba(255, 70, 10, 0.1) 56%, transparent 57%),
+    linear-gradient(20deg, transparent 75%, rgba(255, 100, 25, 0.1) 76%, transparent 77%),
+    linear-gradient(180deg, rgba(80, 30, 10, 0.2) 0%, transparent 40%) !important;
   opacity: 1 !important;
+  border-radius: 10px !important;
 }
 
 /* ==============================================================
-   SKIN: SUN - Golden solar radiance with rays
+   SKIN: SUN - Golden radiance with massive warm glow halo
    ============================================================== */
 .glass-surface.skin-sun {
+  border: 2px solid rgba(255, 215, 70, 0.55) !important;
+
   background:
-    /* Solar corona / radial burst */
-    radial-gradient(ellipse at 30% 20%, rgba(255, 220, 80, 0.2) 0%, rgba(255, 200, 50, 0.08) 30%, transparent 60%),
-    /* Warm golden gradient layers */
-    radial-gradient(ellipse at 70% 80%, rgba(255, 200, 60, 0.1) 0%, transparent 50%),
+    /* Solar corona */
+    radial-gradient(ellipse at 30% 20%, rgba(255, 225, 90, 0.25) 0%, rgba(255, 200, 50, 0.1) 30%, transparent 60%),
+    radial-gradient(ellipse at 70% 80%, rgba(255, 200, 60, 0.12) 0%, transparent 50%),
     /* Light ray streaks */
     conic-gradient(
       from 200deg at 25% 15%,
-      transparent 0deg,
-      rgba(255, 220, 80, 0.06) 10deg,
-      transparent 20deg,
-      rgba(255, 210, 60, 0.04) 35deg,
-      transparent 45deg,
-      rgba(255, 230, 100, 0.05) 60deg,
-      transparent 70deg,
-      rgba(255, 215, 70, 0.04) 100deg,
-      transparent 110deg,
-      transparent 360deg
+      transparent 0deg, rgba(255, 220, 80, 0.08) 10deg, transparent 20deg,
+      rgba(255, 210, 60, 0.06) 35deg, transparent 45deg,
+      rgba(255, 230, 100, 0.07) 60deg, transparent 70deg,
+      rgba(255, 215, 70, 0.05) 100deg, transparent 110deg, transparent 360deg
     ),
-    /* Warm golden base */
-    linear-gradient(180deg, rgba(255, 220, 80, 0.12) 0%, rgba(255, 180, 40, 0.04) 50%, rgba(255, 200, 60, 0.08) 100%),
-    rgba(35, 28, 8, 0.65) !important;
+    /* Warm base */
+    linear-gradient(180deg, rgba(255, 220, 80, 0.15) 0%, rgba(255, 180, 40, 0.05) 50%, rgba(255, 200, 60, 0.1) 100%),
+    rgba(35, 28, 8, 0.68) !important;
 
-  border-color: rgba(255, 215, 80, 0.5) rgba(255, 200, 60, 0.35) rgba(255, 180, 40, 0.25) rgba(255, 210, 70, 0.4) !important;
-
+  /* MASSIVE GOLDEN HALO */
   box-shadow:
-    0 0 0 1px rgba(255, 210, 60, 0.15),
-    0 2px 8px rgba(0, 0, 0, 0.2),
-    0 12px 40px rgba(20, 10, 0, 0.35),
-    0 0 50px rgba(255, 200, 50, 0.1),
-    0 0 100px rgba(255, 180, 30, 0.06),
-    inset 0 1px 0 rgba(255, 240, 180, 0.25),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1) !important;
+    0 0 8px rgba(255, 210, 60, 0.45),
+    0 0 20px rgba(255, 200, 50, 0.35),
+    0 0 45px rgba(255, 200, 50, 0.22),
+    0 0 80px rgba(255, 180, 30, 0.15),
+    0 0 130px rgba(255, 160, 20, 0.1),
+    0 0 200px rgba(255, 140, 10, 0.05),
+    inset 0 0 20px rgba(255, 230, 100, 0.06),
+    inset 0 1px 0 rgba(255, 245, 200, 0.3) !important;
 
-  animation: sun-radiance 6s ease-in-out infinite;
+  animation: sun-radiance 5s ease-in-out infinite;
 }
 
 @keyframes sun-radiance {
   0%, 100% {
     box-shadow:
-      0 0 0 1px rgba(255, 210, 60, 0.15),
-      0 2px 8px rgba(0, 0, 0, 0.2),
-      0 12px 40px rgba(20, 10, 0, 0.35),
-      0 0 50px rgba(255, 200, 50, 0.1),
-      0 0 100px rgba(255, 180, 30, 0.06),
-      inset 0 1px 0 rgba(255, 240, 180, 0.25),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+      0 0 8px rgba(255, 210, 60, 0.45),
+      0 0 20px rgba(255, 200, 50, 0.35),
+      0 0 45px rgba(255, 200, 50, 0.22),
+      0 0 80px rgba(255, 180, 30, 0.15),
+      0 0 130px rgba(255, 160, 20, 0.1),
+      0 0 200px rgba(255, 140, 10, 0.05),
+      inset 0 0 20px rgba(255, 230, 100, 0.06),
+      inset 0 1px 0 rgba(255, 245, 200, 0.3);
   }
   50% {
     box-shadow:
-      0 0 0 1px rgba(255, 215, 70, 0.2),
-      0 2px 8px rgba(0, 0, 0, 0.2),
-      0 12px 40px rgba(20, 10, 0, 0.35),
-      0 0 65px rgba(255, 210, 60, 0.15),
-      0 0 130px rgba(255, 190, 40, 0.08),
-      inset 0 1px 0 rgba(255, 245, 200, 0.3),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+      0 0 12px rgba(255, 215, 70, 0.55),
+      0 0 28px rgba(255, 210, 60, 0.42),
+      0 0 55px rgba(255, 205, 55, 0.28),
+      0 0 100px rgba(255, 190, 40, 0.2),
+      0 0 160px rgba(255, 170, 25, 0.13),
+      0 0 240px rgba(255, 150, 15, 0.07),
+      inset 0 0 25px rgba(255, 235, 110, 0.08),
+      inset 0 1px 0 rgba(255, 250, 210, 0.35);
   }
 }
 
 .glass-surface.skin-sun::before {
   background:
-    /* Solar flare highlight */
-    radial-gradient(ellipse at 25% 12%, rgba(255, 240, 150, 0.2) 0%, transparent 40%),
+    /* Solar flare */
+    radial-gradient(ellipse at 25% 12%, rgba(255, 245, 170, 0.25) 0%, transparent 40%),
     /* Golden sparkles */
-    radial-gradient(1.5px 1.5px at 20% 15%, rgba(255, 240, 160, 0.7) 50%, transparent 50%),
-    radial-gradient(1px 1px at 40% 25%, rgba(255, 230, 140, 0.5) 50%, transparent 50%),
-    radial-gradient(1.5px 1.5px at 60% 10%, rgba(255, 245, 180, 0.6) 50%, transparent 50%),
-    radial-gradient(1px 1px at 75% 30%, rgba(255, 235, 150, 0.4) 50%, transparent 50%),
-    radial-gradient(1px 1px at 15% 45%, rgba(255, 230, 130, 0.5) 50%, transparent 50%),
-    radial-gradient(2px 2px at 85% 18%, rgba(255, 245, 170, 0.6) 50%, transparent 50%),
-    /* Warm diagonal reflection */
-    linear-gradient(
-      125deg,
-      transparent 35%,
-      rgba(255, 230, 120, 0.06) 38%,
-      rgba(255, 240, 160, 0.12) 42%,
-      rgba(255, 230, 120, 0.06) 46%,
-      transparent 49%
-    ) !important;
+    radial-gradient(2px 2px at 20% 15%, rgba(255, 245, 180, 0.8) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 40% 25%, rgba(255, 235, 150, 0.6) 50%, transparent 50%),
+    radial-gradient(2px 2px at 60% 10%, rgba(255, 250, 200, 0.7) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 75% 30%, rgba(255, 240, 160, 0.5) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 15% 45%, rgba(255, 235, 140, 0.6) 50%, transparent 50%),
+    radial-gradient(2.5px 2.5px at 85% 18%, rgba(255, 250, 190, 0.7) 50%, transparent 50%),
+    /* Warm reflection */
+    linear-gradient(125deg, transparent 35%, rgba(255, 235, 130, 0.08) 38%, rgba(255, 245, 170, 0.15) 42%, rgba(255, 235, 130, 0.08) 46%, transparent 49%) !important;
 }
 
 .glass-surface.skin-sun::after {
   background:
-    /* Warm haze */
-    radial-gradient(ellipse at 30% 25%, rgba(255, 220, 80, 0.06) 0%, transparent 50%),
-    /* Subtle ray lines */
-    linear-gradient(35deg, transparent 45%, rgba(255, 230, 100, 0.04) 46%, transparent 47%),
-    linear-gradient(55deg, transparent 30%, rgba(255, 220, 80, 0.03) 31%, transparent 32%) !important;
+    radial-gradient(ellipse at 30% 25%, rgba(255, 225, 90, 0.08) 0%, transparent 50%),
+    linear-gradient(35deg, transparent 45%, rgba(255, 230, 100, 0.05) 46%, transparent 47%),
+    linear-gradient(55deg, transparent 30%, rgba(255, 220, 80, 0.04) 31%, transparent 32%) !important;
   opacity: 1 !important;
 }
 
 /* ==============================================================
-   SKIN: ORANGE - Warm citrus with deep amber glow
+   SKIN: ORANGE - Warm citrus fruit with rounded shape & texture
    ============================================================== */
 .glass-surface.skin-orange {
-  background:
-    /* Citrus texture - organic bright spots */
-    radial-gradient(circle at 20% 25%, rgba(255, 170, 60, 0.15) 0%, transparent 30%),
-    radial-gradient(circle at 70% 15%, rgba(255, 150, 40, 0.1) 0%, transparent 25%),
-    radial-gradient(circle at 85% 65%, rgba(255, 180, 70, 0.12) 0%, transparent 28%),
-    radial-gradient(circle at 40% 75%, rgba(255, 140, 30, 0.08) 0%, transparent 35%),
-    /* Warm gradient layers */
-    linear-gradient(135deg, rgba(255, 170, 60, 0.1) 0%, rgba(255, 130, 30, 0.04) 50%, rgba(255, 160, 50, 0.08) 100%),
-    /* Amber base */
-    linear-gradient(180deg, rgba(255, 160, 50, 0.1) 0%, rgba(200, 100, 20, 0.05) 50%, rgba(255, 140, 40, 0.08) 100%),
-    rgba(38, 18, 5, 0.65) !important;
+  border-radius: 22px !important; /* Rounded like a fruit */
+  border: 2px solid rgba(255, 160, 60, 0.5) !important;
 
-  border-color: rgba(255, 165, 70, 0.5) rgba(255, 145, 50, 0.35) rgba(255, 125, 30, 0.25) rgba(255, 155, 60, 0.4) !important;
+  background:
+    /* Orange peel texture - organic bumps */
+    radial-gradient(circle at 18% 22%, rgba(255, 180, 70, 0.18) 0%, transparent 18%),
+    radial-gradient(circle at 45% 15%, rgba(255, 160, 50, 0.12) 0%, transparent 15%),
+    radial-gradient(circle at 72% 28%, rgba(255, 190, 80, 0.15) 0%, transparent 16%),
+    radial-gradient(circle at 30% 55%, rgba(255, 170, 60, 0.1) 0%, transparent 20%),
+    radial-gradient(circle at 80% 60%, rgba(255, 185, 75, 0.13) 0%, transparent 17%),
+    radial-gradient(circle at 55% 80%, rgba(255, 175, 65, 0.11) 0%, transparent 19%),
+    radial-gradient(circle at 15% 75%, rgba(255, 160, 50, 0.09) 0%, transparent 22%),
+    radial-gradient(circle at 90% 85%, rgba(255, 180, 70, 0.1) 0%, transparent 14%),
+    /* Orange gradient - center lighter, edges darker */
+    radial-gradient(ellipse at 45% 40%, rgba(255, 180, 70, 0.2) 0%, rgba(255, 140, 30, 0.08) 50%, rgba(200, 100, 20, 0.04) 100%),
+    /* Base */
+    linear-gradient(180deg, rgba(255, 160, 50, 0.12) 0%, rgba(200, 100, 20, 0.06) 50%, rgba(255, 140, 40, 0.1) 100%),
+    rgba(38, 18, 5, 0.68) !important;
 
   box-shadow:
-    0 0 0 1px rgba(255, 150, 50, 0.15),
-    0 2px 8px rgba(0, 0, 0, 0.2),
-    0 12px 40px rgba(20, 8, 0, 0.35),
-    0 0 50px rgba(255, 140, 40, 0.1),
-    0 0 100px rgba(255, 120, 20, 0.05),
-    inset 0 1px 0 rgba(255, 200, 140, 0.22),
+    0 0 10px rgba(255, 150, 50, 0.25),
+    0 0 30px rgba(255, 140, 40, 0.15),
+    0 0 60px rgba(255, 120, 20, 0.08),
+    0 8px 30px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 210, 150, 0.25),
     inset 0 -1px 0 rgba(0, 0, 0, 0.1) !important;
 }
 
 .glass-surface.skin-orange::before {
   background:
-    /* Warm diagonal reflection */
-    linear-gradient(
-      125deg,
-      transparent 35%,
-      rgba(255, 190, 100, 0.06) 38%,
-      rgba(255, 200, 130, 0.12) 42%,
-      rgba(255, 190, 100, 0.06) 46%,
-      transparent 49%
-    ),
-    /* Citrus peel texture sparkles */
-    radial-gradient(1px 1px at 25% 20%, rgba(255, 200, 120, 0.5) 50%, transparent 50%),
-    radial-gradient(1px 1px at 55% 35%, rgba(255, 190, 100, 0.4) 50%, transparent 50%),
-    radial-gradient(1.5px 1.5px at 78% 22%, rgba(255, 210, 140, 0.5) 50%, transparent 50%),
-    radial-gradient(1px 1px at 40% 60%, rgba(255, 185, 90, 0.4) 50%, transparent 50%),
-    radial-gradient(1px 1px at 88% 50%, rgba(255, 195, 110, 0.3) 50%, transparent 50%),
-    /* Top warm edge */
-    linear-gradient(180deg, rgba(255, 170, 70, 0.1) 0%, transparent 25%) !important;
+    /* Warm reflection */
+    linear-gradient(125deg, transparent 32%, rgba(255, 200, 120, 0.08) 36%, rgba(255, 215, 150, 0.15) 42%, rgba(255, 200, 120, 0.08) 48%, transparent 52%),
+    /* Peel texture sparkles */
+    radial-gradient(1.5px 1.5px at 25% 20%, rgba(255, 210, 140, 0.6) 50%, transparent 50%),
+    radial-gradient(1px 1px at 55% 35%, rgba(255, 200, 120, 0.5) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 78% 22%, rgba(255, 220, 160, 0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 40% 60%, rgba(255, 195, 110, 0.4) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 88% 50%, rgba(255, 205, 130, 0.4) 50%, transparent 50%),
+    linear-gradient(180deg, rgba(255, 180, 80, 0.12) 0%, transparent 20%) !important;
+  border-radius: 22px !important;
 }
 
 .glass-surface.skin-orange::after {
   background:
-    /* Warm haze */
-    radial-gradient(ellipse at 50% 30%, rgba(255, 160, 50, 0.05) 0%, transparent 50%),
-    /* Subtle organic lines */
-    linear-gradient(70deg, transparent 40%, rgba(255, 170, 60, 0.04) 41%, transparent 42%),
-    linear-gradient(110deg, transparent 55%, rgba(255, 150, 40, 0.03) 56%, transparent 57%) !important;
+    radial-gradient(ellipse at 50% 30%, rgba(255, 170, 60, 0.06) 0%, transparent 50%),
+    linear-gradient(70deg, transparent 40%, rgba(255, 175, 65, 0.05) 41%, transparent 42%),
+    linear-gradient(110deg, transparent 55%, rgba(255, 155, 45, 0.04) 56%, transparent 57%) !important;
   opacity: 1 !important;
+  border-radius: 22px !important;
 }
 
 /* ===== TITLE BAR ===== */
@@ -445,9 +396,7 @@
   background: rgba(255, 255, 255, 0.03);
 }
 
-.titlebar:active {
-  cursor: grabbing;
-}
+.titlebar:active { cursor: grabbing; }
 
 .titlebar-title {
   flex: 1;
@@ -587,9 +536,7 @@
   position: relative;
 }
 
-.priority-dot:hover {
-  transform: scale(1.3);
-}
+.priority-dot:hover { transform: scale(1.3); }
 
 .priority-dot.active {
   border-color: rgba(255, 255, 255, 0.8);
@@ -597,21 +544,11 @@
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
 
-.priority-dot.dot-glass {
-  background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.7), rgba(180, 180, 200, 0.4));
-}
-.priority-dot.dot-red {
-  background: radial-gradient(circle at 35% 35%, rgba(255, 130, 130, 1), rgba(200, 40, 40, 0.8));
-}
-.priority-dot.dot-orange {
-  background: radial-gradient(circle at 35% 35%, rgba(255, 190, 120, 1), rgba(220, 130, 30, 0.8));
-}
-.priority-dot.dot-yellow {
-  background: radial-gradient(circle at 35% 35%, rgba(255, 240, 150, 1), rgba(220, 200, 30, 0.8));
-}
-.priority-dot.dot-green {
-  background: radial-gradient(circle at 35% 35%, rgba(120, 255, 160, 1), rgba(40, 180, 80, 0.8));
-}
+.priority-dot.dot-glass { background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.7), rgba(180, 180, 200, 0.4)); }
+.priority-dot.dot-red { background: radial-gradient(circle at 35% 35%, rgba(255, 130, 130, 1), rgba(200, 40, 40, 0.8)); }
+.priority-dot.dot-orange { background: radial-gradient(circle at 35% 35%, rgba(255, 190, 120, 1), rgba(220, 130, 30, 0.8)); }
+.priority-dot.dot-yellow { background: radial-gradient(circle at 35% 35%, rgba(255, 240, 150, 1), rgba(220, 200, 30, 0.8)); }
+.priority-dot.dot-green { background: radial-gradient(circle at 35% 35%, rgba(120, 255, 160, 1), rgba(40, 180, 80, 0.8)); }
 
 /* ===== SKIN PICKER ===== */
 .skin-toggle-btn {
@@ -642,10 +579,7 @@
   border-radius: 12px;
   padding: 6px;
   min-width: 200px;
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   z-index: 9999;
 }
 
@@ -664,13 +598,8 @@
   text-align: left;
 }
 
-.skin-option:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.skin-option.active {
-  background: rgba(100, 160, 255, 0.18);
-}
+.skin-option:hover { background: rgba(255, 255, 255, 0.1); }
+.skin-option.active { background: rgba(100, 160, 255, 0.18); }
 
 .skin-preview {
   width: 28px;
@@ -681,19 +610,6 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-.skin-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.skin-name {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.skin-desc {
-  font-size: 10.5px;
-  color: rgba(255, 255, 255, 0.4);
-}
+.skin-info { display: flex; flex-direction: column; gap: 2px; }
+.skin-name { font-size: 12.5px; font-weight: 600; color: rgba(255, 255, 255, 0.9); }
+.skin-desc { font-size: 10.5px; color: rgba(255, 255, 255, 0.4); }
