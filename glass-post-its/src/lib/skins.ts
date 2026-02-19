@@ -11,6 +11,8 @@ export interface Skin {
   textSecondary: string;
   accentColor: string;
   surfaceOverlay: string;
+  // Highlight background for marked text
+  highlightBg: string;
   // Preview colors for skin picker dropdown
   previewBg: string;
   previewBorder: string;
@@ -29,6 +31,7 @@ export const SKINS: Record<string, Skin> = {
     textSecondary: 'rgba(255, 255, 255, 0.55)',
     accentColor: 'rgba(140, 190, 255, 0.9)',
     surfaceOverlay: 'transparent',
+    highlightBg: 'rgba(255, 220, 80, 0.25)',
     previewBg: 'linear-gradient(135deg, rgba(255,255,255,0.15), rgba(180,180,200,0.08))',
     previewBorder: 'rgba(255, 255, 255, 0.3)',
   },
@@ -44,6 +47,7 @@ export const SKINS: Record<string, Skin> = {
     textSecondary: 'rgba(160, 200, 230, 0.6)',
     accentColor: 'rgba(100, 200, 255, 0.9)',
     surfaceOverlay: 'transparent',
+    highlightBg: 'rgba(140, 210, 255, 0.25)',
     previewBg: 'linear-gradient(135deg, rgba(160,220,255,0.4), rgba(80,150,220,0.2), rgba(200,240,255,0.3))',
     previewBorder: 'rgba(160, 225, 255, 0.5)',
   },
@@ -59,6 +63,7 @@ export const SKINS: Record<string, Skin> = {
     textSecondary: 'rgba(255, 180, 150, 0.6)',
     accentColor: 'rgba(255, 150, 80, 0.9)',
     surfaceOverlay: 'transparent',
+    highlightBg: 'rgba(255, 100, 30, 0.3)',
     previewBg: 'linear-gradient(135deg, rgba(60,15,5,0.9), rgba(255,80,15,0.4), rgba(40,10,2,0.8), rgba(255,100,20,0.3))',
     previewBorder: 'rgba(255, 100, 30, 0.6)',
   },
@@ -74,6 +79,7 @@ export const SKINS: Record<string, Skin> = {
     textSecondary: 'rgba(255, 220, 150, 0.6)',
     accentColor: 'rgba(255, 200, 80, 0.9)',
     surfaceOverlay: 'transparent',
+    highlightBg: 'rgba(255, 210, 60, 0.3)',
     previewBg: 'radial-gradient(circle at 30% 30%, rgba(255,240,150,0.5), rgba(255,200,50,0.3), rgba(200,150,20,0.2))',
     previewBorder: 'rgba(255, 215, 80, 0.5)',
   },
@@ -89,6 +95,7 @@ export const SKINS: Record<string, Skin> = {
     textSecondary: 'rgba(255, 190, 140, 0.6)',
     accentColor: 'rgba(255, 170, 80, 0.9)',
     surfaceOverlay: 'transparent',
+    highlightBg: 'rgba(255, 150, 40, 0.3)',
     previewBg: 'linear-gradient(135deg, rgba(255,170,60,0.4), rgba(255,130,30,0.2), rgba(255,160,50,0.3))',
     previewBorder: 'rgba(255, 165, 70, 0.5)',
   },

@@ -439,7 +439,7 @@
   user-select: none;
   -webkit-app-region: drag;
   flex-shrink: 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--skin-border, rgba(255, 255, 255, 0.08));
   position: relative;
   z-index: 1;
   background: rgba(255, 255, 255, 0.03);
@@ -495,7 +495,7 @@
 .titlebar-btn.pinned {
   background: rgba(100, 160, 255, 0.2);
   border-color: rgba(100, 160, 255, 0.35);
-  color: rgba(140, 190, 255, 0.95);
+  color: var(--skin-accent, rgba(140, 190, 255, 0.95));
 }
 
 /* ===== POST-IT CONTENT ===== */
@@ -511,7 +511,7 @@
 .toolbar-row {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--skin-border, rgba(255, 255, 255, 0.06));
   position: relative;
   z-index: 2;
   -webkit-app-region: no-drag;
@@ -556,7 +556,7 @@
 }
 
 .format-btn.is-active {
-  color: rgba(140, 190, 255, 1);
+  color: var(--skin-accent, rgba(140, 190, 255, 1));
   background: rgba(100, 160, 255, 0.18);
 }
 
