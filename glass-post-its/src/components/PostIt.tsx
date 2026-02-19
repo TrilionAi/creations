@@ -71,9 +71,6 @@ export default function PostItView({ id }: Props) {
     '--skin-text': skin.textColor,
     '--skin-text-secondary': skin.textSecondary,
     '--skin-accent': skin.accentColor,
-    '--skin-overlay': skin.surfaceOverlay,
-    '--skin-gradient': skin.gradient || 'none',
-    '--skin-texture': skin.texture || 'none',
     '--skin-reflection': String(skin.reflectionOpacity),
   } as React.CSSProperties), [skin]);
 

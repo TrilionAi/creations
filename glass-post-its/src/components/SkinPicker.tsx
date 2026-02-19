@@ -68,8 +68,8 @@ export default function SkinPicker({ current, onChange }: Props) {
               <span
                 className="skin-preview"
                 style={{
-                  background: skin.gradient || skin.bgTint,
-                  borderColor: skin.borderColor,
+                  background: skin.previewBg,
+                  borderColor: skin.previewBorder,
                 }}
               />
               <span className="skin-info">

@@ -69,40 +69,28 @@ export default function FormatToolbar({ editor }: Props) {
       <button
         className="format-btn"
         onClick={() => {
-          // Insert a collapsible group: parent task with nested child tasks
-          editor.chain().focus().toggleTaskList().run();
-          // After creating the task list, sink the next items to create nesting
-          setTimeout(() => {
-            editor.chain().focus()
-              .insertContent({
-                type: 'taskList',
-                content: [{
-                  type: 'taskItem',
-                  attrs: { checked: false },
-                  content: [
-                    { type: 'paragraph', content: [{ type: 'text', text: 'Grupo...' }] },
-                    {
-                      type: 'taskList',
-                      content: [
-                        {
-                          type: 'taskItem',
-                          attrs: { checked: false },
-                          content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Sub-tarefa 1' }] }]
-                        },
-                        {
-                          type: 'taskItem',
-                          attrs: { checked: false },
-                          content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Sub-tarefa 2' }] }]
-                        },
-                      ]
-                    }
-                  ]
-                }]
-              })
-              .run();
-          }, 50);
+          editor.chain().focus()
+            .insertContent({
+              type: 'taskList',
+              content: [{
+                type: 'taskItem',
+                attrs: { checked: false },
+                content: [
+                  { type: 'paragraph' },
+                  {
+                    type: 'taskList',
+                    content: [{
+                      type: 'taskItem',
+                      attrs: { checked: false },
+                      content: [{ type: 'paragraph' }]
+                    }]
+                  }
+                ]
+              }]
+            })
+            .run();
         }}
-        title="Grupo colapsavel (checklist com sub-itens)"
+        title="Toggle list (collapsible)"
       >
         {'\u25B6'}
       </button>
