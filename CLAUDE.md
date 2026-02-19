@@ -1,4 +1,4 @@
-# Creations - Workspace Conventions
+# Creations - Convenções de Trabalho
 
 ## Estrutura do Repositório
 
@@ -17,8 +17,9 @@ creations/
 
 Regras:
 - **Uma pasta por criação** — nunca misturar projetos
-- Cada pasta é autônoma (tem seu próprio package.json, Cargo.toml, etc.)
+- Cada pasta é autônoma com suas próprias dependências e configurações
 - Sem dependências cruzadas entre criações
+- Cada criação define sua própria stack (pode ser qualquer tecnologia)
 
 ## Ambiente de Desenvolvimento
 
@@ -33,10 +34,10 @@ Regras:
 - Commits direto na main (workflow simplificado)
 
 ### Releases e Builds
-- **GitHub Actions** compila automaticamente quando uma tag `v*` é criada
+- **GitHub Actions** compila automaticamente quando uma tag é criada
 - Cada criação tem seu workflow em `.github/workflows/`
-- O build gera instaladores para **Windows (.exe)** e **macOS (.dmg)**
 - Releases ficam em: https://github.com/TrilionAi/creations/releases
+- O que o build gera depende da criação (pode ser .exe, .dmg, .apk, site, etc.)
 
 ### Fluxo para publicar nova versão:
 ```bash
@@ -48,57 +49,21 @@ git push origin v0.X.0
 ```
 
 ### Convenção de tags:
-- Formato: `v{major}.{minor}.{patch}` (ex: v0.1.0, v0.2.0)
-- Para criações com nomes diferentes no futuro: `{nome}-v0.1.0` (ex: `cool-app-v0.1.0`)
+- Projeto único: `v{major}.{minor}.{patch}` (ex: v0.1.0)
+- Múltiplos projetos: `{nome}-v{major}.{minor}.{patch}` (ex: `glass-post-its-v0.1.0`)
 
-## Configuração de Apps (Tauri)
+## Regras para Instaladores Desktop
 
-### Desinstalação limpa (Hard Delete)
-Todo app Tauri DEVE ter o instalador configurado para **apagar dados do usuário** (AppData) quando desinstalado. Isso é configurado no `tauri.conf.json`:
-
-```json
-{
-  "bundle": {
-    "windows": {
-      "nsis": {
-        "installerIcon": "icons/icon.ico",
-        "uninstallerIcon": "icons/icon.ico"
-      }
-    }
-  }
-}
-```
-
-E via hook de desinstalação customizado no NSIS ou via script de limpeza.
-
-### Transparência e efeitos visuais
-Para apps com efeito glass/transparent:
-- `transparent: true` no tauri.conf.json (ou no window builder)
-- `decorations: false` para custom title bar
-- `window-vibrancy` crate para efeitos nativos
-- CSS com `background: transparent` no body
-
-### SQL/Persistência
-- Usar `@tauri-apps/plugin-sql` (SQLite) do lado frontend
-- Migrations automáticas no código (CREATE TABLE IF NOT EXISTS + ALTER TABLE com try/catch)
+Quando a criação gera um app instalável:
+- **Desinstalação limpa (hard delete)** — sempre configurar para apagar dados locais do usuário ao desinstalar
+- O usuário não deve ter que caçar pastas manualmente para limpar
 
 ## Checklist para Nova Criação
 
 1. [ ] Criar pasta isolada: `creations/{nome-da-criacao}/`
-2. [ ] Scaffoldar o projeto (ex: `npm create tauri-app@latest`)
-3. [ ] Configurar tauri.conf.json (transparent, decorations, bundle)
-4. [ ] Criar workflow em `.github/workflows/{nome}-build.yml`
-5. [ ] Implementar o app
-6. [ ] Testar TypeScript: `npx tsc --noEmit`
-7. [ ] Testar Vite build: `npx vite build`
-8. [ ] Testar Cargo: `cargo check` (da pasta src-tauri)
-9. [ ] Commit + push + tag para gerar release
-10. [ ] Baixar .exe no PC e testar
-
-## Stack Padrão (Tauri Apps)
-
-- **Backend**: Rust + Tauri v2
-- **Frontend**: React 19 + TypeScript + Vite
-- **Database**: SQLite via tauri-plugin-sql
-- **Efeitos**: window-vibrancy (Acrylic/Mica Windows, Vibrancy macOS)
-- **Editor Rich Text**: Tiptap (quando necessário)
+2. [ ] Escolher stack e scaffoldar o projeto
+3. [ ] Criar workflow em `.github/workflows/{nome}-build.yml`
+4. [ ] Implementar
+5. [ ] Verificar que compila sem erros
+6. [ ] Commit + push + tag para gerar release
+7. [ ] Baixar no PC e testar
