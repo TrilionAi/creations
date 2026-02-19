@@ -44,7 +44,7 @@ export default function FormatToolbar({ editor }: Props) {
       >
         H
       </button>
-      <span style={{ width: 1, background: 'rgba(0,0,0,0.1)', margin: '2px 4px' }} />
+      <span className="format-separator" />
       <button
         className={`format-btn ${editor.isActive('bulletList') ? 'is-active' : ''}`}
         onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -66,7 +66,7 @@ export default function FormatToolbar({ editor }: Props) {
       >
         {'\u2610'}
       </button>
-      <span style={{ width: 1, background: 'rgba(0,0,0,0.1)', margin: '2px 4px' }} />
+      <span className="format-separator" />
       <button
         className={`format-btn ${editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}`}
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}

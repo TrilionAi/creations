@@ -2,18 +2,19 @@ use tauri::WebviewWindow;
 
 #[allow(unused_variables)]
 pub fn apply_glass(window: &WebviewWindow, priority: &str) {
-    let color = match priority {
-        "red" => (255, 100, 100, 40),
-        "orange" => (255, 180, 100, 40),
-        "yellow" => (255, 255, 150, 40),
-        "green" => (100, 255, 150, 40),
-        _ => (255, 255, 255, 25), // "glass" - subtle white
-    };
-
     #[cfg(target_os = "windows")]
     {
         use window_vibrancy::apply_acrylic;
-        let _ = apply_acrylic(window, Some((color.0, color.1, color.2, color.3)));
+        // Use very transparent tint - let the CSS handle the color overlay
+        // The acrylic effect provides the frosted blur of the desktop behind
+        let tint = match priority {
+            "red" => (180, 40, 40, 80),
+            "orange" => (180, 100, 30, 80),
+            "yellow" => (180, 170, 50, 80),
+            "green" => (40, 150, 70, 80),
+            _ => (200, 200, 220, 60), // glass - very subtle cool white
+        };
+        let _ = apply_acrylic(window, Some((tint.0, tint.1, tint.2, tint.3)));
     }
 
     #[cfg(target_os = "macos")]
