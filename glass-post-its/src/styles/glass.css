@@ -134,6 +134,7 @@
 .format-btn:hover { color: white; background: rgba(255, 255, 255, 0.12); }
 .format-btn.is-active { color: rgba(140, 190, 255, 1); background: rgba(100, 160, 255, 0.18); }
 .format-separator { width: 1px; background: rgba(255, 255, 255, 0.1); margin: 3px 5px; align-self: stretch; }
+.font-size-btn { font-size: 10px !important; padding: 5px 5px !important; letter-spacing: -0.5px; }
 
 /* ===== COLOR PICKER ===== */
 .cp-wrapper { position: relative; }

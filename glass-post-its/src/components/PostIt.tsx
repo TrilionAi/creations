@@ -16,6 +16,7 @@ import { TextStyle } from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
 import CollapsibleTaskItem from './CollapsibleTaskItem';
 import { ToggleBlock } from '../extensions/ToggleBlock';
+import { FontSize } from '../extensions/FontSize';
 import { Priority } from '../types/postit';
 import { invoke } from '@tauri-apps/api/core';
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow';
@@ -41,6 +42,7 @@ export default function PostItView({ id }: Props) {
       Highlight,
       TextStyle,
       Color,
+      FontSize,
       ToggleBlock,
     ],
     content: postit?.content || '',
