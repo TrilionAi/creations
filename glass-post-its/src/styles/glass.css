@@ -95,7 +95,11 @@
 .titlebar:active { cursor: grabbing; }
 
 .titlebar-title {
-  flex: 1; font-size: 12.5px; font-weight: 500; opacity: 0.8; padding: 0 6px; letter-spacing: 0.02em;
+  flex: 1; font-size: 12.5px; font-weight: 500; opacity: 0.9; padding: 0 6px; letter-spacing: 0.02em;
+}
+.titlebar-title::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+  font-style: italic;
 }
 .titlebar-buttons { display: flex; gap: 5px; -webkit-app-region: no-drag; }
 

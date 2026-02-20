@@ -73,7 +73,7 @@ export const ToggleBlock = Node.create({
         // Title has content: create new toggleBlock after current one
         const toggleEnd = $from.after(toggleDepth);
         const newToggle = state.schema.nodes.toggleBlock.create(
-          { open: true },
+          { open: false },
           [
             state.schema.nodes.paragraph.create(),
             state.schema.nodes.paragraph.create(),

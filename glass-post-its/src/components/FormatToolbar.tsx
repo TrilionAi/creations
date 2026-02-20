@@ -72,7 +72,7 @@ export default function FormatToolbar({ editor }: Props) {
           editor.chain().focus()
             .insertContent({
               type: 'toggleBlock',
-              attrs: { open: true },
+              attrs: { open: false },
               content: [
                 { type: 'paragraph' },
                 { type: 'paragraph' },
