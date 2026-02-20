@@ -1,17 +1,29 @@
 use tauri::{
     AppHandle, Emitter, Manager,
-    menu::{Menu, MenuItem},
+    menu::{CheckMenuItem, Menu, MenuItem, PredefinedMenuItem},
     tray::TrayIconBuilder,
     image::Image,
 };
+use tauri_plugin_autostart::ManagerExt;
 
 pub fn setup_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
     let new_postit = MenuItem::with_id(app, "new", "New Post-it", true, None::<&str>)?;
     let show_all = MenuItem::with_id(app, "show_all", "Show All", true, None::<&str>)?;
     let hide_all = MenuItem::with_id(app, "hide_all", "Hide All", true, None::<&str>)?;
+
+    let is_autostart = app.autolaunch().is_enabled().unwrap_or(false);
+    let autostart = CheckMenuItem::with_id(
+        app, "autostart", "Start with System", true, is_autostart, None::<&str>,
+    )?;
+
+    let sep1 = PredefinedMenuItem::separator(app)?;
+    let sep2 = PredefinedMenuItem::separator(app)?;
     let quit = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
 
-    let menu = Menu::with_items(app, &[&new_postit, &show_all, &hide_all, &quit])?;
+    let menu = Menu::with_items(
+        app,
+        &[&new_postit, &show_all, &hide_all, &sep1, &autostart, &sep2, &quit],
+    )?;
 
     TrayIconBuilder::new()
         .menu(&menu)
@@ -34,6 +46,15 @@ pub fn setup_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
                         if label.starts_with("postit-") {
                             let _ = window.hide();
                         }
+                    }
+                }
+                "autostart" => {
+                    let manager = app.autolaunch();
+                    let is_enabled = manager.is_enabled().unwrap_or(false);
+                    if is_enabled {
+                        let _ = manager.disable();
+                    } else {
+                        let _ = manager.enable();
                     }
                 }
                 "quit" => {

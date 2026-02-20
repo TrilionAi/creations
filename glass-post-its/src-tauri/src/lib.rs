@@ -13,6 +13,10 @@ pub fn run() {
             tauri_plugin_sql::Builder::default()
                 .build(),
         )
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            None,
+        ))
         .invoke_handler(tauri::generate_handler![
             commands::create_postit_window,
             commands::close_postit_window,

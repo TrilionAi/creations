@@ -17,7 +17,7 @@ export default function ToggleBlockView({ node, updateAttributes }: NodeViewProp
         contentEditable={false}
         title={isOpen ? 'Collapse' : 'Expand'}
       >
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
+        <svg width="14" height="14" viewBox="0 0 10 10" fill="currentColor">
           <path d={isOpen ? 'M1 3L5 8L9 3Z' : 'M3 1L8 5L3 9Z'} />
         </svg>
       </button>
