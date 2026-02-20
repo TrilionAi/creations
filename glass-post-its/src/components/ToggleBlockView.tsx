@@ -44,8 +44,29 @@ export default function ToggleBlockView({ node, updateAttributes, editor, getPos
   const handleTitleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      updateAttributes({ open: true });
-      focusBody();
+      const pos = getPos();
+      if (typeof pos !== 'number') return;
+
+      if (title === '') {
+        // Empty title + Enter: exit toggle mode, replace with paragraph
+        const { state } = editor;
+        const tr = state.tr;
+        const end = pos + node.nodeSize;
+        tr.replaceWith(pos, end, state.schema.nodes.paragraph.create());
+        tr.setSelection(TextSelection.create(tr.doc, pos + 1));
+        editor.view.dispatch(tr);
+        editor.view.focus();
+      } else {
+        // Title has content: create new accordion below (like bullet lists)
+        const { state } = editor;
+        const toggleEnd = pos + node.nodeSize;
+        const newToggle = state.schema.nodes.toggleBlock.create(
+          { open: false, title: '', titleColor: '' },
+          [state.schema.nodes.paragraph.create()]
+        );
+        editor.view.dispatch(state.tr.insert(toggleEnd, newToggle));
+        // New ToggleBlockView auto-focuses its title via useEffect
+      }
     } else if (e.key === 'Backspace' && title === '') {
       e.preventDefault();
       const pos = getPos();
@@ -59,7 +80,7 @@ export default function ToggleBlockView({ node, updateAttributes, editor, getPos
         editor.view.focus();
       }
     }
-  }, [title, updateAttributes, focusBody, editor, getPos, node]);
+  }, [title, editor, getPos, node]);
 
   const handleTitleFocus = useCallback(() => {
     if ((editor.storage as Record<string, any>).toggleBlock) {
