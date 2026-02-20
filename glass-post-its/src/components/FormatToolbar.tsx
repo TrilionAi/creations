@@ -32,6 +32,9 @@ function hexToHsv(hex: string): [number, number, number] {
   return [h, s, max];
 }
 
+const FONT_SIZES = ['10px', '12px', '13.5px', '16px', '20px', '24px', '32px'];
+const DEFAULT_SIZE = '13.5px';
+
 const QUICK_COLORS = [
   '#ffffff', '#ff6b6b', '#ffa94d', '#ffd43b',
   '#69db7c', '#74c0fc', '#b197fc', '#f783ac',
@@ -292,23 +295,53 @@ export default function FormatToolbar({ editor }: Props) {
         H
       </button>
       <ColorPicker editor={editor} />
+      <button
+        className="format-btn font-size-btn"
+        onClick={() => {
+          const current = editor.getAttributes('textStyle').fontSize || DEFAULT_SIZE;
+          const num = parseFloat(current);
+          const idx = FONT_SIZES.findIndex(s => parseFloat(s) >= num);
+          const prevIdx = idx <= 0 ? 0 : idx - 1;
+          if (parseFloat(FONT_SIZES[prevIdx]) !== num || prevIdx > 0) {
+            const newSize = FONT_SIZES[Math.max(0, idx <= 0 ? 0 : prevIdx)];
+            editor.chain().focus().setFontSize(newSize).run();
+          }
+        }}
+        title="Decrease font size"
+      >
+        A-
+      </button>
+      <button
+        className="format-btn font-size-btn"
+        onClick={() => {
+          const current = editor.getAttributes('textStyle').fontSize || DEFAULT_SIZE;
+          const num = parseFloat(current);
+          const idx = FONT_SIZES.findIndex(s => parseFloat(s) > num);
+          if (idx !== -1) {
+            editor.chain().focus().setFontSize(FONT_SIZES[idx]).run();
+          }
+        }}
+        title="Increase font size"
+      >
+        A+
+      </button>
       <span className="format-separator" />
       <button
-        className={`format-btn ${editor.isActive('bulletList') ? 'is-active' : ''}`}
+        className="format-btn"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         title="Bullet List"
       >
         {'\u2022'}
       </button>
       <button
-        className={`format-btn ${editor.isActive('orderedList') ? 'is-active' : ''}`}
+        className="format-btn"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         title="Numbered List"
       >
         1.
       </button>
       <button
-        className={`format-btn ${editor.isActive('taskList') ? 'is-active' : ''}`}
+        className="format-btn"
         onClick={() => editor.chain().focus().toggleTaskList().run()}
         title="Checklist"
       >
@@ -333,28 +366,28 @@ export default function FormatToolbar({ editor }: Props) {
       </button>
       <span className="format-separator" />
       <button
-        className={`format-btn ${editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}`}
+        className="format-btn"
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         title="Heading 1"
       >
         H1
       </button>
       <button
-        className={`format-btn ${editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}`}
+        className="format-btn"
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         title="Heading 2"
       >
         H2
       </button>
       <button
-        className={`format-btn ${editor.isActive('blockquote') ? 'is-active' : ''}`}
+        className="format-btn"
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         title="Quote"
       >
         {'\u201C'}
       </button>
       <button
-        className={`format-btn ${editor.isActive('code') ? 'is-active' : ''}`}
+        className="format-btn"
         onClick={() => editor.chain().focus().toggleCode().run()}
         title="Code"
       >
