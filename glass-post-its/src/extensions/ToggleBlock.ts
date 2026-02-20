@@ -16,6 +16,11 @@ export const ToggleBlock = Node.create({
         parseHTML: (element) => element.getAttribute('data-open') !== 'false',
         renderHTML: (attributes) => ({ 'data-open': String(attributes.open) }),
       },
+      title: {
+        default: '',
+        parseHTML: (element) => element.getAttribute('data-title') || '',
+        renderHTML: (attributes) => ({ 'data-title': attributes.title || '' }),
+      },
     };
   },
 
@@ -48,41 +53,34 @@ export const ToggleBlock = Node.create({
 
         if (toggleDepth === -1) return false;
 
-        // Only handle Enter in the first child (title) of the toggleBlock
-        const indexInToggle = $from.index(toggleDepth);
-        if (indexInToggle !== 0) return false;
-
         const toggleNode = $from.node(toggleDepth);
-        const firstChild = toggleNode.child(0);
-        const atEnd = $from.parentOffset === firstChild.content.size;
+        const indexInToggle = $from.index(toggleDepth);
 
-        if (!atEnd) return false;
+        // If in the last child and it's an empty paragraph → exit toggle
+        if (indexInToggle === toggleNode.childCount - 1) {
+          const lastChild = toggleNode.child(toggleNode.childCount - 1);
+          if (lastChild.type.name === 'paragraph' && lastChild.content.size === 0) {
+            // Need at least 2 children to remove the last one (content: 'block+')
+            if (toggleNode.childCount < 2) return false;
 
-        const tr = state.tr;
+            const tr = state.tr;
+            const paraStart = $from.before($from.depth);
+            const paraEnd = $from.after($from.depth);
+            const deletedSize = paraEnd - paraStart;
 
-        if (firstChild.content.size === 0) {
-          // Empty title: exit toggle mode → replace with plain paragraph
-          const toggleStart = $from.before(toggleDepth);
-          const toggleEnd = $from.after(toggleDepth);
-          tr.replaceWith(toggleStart, toggleEnd, state.schema.nodes.paragraph.create());
-          tr.setSelection(TextSelection.create(tr.doc, toggleStart + 1));
-          view.dispatch(tr);
-          return true;
+            // Delete the empty paragraph
+            tr.delete(paraStart, paraEnd);
+
+            // Insert a new paragraph after the toggle
+            const newToggleEnd = $from.after(toggleDepth) - deletedSize;
+            tr.insert(newToggleEnd, state.schema.nodes.paragraph.create());
+            tr.setSelection(TextSelection.create(tr.doc, newToggleEnd + 1));
+            view.dispatch(tr);
+            return true;
+          }
         }
 
-        // Title has content: create new toggleBlock after current one
-        const toggleEnd = $from.after(toggleDepth);
-        const newToggle = state.schema.nodes.toggleBlock.create(
-          { open: false },
-          [
-            state.schema.nodes.paragraph.create(),
-            state.schema.nodes.paragraph.create(),
-          ]
-        );
-        tr.insert(toggleEnd, newToggle);
-        tr.setSelection(TextSelection.create(tr.doc, toggleEnd + 2));
-        view.dispatch(tr);
-        return true;
+        return false;
       },
 
       Backspace: () => {
@@ -102,16 +100,16 @@ export const ToggleBlock = Node.create({
 
         if (toggleDepth === -1) return false;
 
-        // Only in the first child (title)
+        // Only in the first child
         const indexInToggle = $from.index(toggleDepth);
         if (indexInToggle !== 0) return false;
 
-        // Only if cursor is at position 0 of the title
+        // Only if cursor is at position 0 of the first child
         if ($from.parentOffset !== 0) return false;
 
         const firstChild = $from.node(toggleDepth).child(0);
         if (firstChild.content.size === 0) {
-          // Empty title + Backspace: exit toggle, replace with paragraph
+          // Empty first paragraph + Backspace: exit toggle, replace with paragraph
           const toggleStart = $from.before(toggleDepth);
           const toggleEnd = $from.after(toggleDepth);
           const tr = state.tr;
