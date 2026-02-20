@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { usePostIt } from '../hooks/usePostIt';
 import { useAutoGreen } from '../hooks/useAutoGreen';
 import TitleBar from './TitleBar';
@@ -57,6 +57,32 @@ export default function PostItView({ id }: Props) {
   }, [updateField]);
 
   useAutoGreen(editor, postit?.priority || 'glass', handlePriorityChange);
+
+  // Restore and enforce always-on-top for pinned post-its
+  useEffect(() => {
+    if (!postit) return;
+
+    const win = getCurrentWebviewWindow();
+
+    // Apply always-on-top state (restores pin on startup)
+    if (postit.is_pinned) {
+      invoke('set_always_on_top', { id, pinned: true });
+    }
+
+    // When pinned: re-apply topmost when window loses focus
+    // Windows can "forget" the topmost z-order when other windows activate
+    if (!postit.is_pinned) return;
+
+    const unlisten = win.onFocusChanged(({ payload: focused }) => {
+      if (!focused) {
+        setTimeout(() => {
+          invoke('set_always_on_top', { id, pinned: true });
+        }, 150);
+      }
+    });
+
+    return () => { unlisten.then(fn => fn()); };
+  }, [id, postit?.is_pinned]);
 
   if (!postit) return null;
 
