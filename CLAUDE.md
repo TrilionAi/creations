@@ -54,6 +54,14 @@ git tag v0.X.0
 git push origin v0.X.0
 ```
 
+### IMPORTANTE: Sincronizar versão nos arquivos do projeto
+**Antes de criar a tag**, SEMPRE atualizar a versão nos arquivos de configuração do projeto para bater com a tag:
+- `tauri.conf.json` → campo `"version"` (é o que aparece no instalador/download)
+- `package.json` → campo `"version"` (se relevante)
+- Qualquer outro arquivo que contenha o número da versão
+
+**Exemplo**: Se a tag será `v0.15.0`, os arquivos devem ter `"version": "0.15.0"` ANTES do commit/tag. Nunca deixar a versão do instalador desatualizada em relação à tag do git.
+
 ### Convenção de tags:
 - Projeto único: `v{major}.{minor}.{patch}` (ex: v0.1.0)
 - Múltiplos projetos: `{nome}-v{major}.{minor}.{patch}` (ex: `glass-post-its-v0.1.0`)

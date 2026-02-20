@@ -255,6 +255,15 @@ function ColorPicker({ editor }: { editor: Editor }) {
 
 /* ===== Format Toolbar ===== */
 export default function FormatToolbar({ editor }: Props) {
+  // Force re-render when selection or formatting state changes
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    if (!editor) return;
+    const handler = () => setTick(t => t + 1);
+    editor.on('transaction', handler);
+    return () => { editor.off('transaction', handler); };
+  }, [editor]);
+
   if (!editor) return null;
 
   return (
