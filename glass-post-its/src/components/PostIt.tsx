@@ -47,6 +47,11 @@ export default function PostItView({ id }: Props) {
     onUpdate: ({ editor }) => {
       updateField('content', editor.getHTML());
     },
+    onFocus: ({ editor }) => {
+      if ((editor.storage as Record<string, any>).toggleBlock) {
+        (editor.storage as Record<string, any>).toggleBlock.activeTitle = null;
+      }
+    },
   }, [postit?.id]);
 
   const handlePriorityChange = useCallback(async (priority: Priority) => {
