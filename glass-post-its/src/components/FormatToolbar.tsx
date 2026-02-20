@@ -1,7 +1,99 @@
+import { useState, useRef, useEffect } from 'react';
 import { Editor } from '@tiptap/react';
 
 interface Props {
   editor: Editor | null;
+}
+
+const PRESET_COLORS = [
+  { color: '#ffffff', label: 'White' },
+  { color: '#ff6b6b', label: 'Red' },
+  { color: '#ffa94d', label: 'Orange' },
+  { color: '#ffd43b', label: 'Yellow' },
+  { color: '#69db7c', label: 'Green' },
+  { color: '#74c0fc', label: 'Blue' },
+  { color: '#b197fc', label: 'Purple' },
+  { color: '#f783ac', label: 'Pink' },
+  { color: '#adb5bd', label: 'Gray' },
+];
+
+function ColorPicker({ editor }: { editor: Editor }) {
+  const [open, setOpen] = useState(false);
+  const [hex, setHex] = useState('');
+  const ref = useRef<HTMLDivElement>(null);
+
+  const currentColor = editor.getAttributes('textStyle').color || '#ffffff';
+
+  // Close on outside click
+  useEffect(() => {
+    if (!open) return;
+    const handleClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [open]);
+
+  const applyColor = (color: string) => {
+    if (color === '#ffffff') {
+      editor.chain().focus().unsetColor().run();
+    } else {
+      editor.chain().focus().setColor(color).run();
+    }
+    setOpen(false);
+  };
+
+  const handleHexSubmit = () => {
+    const normalized = hex.startsWith('#') ? hex : `#${hex}`;
+    if (/^#[0-9a-fA-F]{3,8}$/.test(normalized)) {
+      applyColor(normalized);
+      setHex('');
+    }
+  };
+
+  return (
+    <div className="color-picker-wrapper" ref={ref}>
+      <button
+        className="format-btn color-picker-btn"
+        onClick={() => setOpen(!open)}
+        title="Text color"
+      >
+        <span className="color-picker-icon">A</span>
+        <span
+          className="color-picker-bar"
+          style={{ background: currentColor }}
+        />
+      </button>
+      {open && (
+        <div className="color-picker-dropdown">
+          <div className="color-picker-grid">
+            {PRESET_COLORS.map(({ color, label }) => (
+              <button
+                key={color}
+                className={`color-picker-swatch ${currentColor === color ? 'active' : ''}`}
+                style={{ background: color }}
+                onClick={() => applyColor(color)}
+                title={label}
+              />
+            ))}
+          </div>
+          <div className="color-picker-hex">
+            <span className="color-picker-hash">#</span>
+            <input
+              type="text"
+              value={hex}
+              onChange={(e) => setHex(e.target.value.replace(/[^0-9a-fA-F]/g, '').slice(0, 6))}
+              onKeyDown={(e) => e.key === 'Enter' && handleHexSubmit()}
+              placeholder="hex"
+              maxLength={6}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function FormatToolbar({ editor }: Props) {
@@ -44,6 +136,7 @@ export default function FormatToolbar({ editor }: Props) {
       >
         H
       </button>
+      <ColorPicker editor={editor} />
       <span className="format-separator" />
       <button
         className={`format-btn ${editor.isActive('bulletList') ? 'is-active' : ''}`}

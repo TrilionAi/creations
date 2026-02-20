@@ -135,6 +135,45 @@
 .format-btn.is-active { color: rgba(140, 190, 255, 1); background: rgba(100, 160, 255, 0.18); }
 .format-separator { width: 1px; background: rgba(255, 255, 255, 0.1); margin: 3px 5px; align-self: stretch; }
 
+/* ===== COLOR PICKER ===== */
+.color-picker-wrapper { position: relative; }
+.color-picker-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  padding: 3px 8px 4px !important;
+}
+.color-picker-icon { font-weight: 700; font-size: 12px; line-height: 1; }
+.color-picker-bar { width: 14px; height: 3px; border-radius: 1px; }
+.color-picker-dropdown {
+  position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  margin-top: 6px; padding: 8px;
+  background: rgba(30, 30, 35, 0.95); backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  z-index: 100; min-width: 140px;
+}
+.color-picker-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px;
+  margin-bottom: 8px;
+}
+.color-picker-swatch {
+  width: 22px; height: 22px; border-radius: 6px; border: 2px solid transparent;
+  cursor: pointer; transition: all 0.15s ease; padding: 0;
+}
+.color-picker-swatch:hover { transform: scale(1.15); border-color: rgba(255, 255, 255, 0.3); }
+.color-picker-swatch.active { border-color: rgba(255, 255, 255, 0.8); transform: scale(1.1); }
+.color-picker-hex {
+  display: flex; align-items: center; gap: 2px;
+  background: rgba(255, 255, 255, 0.08); border-radius: 6px;
+  padding: 4px 6px; border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.color-picker-hash { color: rgba(255, 255, 255, 0.35); font-size: 11px; font-weight: 600; }
+.color-picker-hex input {
+  background: transparent; border: none; outline: none;
+  color: rgba(255, 255, 255, 0.85); font-size: 11px; font-family: monospace;
+  width: 100%; padding: 0;
+}
+.color-picker-hex input::placeholder { color: rgba(255, 255, 255, 0.25); }
+
 /* ===== PRIORITY PICKER ===== */
 .priority-picker { display: flex; gap: 5px; padding: 0 4px; -webkit-app-region: no-drag; position: relative; z-index: 1; }
 .priority-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: all 0.2s ease; }
