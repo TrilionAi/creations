@@ -9,6 +9,12 @@ export const ToggleBlock = Node.create({
   content: 'block+',
   defining: true,
 
+  addStorage() {
+    return {
+      activeTitle: null as number | null,
+    };
+  },
+
   addAttributes() {
     return {
       open: {
@@ -20,6 +26,11 @@ export const ToggleBlock = Node.create({
         default: '',
         parseHTML: (element) => element.getAttribute('data-title') || '',
         renderHTML: (attributes) => ({ 'data-title': attributes.title || '' }),
+      },
+      titleColor: {
+        default: '',
+        parseHTML: (element) => element.getAttribute('data-title-color') || '',
+        renderHTML: (attributes) => ({ 'data-title-color': attributes.titleColor || '' }),
       },
     };
   },

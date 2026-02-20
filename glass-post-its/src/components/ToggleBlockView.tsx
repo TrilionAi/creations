@@ -61,6 +61,14 @@ export default function ToggleBlockView({ node, updateAttributes, editor, getPos
     }
   }, [title, updateAttributes, focusBody, editor, getPos, node]);
 
+  const handleTitleFocus = useCallback(() => {
+    if ((editor.storage as Record<string, any>).toggleBlock) {
+      (editor.storage as Record<string, any>).toggleBlock.activeTitle = getPos();
+    }
+  }, [editor, getPos]);
+
+  const titleColor = node.attrs.titleColor || '';
+
   return (
     <NodeViewWrapper className={`toggle-block ${isOpen ? 'is-open' : 'is-closed'}`}>
       <div className="toggle-header" contentEditable={false}>
@@ -79,7 +87,9 @@ export default function ToggleBlockView({ node, updateAttributes, editor, getPos
           value={title}
           onChange={(e) => updateAttributes({ title: e.target.value })}
           onKeyDown={handleTitleKeyDown}
+          onFocus={handleTitleFocus}
           placeholder="Untitled"
+          style={titleColor ? { color: titleColor } : undefined}
         />
       </div>
       <NodeViewContent className="toggle-body" />
