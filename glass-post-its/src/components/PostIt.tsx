@@ -1,11 +1,10 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { usePostIt } from '../hooks/usePostIt';
 import { useAutoGreen } from '../hooks/useAutoGreen';
 import TitleBar from './TitleBar';
 import Editor from './Editor';
 import FormatToolbar from './FormatToolbar';
 import PriorityPicker from './PriorityPicker';
-import SkinPicker from './SkinPicker';
 import { useEditor, ReactNodeViewRenderer } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import TaskList from '@tiptap/extension-task-list';
@@ -18,7 +17,6 @@ import Color from '@tiptap/extension-color';
 import CollapsibleTaskItem from './CollapsibleTaskItem';
 import { ToggleBlock } from '../extensions/ToggleBlock';
 import { Priority } from '../types/postit';
-import { SKINS } from '../lib/skins';
 import { invoke } from '@tauri-apps/api/core';
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow';
 
@@ -58,35 +56,13 @@ export default function PostItView({ id }: Props) {
     await invoke('update_glass_tint', { id: windowId, priority });
   }, [updateField]);
 
-  const handleSkinChange = useCallback((skinId: string) => {
-    updateField('skin', skinId);
-  }, [updateField]);
-
   useAutoGreen(editor, postit?.priority || 'glass', handlePriorityChange);
-
-  // Get skin styles as CSS custom properties
-  const skin = SKINS[postit?.skin || 'glass'] || SKINS.glass;
-  const skinStyles = useMemo(() => ({
-    '--skin-bg': skin.bgTint,
-    '--skin-border': skin.borderColor,
-    '--skin-glow': skin.glowColor,
-    '--skin-text': skin.textColor,
-    '--skin-text-secondary': skin.textSecondary,
-    '--skin-accent': skin.accentColor,
-    '--skin-highlight': skin.highlightBg,
-    '--skin-reflection': String(skin.reflectionOpacity),
-  } as React.CSSProperties), [skin]);
 
   if (!postit) return null;
 
-  const skinClass = postit.skin !== 'glass' ? `skin-${postit.skin}` : '';
-
   return (
-    <div className={`postit-container ${skinClass}`}>
-      <div
-        className={`glass-surface priority-${postit.priority} ${skinClass}`}
-        style={skinStyles}
-      >
+    <div className="postit-container">
+      <div className={`glass-surface priority-${postit.priority}`}>
         <TitleBar
           id={id}
           title={postit.title}
@@ -100,10 +76,6 @@ export default function PostItView({ id }: Props) {
             <PriorityPicker
               current={postit.priority}
               onChange={handlePriorityChange}
-            />
-            <SkinPicker
-              current={postit.skin || 'glass'}
-              onChange={handleSkinChange}
             />
           </div>
         </div>

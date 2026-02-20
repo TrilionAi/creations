@@ -20,7 +20,7 @@ body {
 }
 
 ::selection {
-  background: var(--skin-highlight, rgba(130, 170, 255, 0.4));
+  background: rgba(130, 170, 255, 0.4);
 }
 
 ::-webkit-scrollbar {

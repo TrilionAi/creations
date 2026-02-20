@@ -11,7 +11,7 @@
   padding: 4px 0;
   font-size: 13.5px;
   line-height: 1.6;
-  color: var(--skin-text, rgba(255, 255, 255, 0.88));
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .tiptap-editor .ProseMirror p {
@@ -21,7 +21,7 @@
 .tiptap-editor .ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   float: left;
-  color: var(--skin-text-secondary, rgba(255, 255, 255, 0.25));
+  color: rgba(255, 255, 255, 0.25);
   pointer-events: none;
   height: 0;
   font-style: italic;
@@ -56,14 +56,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--skin-text-secondary, rgba(255, 255, 255, 0.55));
+  color: rgba(255, 255, 255, 0.55);
   border-radius: 4px;
   transition: all 0.15s ease;
   padding: 0;
 }
 
 .task-collapse-btn:hover {
-  color: var(--skin-text, rgba(255, 255, 255, 0.9));
+  color: rgba(255, 255, 255, 0.9);
   background: rgba(255, 255, 255, 0.1);
 }
 
@@ -88,7 +88,7 @@
 .task-checkbox-label input[type="checkbox"] {
   width: 15px;
   height: 15px;
-  accent-color: var(--skin-accent, #5ddf7a);
+  accent-color: #5ddf7a;
   cursor: pointer;
 }
 
@@ -106,7 +106,7 @@
 .task-item.is-checked > .task-item-row > .task-item-content {
   text-decoration: line-through;
   opacity: 0.4;
-  color: var(--skin-text-secondary, rgba(255, 255, 255, 0.5));
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* Nested task lists - children of a task item */
@@ -140,25 +140,25 @@
   font-size: 1.4em;
   margin: 10px 0 6px;
   font-weight: 600;
-  color: var(--skin-text, rgba(255, 255, 255, 0.95));
+  color: rgba(255, 255, 255, 0.95);
 }
 .tiptap-editor .ProseMirror h2 {
   font-size: 1.2em;
   margin: 8px 0 4px;
   font-weight: 600;
-  color: var(--skin-text, rgba(255, 255, 255, 0.93));
+  color: rgba(255, 255, 255, 0.93);
 }
 .tiptap-editor .ProseMirror h3 {
   font-size: 1.05em;
   margin: 6px 0 3px;
   font-weight: 600;
-  color: var(--skin-text, rgba(255, 255, 255, 0.9));
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* Highlight */
 .tiptap-editor .ProseMirror mark {
-  background: var(--skin-highlight, rgba(255, 220, 80, 0.25));
-  color: var(--skin-text, rgba(255, 255, 255, 0.95));
+  background: rgba(255, 220, 80, 0.25);
+  color: rgba(255, 255, 255, 0.95);
   padding: 1px 3px;
   border-radius: 3px;
 }
@@ -170,7 +170,7 @@
   border-radius: 4px;
   font-size: 0.88em;
   font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-  color: var(--skin-accent, rgba(180, 210, 255, 0.9));
+  color: rgba(180, 210, 255, 0.9);
 }
 
 .tiptap-editor .ProseMirror pre {
@@ -185,7 +185,7 @@
   background: none;
   padding: 0;
   border: none;
-  color: var(--skin-text, rgba(200, 220, 255, 0.85));
+  color: rgba(200, 220, 255, 0.85);
 }
 
 /* Bullet and ordered lists */
@@ -200,33 +200,33 @@
 }
 
 .tiptap-editor .ProseMirror ul:not([data-type="taskList"]) li::marker {
-  color: var(--skin-text-secondary, rgba(255, 255, 255, 0.35));
+  color: rgba(255, 255, 255, 0.35);
 }
 
 .tiptap-editor .ProseMirror ol li::marker {
-  color: var(--skin-text-secondary, rgba(255, 255, 255, 0.4));
+  color: rgba(255, 255, 255, 0.4);
 }
 
 /* Blockquote */
 .tiptap-editor .ProseMirror blockquote {
-  border-left: 3px solid var(--skin-accent, rgba(140, 180, 255, 0.3));
+  border-left: 3px solid rgba(140, 180, 255, 0.3);
   padding-left: 14px;
   margin: 6px 0;
-  color: var(--skin-text-secondary, rgba(255, 255, 255, 0.65));
+  color: rgba(255, 255, 255, 0.65);
   font-style: italic;
 }
 
 /* Links */
 .tiptap-editor .ProseMirror a {
-  color: var(--skin-accent, rgba(140, 190, 255, 0.9));
+  color: rgba(140, 190, 255, 0.9);
   text-decoration: underline;
-  text-decoration-color: var(--skin-accent, rgba(140, 190, 255, 0.3));
+  text-decoration-color: rgba(140, 190, 255, 0.3);
 }
 
 /* Horizontal rule */
 .tiptap-editor .ProseMirror hr {
   border: none;
-  border-top: 1px solid var(--skin-border, rgba(255, 255, 255, 0.1));
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   margin: 10px 0;
 }
 
@@ -249,14 +249,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--skin-text-secondary, rgba(255, 255, 255, 0.55));
+  color: rgba(255, 255, 255, 0.55);
   border-radius: 4px;
   transition: all 0.15s ease;
   padding: 0;
 }
 
 .toggle-arrow-btn:hover {
-  color: var(--skin-text, rgba(255, 255, 255, 0.9));
+  color: rgba(255, 255, 255, 0.9);
   background: rgba(255, 255, 255, 0.1);
 }
 
@@ -266,21 +266,18 @@
 
 .toggle-body {
   min-height: 1.6em;
+  transition: max-height 0.25s ease, opacity 0.2s ease;
+  overflow: hidden;
 }
 
-/* First child = summary/title (always visible) */
-.toggle-body > *:first-child {
-  font-weight: 500;
+/* When collapsed: only show first line (the title), hide rest */
+.toggle-block.is-closed .toggle-body {
+  max-height: 1.8em;
+  opacity: 0.85;
 }
 
-/* When collapsed, hide everything except the first child (title) */
-.toggle-block.is-closed > .toggle-body > *:not(:first-child) {
-  display: none;
-}
-
-/* Indent the collapsible content (everything after first child) */
-.toggle-body > *:not(:first-child) {
-  margin-left: 4px;
-  padding-left: 10px;
-  border-left: 2px solid var(--skin-border, rgba(255, 255, 255, 0.08));
+/* When open: no height limit */
+.toggle-block.is-open .toggle-body {
+  max-height: 5000px;
+  opacity: 1;
 }
