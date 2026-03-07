@@ -1,0 +1,66 @@
+name: Editor Universal - Build & Release
+
+on:
+  push:
+    tags:
+      - 'editor-universal-v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        working-directory: "Editor Universal/desktop-overlay"
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build with PyInstaller
+        working-directory: "Editor Universal/desktop-overlay"
+        run: |
+          pyinstaller editor_universal.spec
+
+      - name: Create ZIP - Desktop Overlay
+        working-directory: "Editor Universal/desktop-overlay"
+        run: |
+          Compress-Archive -Path "dist/Editor Universal Desktop/*" -DestinationPath "dist/EditorUniversal-Desktop-${{ github.ref_name }}.zip"
+
+      - name: Create ZIP - Chrome Extension
+        working-directory: "Editor Universal"
+        run: |
+          Compress-Archive -Path "chrome-extension/*" -DestinationPath "EditorUniversal-Chrome-${{ github.ref_name }}.zip"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Editor Universal ${{ github.ref_name }}"
+          body: |
+            ## Editor Universal ${{ github.ref_name }}
+
+            Desktop drawing/annotation overlay + Chrome extension.
+
+            ### Download
+            - **Desktop Overlay (Windows)**: `.zip` with portable app
+            - **Chrome Extension**: `.zip` to load as unpacked extension
+
+            ### Features
+            - Draw and annotate over any window
+            - Reading guide mode
+            - Text annotation mode
+            - Chrome extension for web annotations
+          files: |
+            Editor Universal/desktop-overlay/dist/EditorUniversal-Desktop-${{ github.ref_name }}.zip
+            Editor Universal/EditorUniversal-Chrome-${{ github.ref_name }}.zip

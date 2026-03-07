@@ -1,0 +1,61 @@
+name: Float Timer - Build & Release
+
+on:
+  push:
+    tags:
+      - 'float-timer-v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        working-directory: "Relógio Universal"
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build with PyInstaller
+        working-directory: "Relógio Universal"
+        run: |
+          pyinstaller "Float Timer.spec"
+
+      - name: Create ZIP artifact
+        working-directory: "Relógio Universal"
+        run: |
+          Compress-Archive -Path "dist/Float Timer.exe" -DestinationPath "dist/FloatTimer-${{ github.ref_name }}.zip"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Float Timer ${{ github.ref_name }}"
+          body: |
+            ## Float Timer ${{ github.ref_name }}
+
+            Circular timer/stopwatch widget that stays always visible on your desktop.
+
+            ### Download
+            - **Windows**: `.zip` with portable `.exe`
+
+            ### Features
+            - Timer and stopwatch modes
+            - Transparent circular widget
+            - Always-on-top
+            - System tray integration
+            - Pomodoro presets
+          files: |
+            Relógio Universal/dist/FloatTimer-${{ github.ref_name }}.zip
+            Relógio Universal/dist/Float Timer.exe
