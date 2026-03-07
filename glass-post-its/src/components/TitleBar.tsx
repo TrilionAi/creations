@@ -1,5 +1,7 @@
 import { invoke } from '@tauri-apps/api/core';
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow';
+import { ask } from '@tauri-apps/plugin-dialog';
+import { deletePostIt } from '../lib/database';
 
 interface Props {
   id: string;
@@ -13,12 +15,20 @@ export default function TitleBar({ id, title, isPinned, onTitleChange, onPinTogg
   const handleClose = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    const confirmed = await ask(
+      'This post-it will be permanently deleted and its content will be lost. Are you sure?',
+      { title: 'Close Post-it', kind: 'warning', okLabel: 'Delete', cancelLabel: 'Cancel' }
+    );
+
+    if (!confirmed) return;
+
+    await deletePostIt(id);
+
     try {
       const win = getCurrentWebviewWindow();
-      await win.hide(); // Hide instead of close to preserve the window
       await win.close();
     } catch {
-      // If close fails, try via Rust command
       await invoke('close_postit_window', { id });
     }
   };
