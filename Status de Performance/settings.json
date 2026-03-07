@@ -1,0 +1,17 @@
+{
+  "font_size": 11,
+  "cpu_temp_limit": 85,
+  "gpu_temp_limit": 83,
+  "auto_start": false,
+  "position_x": 1504,
+  "position_y": 1333,
+  "color_normal": "#00FF00",
+  "color_warning": "#FFAA00",
+  "color_critical": "#FF4444",
+  "color_temp": "#00AAFF",
+  "color_background": "#1e1e1e",
+  "hotkey_toggle": "ctrl+num1",
+  "hotkey_drag": "ctrl+num2",
+  "hotkey_quit": "ctrl+num3",
+  "hotkey_config": "ctrl+num0"
+}

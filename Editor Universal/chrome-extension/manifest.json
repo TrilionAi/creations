@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "Editor Universal",
+  "version": "1.0.0",
+  "description": "Ferramenta de estudo: guia de leitura, marca-texto, desenho e anotações sobre qualquer página",
+  "permissions": ["activeTab", "contextMenus", "storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "lib/storage.js",
+        "content/reading-guide.js",
+        "content/highlighter.js",
+        "content/drawing-canvas.js",
+        "content/text-annotation.js",
+        "content/toolbar.js",
+        "content/context-menu.js",
+        "content/content.js"
+      ],
+      "css": ["styles/content.css", "styles/toolbar.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

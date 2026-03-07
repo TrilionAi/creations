@@ -1,0 +1,20 @@
+{
+  "hotkey_toggle_draw": "ctrl+num1",
+  "hotkey_toggle_guide": "ctrl+num2",
+  "hotkey_toggle_text": "ctrl+num3",
+  "hotkey_undo": "ctrl+z",
+  "hotkey_clear": "ctrl+shift+c",
+  "hotkey_quit": "ctrl+num0",
+  "brush_color": "#FF0000",
+  "brush_size": 3,
+  "guide_color_r": 255,
+  "guide_color_g": 255,
+  "guide_color_b": 0,
+  "guide_color_a": 40,
+  "guide_height": 40,
+  "font_family": "Segoe UI",
+  "font_size": 16,
+  "font_color": "#FFFFFF",
+  "toolbar_x": 3315,
+  "toolbar_y": 173
+}

@@ -1,0 +1,5 @@
+Controles:
+PgUp - Mostrar overlay
+End - Esconder overlay
+PgDn - Habilitar arrasto (mover)
+Home - Abrir configurações
