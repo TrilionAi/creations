@@ -28,10 +28,16 @@ jobs:
           pip install -r requirements.txt
           pip install pyinstaller
 
+      - name: Clean old dist
+        working-directory: "Editor Universal/desktop-overlay"
+        run: |
+          Remove-Item -Recurse -Force "dist" -ErrorAction SilentlyContinue
+          Remove-Item -Recurse -Force "build" -ErrorAction SilentlyContinue
+
       - name: Build with PyInstaller
         working-directory: "Editor Universal/desktop-overlay"
         run: |
-          pyinstaller editor_universal.spec
+          pyinstaller --noconfirm editor_universal.spec
 
       - name: Create ZIP - Desktop Overlay
         working-directory: "Editor Universal/desktop-overlay"
