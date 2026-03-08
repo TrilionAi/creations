@@ -39,10 +39,10 @@ jobs:
         run: |
           pyinstaller --noconfirm editor_universal.spec
 
-      - name: Create ZIP - Desktop Overlay
+      - name: Build installer with Inno Setup
         working-directory: "Editor Universal/desktop-overlay"
         run: |
-          Compress-Archive -Path "dist/Editor Universal Desktop/*" -DestinationPath "dist/EditorUniversal-Desktop-${{ github.ref_name }}.zip"
+          iscc installer.iss
 
       - name: Create ZIP - Chrome Extension
         working-directory: "Editor Universal"
@@ -59,7 +59,7 @@ jobs:
             Desktop drawing/annotation overlay + Chrome extension.
 
             ### Download
-            - **Desktop Overlay (Windows)**: `.zip` with portable app
+            - **Desktop Overlay (Windows)**: `.exe` installer
             - **Chrome Extension**: `.zip` to load as unpacked extension
 
             ### Features
@@ -68,5 +68,5 @@ jobs:
             - Text annotation mode
             - Chrome extension for web annotations
           files: |
-            Editor Universal/desktop-overlay/dist/EditorUniversal-Desktop-${{ github.ref_name }}.zip
+            Editor Universal/desktop-overlay/installer_output/Editor_Universal_Desktop_Setup_1.0.0.exe
             Editor Universal/EditorUniversal-Chrome-${{ github.ref_name }}.zip

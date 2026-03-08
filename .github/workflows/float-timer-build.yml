@@ -31,12 +31,12 @@ jobs:
       - name: Build with PyInstaller
         working-directory: "Relógio Universal"
         run: |
-          pyinstaller "Float Timer.spec"
+          pyinstaller --noconfirm "Float Timer.spec"
 
-      - name: Create ZIP artifact
+      - name: Build installer with Inno Setup
         working-directory: "Relógio Universal"
         run: |
-          Compress-Archive -Path "dist/Float Timer.exe" -DestinationPath "dist/FloatTimer-${{ github.ref_name }}.zip"
+          iscc installer.iss
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
@@ -48,7 +48,7 @@ jobs:
             Circular timer/stopwatch widget that stays always visible on your desktop.
 
             ### Download
-            - **Windows**: `.zip` with portable `.exe`
+            - **Windows**: `.exe` installer
 
             ### Features
             - Timer and stopwatch modes
@@ -57,5 +57,4 @@ jobs:
             - System tray integration
             - Pomodoro presets
           files: |
-            Relógio Universal/dist/FloatTimer-${{ github.ref_name }}.zip
-            Relógio Universal/dist/Float Timer.exe
+            Relógio Universal/installer_output/FloatTimer_Setup.exe
