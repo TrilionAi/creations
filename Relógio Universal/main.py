@@ -89,6 +89,9 @@ class TimerApp:
         widget.add_timer_requested.connect(lambda w=widget: self.add_timer_near(w))
         widget.remove_requested.connect(lambda w=widget: self.remove_timer(w))
 
+        # Connect silence button to stop sound
+        widget.notification.silenced.connect(self.silence_alert)
+
         entry = {'widget': widget, 'controller': controller}
         self.timers.append(entry)
 
@@ -161,6 +164,30 @@ class TimerApp:
         settings.timers = configs
         settings.save()
 
+    # --- Sound ---
+
+    def setup_sound(self):
+        """Configura som de alerta com suporte a loop"""
+        self.alert_sound = None
+        if platform.system() == 'Windows':
+            sound_path = "C:/Windows/Media/Alarm01.wav"
+            if os.path.exists(sound_path):
+                self.alert_sound = QSoundEffect()
+                self.alert_sound.setSource(QUrl.fromLocalFile(sound_path))
+                self.alert_sound.setVolume(0.5)
+
+    def start_alert_sound(self):
+        """Start looping the alert sound"""
+        if self.alert_sound:
+            self.alert_sound.setLoopCount(10000)  # loop until silenced
+            self.alert_sound.play()
+
+    def silence_alert(self):
+        """Stop the alert sound"""
+        if self.alert_sound:
+            self.alert_sound.stop()
+            self.alert_sound.setLoopCount(1)
+
     # --- Tray ---
 
     def setup_tray(self):
@@ -205,16 +232,6 @@ class TimerApp:
         menu.addAction(quit_action)
 
         self.tray.setContextMenu(menu)
-
-    def setup_sound(self):
-        """Configura som de alerta"""
-        self.alert_sound = None
-        if platform.system() == 'Windows':
-            sound_path = "C:/Windows/Media/Alarm01.wav"
-            if os.path.exists(sound_path):
-                self.alert_sound = QSoundEffect()
-                self.alert_sound.setSource(QUrl.fromLocalFile(sound_path))
-                self.alert_sound.setVolume(0.5)
 
     def tray_activated(self, reason):
         """Callback quando tray é ativado"""
@@ -271,16 +288,18 @@ class TimerApp:
 
     def on_timer_finished(self, widget):
         """Quando um timer chega a zero"""
-        if self.alert_sound:
-            self.alert_sound.play()
+        # Start looping sound
+        self.start_alert_sound()
 
+        # Show alert notification with silence button
         title = widget.title
         widget.show_notification(
             title,
             settings.tr('time_up'),
-            5000
+            alert=True
         )
 
+        # Flash the widget
         self.flash_widget(widget)
 
     def flash_widget(self, widget):
@@ -307,6 +326,7 @@ class TimerApp:
 
     def quit_app(self):
         """Encerra a aplicação"""
+        self.silence_alert()
         for entry in self.timers:
             entry['controller'].stop()
             entry['widget'].notification.hide()

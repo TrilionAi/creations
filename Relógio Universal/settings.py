@@ -34,6 +34,7 @@ TRANSLATIONS = {
         'add_timer': 'Adicionar Timer',
         'remove_timer': 'Remover Timer',
         'arc_color': 'Cor do Arco',
+        'silence': 'Silenciar',
     },
     'en': {
         'name': 'English',
@@ -60,6 +61,7 @@ TRANSLATIONS = {
         'add_timer': 'Add Timer',
         'remove_timer': 'Remove Timer',
         'arc_color': 'Arc Color',
+        'silence': 'Silence',
     },
     'es': {
         'name': 'Español',
@@ -86,6 +88,7 @@ TRANSLATIONS = {
         'add_timer': 'Agregar Timer',
         'remove_timer': 'Eliminar Timer',
         'arc_color': 'Color del Arco',
+        'silence': 'Silenciar',
     },
 }
 

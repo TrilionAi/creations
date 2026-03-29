@@ -6,7 +6,7 @@ Suporta título editável e cor do arco customizável
 
 from PyQt6.QtWidgets import (QWidget, QMenu, QInputDialog, QWidgetAction,
                               QSlider, QLabel, QHBoxLayout, QLineEdit,
-                              QColorDialog)
+                              QColorDialog, QPushButton)
 from PyQt6.QtCore import Qt, QPoint, QRectF, pyqtSignal, QTimer
 from PyQt6.QtGui import (
     QPainter, QColor, QFont, QPen, QBrush,
@@ -17,7 +17,9 @@ from settings import settings, TRANSLATIONS
 
 
 class NotificationPopup(QWidget):
-    """Custom colored notification popup that appears above a timer"""
+    """Custom colored notification popup with optional silence button"""
+
+    silenced = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -27,21 +29,55 @@ class NotificationPopup(QWidget):
             Qt.WindowType.Tool
         )
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-        self.setFixedSize(220, 55)
 
         self._title = ""
         self._message = ""
         self._bg_color = QColor(0, 200, 100)
+        self._is_alert = False
 
         self._close_timer = QTimer()
         self._close_timer.setSingleShot(True)
         self._close_timer.timeout.connect(self.hide)
 
-    def show_at(self, title, message, color, widget_pos, widget_size, duration=3000):
+        # Silence button
+        self.silence_btn = QPushButton(settings.tr('silence'), self)
+        self.silence_btn.setStyleSheet("""
+            QPushButton {
+                background: rgba(255, 255, 255, 35);
+                color: white;
+                border: 1px solid rgba(255, 255, 255, 90);
+                border-radius: 5px;
+                font-family: 'Segoe UI', sans-serif;
+                font-size: 11px;
+                font-weight: bold;
+                padding: 5px 16px;
+            }
+            QPushButton:hover {
+                background: rgba(255, 255, 255, 70);
+            }
+        """)
+        self.silence_btn.clicked.connect(self._on_silence)
+        self.silence_btn.hide()
+
+    def show_at(self, title, message, color, widget_pos, widget_size, duration=3000, alert=False):
         """Show notification above the target widget"""
         self._title = title
         self._message = message
         self._bg_color = QColor(color)
+        self._is_alert = alert
+
+        # Size depends on mode
+        if alert:
+            self.setFixedSize(280, 100)
+            self.silence_btn.setText(settings.tr('silence'))
+            self.silence_btn.setGeometry(
+                (280 - 120) // 2, 68, 120, 28
+            )
+            self.silence_btn.show()
+        else:
+            self.setFixedSize(260, 60)
+            self.silence_btn.hide()
+            self._close_timer.start(duration)
 
         # Position centered above the widget
         x = widget_pos.x() + (widget_size - self.width()) // 2
@@ -54,8 +90,12 @@ class NotificationPopup(QWidget):
         self.move(x, y)
         self.show()
         self.raise_()
-        self._close_timer.start(duration)
         self.update()
+
+    def _on_silence(self):
+        """Silence button clicked"""
+        self.hide()
+        self.silenced.emit()
 
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -63,34 +103,56 @@ class NotificationPopup(QWidget):
 
         # Rounded rect background with arc color
         bg = QColor(self._bg_color)
-        bg.setAlpha(215)
+        bg.setAlpha(225)
         painter.setBrush(QBrush(bg))
-        painter.setPen(QPen(QColor(255, 255, 255, 60), 1))
+        painter.setPen(QPen(QColor(255, 255, 255, 50), 1))
         painter.drawRoundedRect(QRectF(1, 1, self.width() - 2, self.height() - 2), 10, 10)
 
-        # Title (bold)
         painter.setPen(QColor(255, 255, 255))
-        font = QFont('Segoe UI', 9, QFont.Weight.Bold)
-        painter.setFont(font)
-        painter.drawText(
-            QRectF(12, 4, self.width() - 24, 24),
-            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
-            self._title
-        )
 
-        # Message
-        font = QFont('Segoe UI', 8)
-        painter.setFont(font)
-        painter.setPen(QColor(255, 255, 255, 210))
-        painter.drawText(
-            QRectF(12, 27, self.width() - 24, 24),
-            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
-            self._message
-        )
+        if self._is_alert:
+            # Alert mode: bigger fonts
+            # Title
+            font = QFont('Segoe UI', 13, QFont.Weight.Bold)
+            painter.setFont(font)
+            painter.drawText(
+                QRectF(14, 6, self.width() - 28, 28),
+                Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+                self._title
+            )
+            # Message
+            font = QFont('Segoe UI', 11)
+            painter.setFont(font)
+            painter.setPen(QColor(255, 255, 255, 220))
+            painter.drawText(
+                QRectF(14, 34, self.width() - 28, 26),
+                Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+                self._message
+            )
+        else:
+            # Info mode: medium fonts
+            # Title
+            font = QFont('Segoe UI', 11, QFont.Weight.Bold)
+            painter.setFont(font)
+            painter.drawText(
+                QRectF(12, 4, self.width() - 24, 26),
+                Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+                self._title
+            )
+            # Message
+            font = QFont('Segoe UI', 10)
+            painter.setFont(font)
+            painter.setPen(QColor(255, 255, 255, 210))
+            painter.drawText(
+                QRectF(12, 30, self.width() - 24, 24),
+                Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+                self._message
+            )
 
     def mousePressEvent(self, event):
-        """Click to dismiss"""
-        self.hide()
+        """Click to dismiss (info mode only)"""
+        if not self._is_alert:
+            self.hide()
 
 
 class CircularTimerWidget(QWidget):
@@ -191,11 +253,11 @@ class CircularTimerWidget(QWidget):
         """Sets whether this timer can be removed"""
         self.removable = removable
 
-    def show_notification(self, title, message, duration=3000):
+    def show_notification(self, title, message, duration=3000, alert=False):
         """Shows a colored notification popup above this widget"""
         self.notification.show_at(
             title, message, self.arc_color,
-            self.pos(), self.circle_size, duration
+            self.pos(), self.circle_size, duration, alert
         )
 
     # --- Paint ---
