@@ -51,6 +51,8 @@ jobs:
             - **Windows**: `.exe` installer
 
             ### Features
+            - Multiple independent timers
+            - Editable title per timer (click to rename)
             - Timer and stopwatch modes
             - Transparent circular widget
             - Always-on-top

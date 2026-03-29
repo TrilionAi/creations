@@ -1,10 +1,12 @@
 """
 Float Timer - Circular Timer/Stopwatch
-Transparent circular widget that stays always visible
+Transparent circular widgets that stay always visible
+Supports multiple independent timers with editable titles
 
 Controls:
 - Single click: Play/Pause
-- Double click: Reset
+- Single click on title: Edit title
+- Double click: Reset (anywhere, including on title)
 - Right click: Menu with time options
 - Drag: Move the widget
 """
@@ -16,7 +18,7 @@ import platform
 # Adiciona o diretório atual ao path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from PyQt6.QtWidgets import QApplication, QSystemTrayIcon, QMenu, QMessageBox
+from PyQt6.QtWidgets import QApplication, QSystemTrayIcon, QMenu
 from PyQt6.QtGui import QIcon, QAction
 from PyQt6.QtCore import QTimer
 from PyQt6.QtMultimedia import QSoundEffect
@@ -28,48 +30,139 @@ from settings import settings
 
 
 class TimerApp:
-    """Float Timer main application"""
+    """Float Timer main application - manages multiple timer instances"""
 
     def __init__(self):
         self.app = QApplication(sys.argv)
         self.app.setQuitOnLastWindowClosed(False)
         self.app.setApplicationName("Float Timer")
 
-        # Cria o widget circular
-        self.widget = CircularTimerWidget(150)
+        self.timers = []  # list of {'widget': w, 'controller': c}
 
-        # Cria o controlador do timer
-        self.controller = TimerController()
-
-        # Conecta sinais
-        self.setup_connections()
-
-        # Configura tray icon
-        self.setup_tray()
-
-        # Som de alerta (quando timer termina)
+        # Som de alerta
         self.setup_sound()
 
-        # Mostra o widget
-        self.widget.show()
+        # Tray icon
+        self.setup_tray()
 
-    def setup_connections(self):
-        """Conecta sinais entre widget e controller"""
-        # Widget -> Controller
-        self.widget.play_pause_clicked.connect(self.controller.toggle)
-        self.widget.reset_clicked.connect(self.controller.reset)
-        self.widget.time_selected.connect(self.on_time_selected)
+        # Load saved timers
+        saved_timers = settings.timers
+        for config in saved_timers:
+            self.create_timer(
+                title=config.get('title', 'Timer'),
+                pos_x=config.get('pos_x'),
+                pos_y=config.get('pos_y'),
+            )
 
-        # Controller -> Widget
-        self.controller.time_updated.connect(self.on_time_updated)
-        self.controller.state_changed.connect(self.widget.set_running)
-        self.controller.timer_finished.connect(self.on_timer_finished)
+        self.update_removable_state()
+
+    def create_timer(self, title="Timer", pos_x=None, pos_y=None):
+        """Creates a new timer instance (widget + controller)"""
+        widget = CircularTimerWidget(150, title=title)
+        controller = TimerController()
+
+        # Set position
+        if pos_x is not None and pos_y is not None:
+            widget.move(pos_x, pos_y)
+        else:
+            widget.move_to_center()
+
+        # Connect widget -> controller
+        widget.play_pause_clicked.connect(controller.toggle)
+        widget.reset_clicked.connect(controller.reset)
+        widget.time_selected.connect(
+            lambda s, w=widget, c=controller: self.on_time_selected(s, w, c)
+        )
+
+        # Connect controller -> widget
+        controller.time_updated.connect(widget.update_time)
+        controller.state_changed.connect(widget.set_running)
+        controller.timer_finished.connect(
+            lambda w=widget: self.on_timer_finished(w)
+        )
+
+        # Connect management signals
+        widget.title_changed.connect(lambda _: self.save_timer_configs())
+        widget.position_changed.connect(lambda: self.save_timer_configs())
+        widget.add_timer_requested.connect(lambda w=widget: self.add_timer_near(w))
+        widget.remove_requested.connect(lambda w=widget: self.remove_timer(w))
+
+        entry = {'widget': widget, 'controller': controller}
+        self.timers.append(entry)
+
+        widget.show()
+        return entry
+
+    def add_timer_near(self, source_widget):
+        """Add a new timer positioned near the source widget"""
+        pos = source_widget.pos()
+        new_x = pos.x() + 170  # 150px size + 20px gap
+        new_y = pos.y()
+
+        # Check screen bounds
+        screen = self.app.primaryScreen().geometry()
+        if new_x + 150 > screen.width():
+            new_x = pos.x() - 170
+        if new_x < 0:
+            new_x = 50
+
+        self.create_timer(title="Timer", pos_x=new_x, pos_y=new_y)
+        self.update_removable_state()
+        self.save_timer_configs()
+        self.rebuild_tray_menu()
+
+    def add_timer_default(self):
+        """Add a new timer (from tray menu, near last timer)"""
+        if self.timers:
+            self.add_timer_near(self.timers[-1]['widget'])
+        else:
+            self.create_timer()
+            self.update_removable_state()
+            self.save_timer_configs()
+            self.rebuild_tray_menu()
+
+    def remove_timer(self, widget):
+        """Remove a specific timer"""
+        if len(self.timers) <= 1:
+            return
+
+        for entry in self.timers:
+            if entry['widget'] is widget:
+                entry['controller'].stop()
+                entry['widget'].close()
+                self.timers.remove(entry)
+                break
+
+        self.update_removable_state()
+        self.save_timer_configs()
+        self.rebuild_tray_menu()
+
+    def update_removable_state(self):
+        """Update whether each timer shows the remove option"""
+        removable = len(self.timers) > 1
+        for entry in self.timers:
+            entry['widget'].set_removable(removable)
+
+    def save_timer_configs(self):
+        """Save all timer positions and titles to settings"""
+        configs = []
+        for entry in self.timers:
+            w = entry['widget']
+            pos = w.pos()
+            configs.append({
+                'title': w.title,
+                'pos_x': pos.x(),
+                'pos_y': pos.y(),
+            })
+        settings.timers = configs
+        settings.save()
+
+    # --- Tray ---
 
     def setup_tray(self):
         """Configura o ícone na bandeja do sistema"""
         self.tray = QSystemTrayIcon()
 
-        # Tenta carregar ícone personalizado
         icon_path = os.path.join(os.path.dirname(__file__), 'icon.ico')
         if os.path.exists(icon_path):
             self.tray.setIcon(QIcon(icon_path))
@@ -78,36 +171,28 @@ class TimerApp:
                 self.app.style().StandardPixmap.SP_MediaPlay
             ))
 
-        # Menu do tray
+        self.rebuild_tray_menu()
+        self.tray.setToolTip("Float Timer")
+        self.tray.show()
+        self.tray.activated.connect(self.tray_activated)
+
+    def rebuild_tray_menu(self):
+        """Rebuilds the tray menu"""
         menu = QMenu()
 
         show_action = QAction(settings.tr('show'), menu)
-        show_action.triggered.connect(self.show_widget)
+        show_action.triggered.connect(self.show_all)
         menu.addAction(show_action)
 
         hide_action = QAction(settings.tr('hide'), menu)
-        hide_action.triggered.connect(self.hide_widget)
+        hide_action.triggered.connect(self.hide_all)
         menu.addAction(hide_action)
 
         menu.addSeparator()
 
-        # Submenu de tempos rápidos
-        time_menu = menu.addMenu(settings.tr('set_time'))
-        time_menu.addAction(settings.tr('stopwatch'), lambda: self.on_time_selected(0))
-        time_menu.addSeparator()
-        time_menu.addAction(f"1 {settings.tr('minute')}", lambda: self.on_time_selected(60))
-        time_menu.addAction(f"5 {settings.tr('minutes')}", lambda: self.on_time_selected(300))
-        time_menu.addAction(f"10 {settings.tr('minutes')}", lambda: self.on_time_selected(600))
-        time_menu.addAction(f"15 {settings.tr('minutes')}", lambda: self.on_time_selected(900))
-        time_menu.addAction(settings.tr('pomodoro_25'), lambda: self.on_time_selected(1500))
-        time_menu.addAction(settings.tr('pomodoro_45'), lambda: self.on_time_selected(2700))
-        time_menu.addAction(f"1 {settings.tr('hour')}", lambda: self.on_time_selected(3600))
-
-        menu.addSeparator()
-
-        reset_action = QAction(settings.tr('reset'), menu)
-        reset_action.triggered.connect(self.controller.reset)
-        menu.addAction(reset_action)
+        add_action = QAction(settings.tr('add_timer'), menu)
+        add_action.triggered.connect(self.add_timer_default)
+        menu.addAction(add_action)
 
         menu.addSeparator()
 
@@ -116,16 +201,10 @@ class TimerApp:
         menu.addAction(quit_action)
 
         self.tray.setContextMenu(menu)
-        self.tray.setToolTip("Float Timer")
-        self.tray.show()
-
-        # Double-click no tray mostra/esconde
-        self.tray.activated.connect(self.tray_activated)
 
     def setup_sound(self):
         """Configura som de alerta"""
         self.alert_sound = None
-        # Tenta usar som do sistema
         if platform.system() == 'Windows':
             sound_path = "C:/Windows/Media/Alarm01.wav"
             if os.path.exists(sound_path):
@@ -136,45 +215,50 @@ class TimerApp:
     def tray_activated(self, reason):
         """Callback quando tray é ativado"""
         if reason == QSystemTrayIcon.ActivationReason.DoubleClick:
-            if self.widget.isVisible():
-                self.hide_widget()
+            any_visible = any(t['widget'].isVisible() for t in self.timers)
+            if any_visible:
+                self.hide_all()
             else:
-                self.show_widget()
+                self.show_all()
 
-    def show_widget(self):
-        """Mostra o widget"""
-        self.widget.show()
-        self.widget.raise_()
+    def show_all(self):
+        """Mostra todos os timers"""
+        for entry in self.timers:
+            entry['widget'].show()
+            entry['widget'].raise_()
 
-    def hide_widget(self):
-        """Esconde o widget"""
-        self.widget.hide()
+    def hide_all(self):
+        """Esconde todos os timers"""
+        for entry in self.timers:
+            entry['widget'].hide()
 
-    def on_time_selected(self, seconds):
-        """Quando um tempo é selecionado no menu"""
-        self.controller.set_timer(seconds)
+    # --- Timer events ---
+
+    def on_time_selected(self, seconds, widget, controller):
+        """Quando um tempo é selecionado no menu de um timer"""
+        controller.set_timer(seconds)
         is_timer = seconds > 0
-        self.widget.set_time(seconds, is_timer)
+        widget.set_time(seconds, is_timer)
 
-        # Notificação (traduzida)
+        title = widget.title
         if seconds > 0:
             time_str = self.format_time(seconds)
             self.tray.showMessage(
-                "Float Timer",
+                title,
                 settings.tr('timer_set').format(time=time_str),
                 QSystemTrayIcon.MessageIcon.Information,
                 1500
             )
         else:
             self.tray.showMessage(
-                "Float Timer",
+                title,
                 settings.tr('stopwatch_mode'),
                 QSystemTrayIcon.MessageIcon.Information,
                 1500
             )
 
     def format_time(self, seconds):
-        """Formata segundos para exibição (MM:SS ou HH:MM:SS)"""
+        """Formata segundos para exibição"""
         hours = seconds // 3600
         minutes = (seconds % 3600) // 60
         secs = seconds % 60
@@ -183,51 +267,48 @@ class TimerApp:
         else:
             return f"{minutes:02d}:{secs:02d}"
 
-    def on_time_updated(self, seconds):
-        """Quando o tempo é atualizado"""
-        self.widget.update_time(seconds)
-
-    def on_timer_finished(self):
-        """Quando o timer chega a zero"""
-        # Toca som
+    def on_timer_finished(self, widget):
+        """Quando um timer chega a zero"""
         if self.alert_sound:
             self.alert_sound.play()
 
-        # Notificação (traduzida)
+        title = widget.title
         self.tray.showMessage(
-            "Float Timer",
+            title,
             settings.tr('time_up'),
             QSystemTrayIcon.MessageIcon.Warning,
             5000
         )
 
-        # Pisca a janela (visual feedback)
-        self.flash_widget()
+        self.flash_widget(widget)
 
-    def flash_widget(self):
-        """Faz o widget piscar"""
-        self.flash_count = 0
+    def flash_widget(self, widget):
+        """Faz um widget específico piscar"""
+        flash_count = [0]
 
         def toggle_visibility():
-            self.flash_count += 1
-            if self.flash_count >= 10:
-                self.flash_timer.stop()
-                self.widget.show()
+            flash_count[0] += 1
+            if flash_count[0] >= 10:
+                flash_timer.stop()
+                widget.show()
                 return
 
-            if self.widget.isVisible():
-                self.widget.hide()
+            if widget.isVisible():
+                widget.hide()
             else:
-                self.widget.show()
+                widget.show()
 
-        self.flash_timer = QTimer()
-        self.flash_timer.timeout.connect(toggle_visibility)
-        self.flash_timer.start(200)
+        flash_timer = QTimer()
+        flash_timer.timeout.connect(toggle_visibility)
+        flash_timer.start(200)
+        # Store reference to prevent garbage collection
+        widget._flash_timer = flash_timer
 
     def quit_app(self):
         """Encerra a aplicação"""
-        self.controller.stop()
-        self.widget.close()
+        for entry in self.timers:
+            entry['controller'].stop()
+            entry['widget'].close()
         self.tray.hide()
         self.app.quit()
 
@@ -238,7 +319,7 @@ class TimerApp:
 
 def main():
     """Main entry point"""
-    # Configure AppUserModelID for Windows (removes "Python" from notifications)
+    # Configure AppUserModelID for Windows
     if platform.system() == 'Windows':
         import ctypes
         app_id = 'FloatTimer.Timer.1.0'

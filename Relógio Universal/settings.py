@@ -1,6 +1,6 @@
 """
 Settings - Float Timer configuration management
-Saves and loads opacity, position and language
+Saves and loads opacity, language and timer configs
 """
 
 import json
@@ -31,6 +31,9 @@ TRANSLATIONS = {
         'quit': 'Sair',
         'pomodoro_25': 'Pomodoro (25 min)',
         'pomodoro_45': 'Pomodoro Longo (45 min)',
+        'add_timer': 'Adicionar Timer',
+        'hide_this': 'Esconder este Timer',
+        'remove_timer': 'Remover Timer',
     },
     'en': {
         'name': 'English',
@@ -54,6 +57,9 @@ TRANSLATIONS = {
         'quit': 'Quit',
         'pomodoro_25': 'Pomodoro (25 min)',
         'pomodoro_45': 'Long Pomodoro (45 min)',
+        'add_timer': 'Add Timer',
+        'hide_this': 'Hide this Timer',
+        'remove_timer': 'Remove Timer',
     },
     'es': {
         'name': 'Español',
@@ -77,6 +83,9 @@ TRANSLATIONS = {
         'quit': 'Salir',
         'pomodoro_25': 'Pomodoro (25 min)',
         'pomodoro_45': 'Pomodoro Largo (45 min)',
+        'add_timer': 'Agregar Timer',
+        'hide_this': 'Ocultar este Timer',
+        'remove_timer': 'Eliminar Timer',
     },
 }
 
@@ -85,16 +94,14 @@ class Settings:
     """Gerencia configurações persistentes"""
 
     def __init__(self):
-        # Arquivo de configurações na mesma pasta do app
         self.settings_file = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
             'settings.json'
         )
         self.defaults = {
             'opacity': 0.85,
-            'pos_x': None,  # None = screen center
-            'pos_y': None,
-            'language': 'en',  # Default language
+            'language': 'en',
+            'timers': [{'title': 'Timer', 'pos_x': None, 'pos_y': None}],
         }
         self.data = self.defaults.copy()
         self.load()
@@ -105,12 +112,17 @@ class Settings:
             if os.path.exists(self.settings_file):
                 with open(self.settings_file, 'r', encoding='utf-8') as f:
                     loaded = json.load(f)
-                    # Mescla com defaults (para garantir que novas configs existam)
                     for key in self.defaults:
                         if key in loaded:
                             self.data[key] = loaded[key]
+                    # Migrate from old single-position format
+                    if 'timers' not in loaded:
+                        self.data['timers'] = [{
+                            'title': 'Timer',
+                            'pos_x': loaded.get('pos_x'),
+                            'pos_y': loaded.get('pos_y'),
+                        }]
         except Exception:
-            # Se falhar, usa defaults
             self.data = self.defaults.copy()
 
     def save(self):
@@ -119,14 +131,12 @@ class Settings:
             with open(self.settings_file, 'w', encoding='utf-8') as f:
                 json.dump(self.data, f, indent=2)
         except Exception:
-            pass  # Ignora erros de salvamento
+            pass
 
     def get(self, key, default=None):
-        """Obtém uma configuração"""
         return self.data.get(key, default)
 
     def set(self, key, value):
-        """Define uma configuração"""
         self.data[key] = value
 
     def tr(self, key):
@@ -134,7 +144,6 @@ class Settings:
         lang = self.data.get('language', 'en')
         if lang in TRANSLATIONS and key in TRANSLATIONS[lang]:
             return TRANSLATIONS[lang][key]
-        # Fallback to English
         return TRANSLATIONS['en'].get(key, key)
 
     @property
@@ -154,23 +163,12 @@ class Settings:
         self.data['language'] = value
 
     @property
-    def position(self):
-        """Retorna (x, y) ou None se não definido"""
-        x = self.data.get('pos_x')
-        y = self.data.get('pos_y')
-        if x is not None and y is not None:
-            return (x, y)
-        return None
+    def timers(self):
+        return self.data.get('timers', [{'title': 'Timer', 'pos_x': None, 'pos_y': None}])
 
-    @position.setter
-    def position(self, pos):
-        """Define posição como tupla (x, y)"""
-        if pos:
-            self.data['pos_x'] = pos[0]
-            self.data['pos_y'] = pos[1]
-        else:
-            self.data['pos_x'] = None
-            self.data['pos_y'] = None
+    @timers.setter
+    def timers(self, value):
+        self.data['timers'] = value
 
 
 # Instância global de settings
