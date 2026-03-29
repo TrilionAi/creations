@@ -57,6 +57,9 @@ class TimerApp:
 
         self.update_removable_state()
 
+        # Save immediately to persist migrated format and initial state
+        self.save_timer_configs()
+
     def create_timer(self, title="Timer", pos_x=None, pos_y=None, arc_color="#00c864"):
         """Creates a new timer instance (widget + controller)"""
         widget = CircularTimerWidget(150, title=title, arc_color=arc_color)
@@ -326,6 +329,7 @@ class TimerApp:
 
     def quit_app(self):
         """Encerra a aplicação"""
+        self.save_timer_configs()
         self.silence_alert()
         for entry in self.timers:
             entry['controller'].stop()
