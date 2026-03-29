@@ -1,18 +1,96 @@
 """
 Circular Widget - Widget circular transparente para Timer/Cronômetro
 Design fosco semi-transparente que funciona sobre qualquer fundo
-Suporta título editável por clique
+Suporta título editável e cor do arco customizável
 """
 
 from PyQt6.QtWidgets import (QWidget, QMenu, QInputDialog, QWidgetAction,
-                              QSlider, QLabel, QHBoxLayout, QLineEdit)
+                              QSlider, QLabel, QHBoxLayout, QLineEdit,
+                              QColorDialog)
 from PyQt6.QtCore import Qt, QPoint, QRectF, pyqtSignal, QTimer
 from PyQt6.QtGui import (
     QPainter, QColor, QFont, QPen, QBrush,
-    QRadialGradient, QPainterPath
+    QRadialGradient, QPainterPath, QPixmap, QIcon
 )
 
 from settings import settings, TRANSLATIONS
+
+
+class NotificationPopup(QWidget):
+    """Custom colored notification popup that appears above a timer"""
+
+    def __init__(self):
+        super().__init__()
+        self.setWindowFlags(
+            Qt.WindowType.FramelessWindowHint |
+            Qt.WindowType.WindowStaysOnTopHint |
+            Qt.WindowType.Tool
+        )
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.setFixedSize(220, 55)
+
+        self._title = ""
+        self._message = ""
+        self._bg_color = QColor(0, 200, 100)
+
+        self._close_timer = QTimer()
+        self._close_timer.setSingleShot(True)
+        self._close_timer.timeout.connect(self.hide)
+
+    def show_at(self, title, message, color, widget_pos, widget_size, duration=3000):
+        """Show notification above the target widget"""
+        self._title = title
+        self._message = message
+        self._bg_color = QColor(color)
+
+        # Position centered above the widget
+        x = widget_pos.x() + (widget_size - self.width()) // 2
+        y = widget_pos.y() - self.height() - 8
+
+        # If above screen, show below
+        if y < 0:
+            y = widget_pos.y() + widget_size + 8
+
+        self.move(x, y)
+        self.show()
+        self.raise_()
+        self._close_timer.start(duration)
+        self.update()
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+
+        # Rounded rect background with arc color
+        bg = QColor(self._bg_color)
+        bg.setAlpha(215)
+        painter.setBrush(QBrush(bg))
+        painter.setPen(QPen(QColor(255, 255, 255, 60), 1))
+        painter.drawRoundedRect(QRectF(1, 1, self.width() - 2, self.height() - 2), 10, 10)
+
+        # Title (bold)
+        painter.setPen(QColor(255, 255, 255))
+        font = QFont('Segoe UI', 9, QFont.Weight.Bold)
+        painter.setFont(font)
+        painter.drawText(
+            QRectF(12, 4, self.width() - 24, 24),
+            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+            self._title
+        )
+
+        # Message
+        font = QFont('Segoe UI', 8)
+        painter.setFont(font)
+        painter.setPen(QColor(255, 255, 255, 210))
+        painter.drawText(
+            QRectF(12, 27, self.width() - 24, 24),
+            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+            self._message
+        )
+
+    def mousePressEvent(self, event):
+        """Click to dismiss"""
+        self.hide()
 
 
 class CircularTimerWidget(QWidget):
@@ -23,11 +101,12 @@ class CircularTimerWidget(QWidget):
     reset_clicked = pyqtSignal()
     time_selected = pyqtSignal(int)  # segundos
     title_changed = pyqtSignal(str)
+    color_changed = pyqtSignal(str)  # hex color
     position_changed = pyqtSignal()
     add_timer_requested = pyqtSignal()
     remove_requested = pyqtSignal()
 
-    def __init__(self, size=150, title="Timer"):
+    def __init__(self, size=150, title="Timer", arc_color="#00c864"):
         super().__init__()
         self.circle_size = size
         self.dragging = False
@@ -46,6 +125,12 @@ class CircularTimerWidget(QWidget):
         self.title = title
         self.title_rect = QRectF()
         self.removable = False
+
+        # Arc color
+        self.arc_color = QColor(arc_color)
+
+        # Notification popup
+        self.notification = NotificationPopup()
 
         # Click position for title hit detection
         self.last_click_pos = QPoint()
@@ -105,6 +190,13 @@ class CircularTimerWidget(QWidget):
     def set_removable(self, removable):
         """Sets whether this timer can be removed"""
         self.removable = removable
+
+    def show_notification(self, title, message, duration=3000):
+        """Shows a colored notification popup above this widget"""
+        self.notification.show_at(
+            title, message, self.arc_color,
+            self.pos(), self.circle_size, duration
+        )
 
     # --- Paint ---
 
@@ -173,20 +265,15 @@ class CircularTimerWidget(QWidget):
         )
 
     def draw_progress_arc(self, painter, cx, cy, radius, progress):
-        """Desenha o arco de progresso na borda externa"""
+        """Desenha o arco de progresso com a cor customizada"""
         rect = QRectF(cx - radius, cy - radius, radius * 2, radius * 2)
 
+        # Track background
         painter.setPen(QPen(QColor(60, 60, 60), 4, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
         painter.drawArc(rect, 90 * 16, -360 * 16)
 
-        if progress > 0.3:
-            color = QColor(0, 200, 100)
-        elif progress > 0.1:
-            color = QColor(255, 180, 0)
-        else:
-            color = QColor(255, 80, 80)
-
-        painter.setPen(QPen(color, 4, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
+        # Progress arc with custom color
+        painter.setPen(QPen(self.arc_color, 4, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
         span = int(-360 * progress * 16)
         painter.drawArc(rect, 90 * 16, span)
 
@@ -332,6 +419,28 @@ class CircularTimerWidget(QWidget):
         self.title_changed.emit(self.title)
         self.update()
 
+    # --- Color picker ---
+
+    def choose_arc_color(self):
+        """Opens full color dialog to pick arc color"""
+        color = QColorDialog.getColor(self.arc_color, self, settings.tr('arc_color'))
+        if color.isValid():
+            self.arc_color = color
+            self.color_changed.emit(color.name())
+            self.update()
+
+    def _make_color_icon(self):
+        """Creates a small circle icon showing the current arc color"""
+        pixmap = QPixmap(16, 16)
+        pixmap.fill(Qt.GlobalColor.transparent)
+        p = QPainter(pixmap)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
+        p.setBrush(QBrush(self.arc_color))
+        p.setPen(QPen(QColor(255, 255, 255, 100), 1))
+        p.drawEllipse(1, 1, 14, 14)
+        p.end()
+        return QIcon(pixmap)
+
     # --- Context menu ---
 
     def contextMenuEvent(self, event):
@@ -384,6 +493,10 @@ class CircularTimerWidget(QWidget):
         menu.addAction(f"1 {settings.tr('hour')}", lambda: self.time_selected.emit(3600))
         menu.addSeparator()
         menu.addAction(settings.tr('custom'), self.show_custom_time_dialog)
+        menu.addSeparator()
+
+        # Color picker with swatch icon
+        menu.addAction(self._make_color_icon(), settings.tr('arc_color'), self.choose_arc_color)
         menu.addSeparator()
 
         # Slider de transparência

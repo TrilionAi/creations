@@ -32,8 +32,8 @@ TRANSLATIONS = {
         'pomodoro_25': 'Pomodoro (25 min)',
         'pomodoro_45': 'Pomodoro Longo (45 min)',
         'add_timer': 'Adicionar Timer',
-        'hide_this': 'Esconder este Timer',
         'remove_timer': 'Remover Timer',
+        'arc_color': 'Cor do Arco',
     },
     'en': {
         'name': 'English',
@@ -58,8 +58,8 @@ TRANSLATIONS = {
         'pomodoro_25': 'Pomodoro (25 min)',
         'pomodoro_45': 'Long Pomodoro (45 min)',
         'add_timer': 'Add Timer',
-        'hide_this': 'Hide this Timer',
         'remove_timer': 'Remove Timer',
+        'arc_color': 'Arc Color',
     },
     'es': {
         'name': 'Español',
@@ -84,8 +84,8 @@ TRANSLATIONS = {
         'pomodoro_25': 'Pomodoro (25 min)',
         'pomodoro_45': 'Pomodoro Largo (45 min)',
         'add_timer': 'Agregar Timer',
-        'hide_this': 'Ocultar este Timer',
         'remove_timer': 'Eliminar Timer',
+        'arc_color': 'Color del Arco',
     },
 }
 

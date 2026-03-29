@@ -2,7 +2,7 @@
 ; To compile: open this file in Inno Setup and click Build > Compile
 
 #define MyAppName "Float Timer"
-#define MyAppVersion "2.0.0"
+#define MyAppVersion "2.1.0"
 #define MyAppPublisher "Lucas"
 #define MyAppExeName "Float Timer.exe"
 

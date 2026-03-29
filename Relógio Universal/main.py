@@ -1,7 +1,7 @@
 """
 Float Timer - Circular Timer/Stopwatch
 Transparent circular widgets that stay always visible
-Supports multiple independent timers with editable titles
+Supports multiple independent timers with editable titles and custom arc colors
 
 Controls:
 - Single click: Play/Pause
@@ -52,13 +52,14 @@ class TimerApp:
                 title=config.get('title', 'Timer'),
                 pos_x=config.get('pos_x'),
                 pos_y=config.get('pos_y'),
+                arc_color=config.get('color', '#00c864'),
             )
 
         self.update_removable_state()
 
-    def create_timer(self, title="Timer", pos_x=None, pos_y=None):
+    def create_timer(self, title="Timer", pos_x=None, pos_y=None, arc_color="#00c864"):
         """Creates a new timer instance (widget + controller)"""
-        widget = CircularTimerWidget(150, title=title)
+        widget = CircularTimerWidget(150, title=title, arc_color=arc_color)
         controller = TimerController()
 
         # Set position
@@ -83,6 +84,7 @@ class TimerApp:
 
         # Connect management signals
         widget.title_changed.connect(lambda _: self.save_timer_configs())
+        widget.color_changed.connect(lambda _: self.save_timer_configs())
         widget.position_changed.connect(lambda: self.save_timer_configs())
         widget.add_timer_requested.connect(lambda w=widget: self.add_timer_near(w))
         widget.remove_requested.connect(lambda w=widget: self.remove_timer(w))
@@ -122,13 +124,14 @@ class TimerApp:
             self.rebuild_tray_menu()
 
     def remove_timer(self, widget):
-        """Remove a specific timer"""
+        """Remove a specific timer permanently"""
         if len(self.timers) <= 1:
             return
 
         for entry in self.timers:
             if entry['widget'] is widget:
                 entry['controller'].stop()
+                entry['widget'].notification.hide()
                 entry['widget'].close()
                 self.timers.remove(entry)
                 break
@@ -144,7 +147,7 @@ class TimerApp:
             entry['widget'].set_removable(removable)
 
     def save_timer_configs(self):
-        """Save all timer positions and titles to settings"""
+        """Save all timer positions, titles and colors to settings"""
         configs = []
         for entry in self.timers:
             w = entry['widget']
@@ -153,6 +156,7 @@ class TimerApp:
                 'title': w.title,
                 'pos_x': pos.x(),
                 'pos_y': pos.y(),
+                'color': w.arc_color.name(),
             })
         settings.timers = configs
         settings.save()
@@ -243,18 +247,16 @@ class TimerApp:
         title = widget.title
         if seconds > 0:
             time_str = self.format_time(seconds)
-            self.tray.showMessage(
+            widget.show_notification(
                 title,
                 settings.tr('timer_set').format(time=time_str),
-                QSystemTrayIcon.MessageIcon.Information,
-                1500
+                2000
             )
         else:
-            self.tray.showMessage(
+            widget.show_notification(
                 title,
                 settings.tr('stopwatch_mode'),
-                QSystemTrayIcon.MessageIcon.Information,
-                1500
+                2000
             )
 
     def format_time(self, seconds):
@@ -273,10 +275,9 @@ class TimerApp:
             self.alert_sound.play()
 
         title = widget.title
-        self.tray.showMessage(
+        widget.show_notification(
             title,
             settings.tr('time_up'),
-            QSystemTrayIcon.MessageIcon.Warning,
             5000
         )
 
@@ -308,6 +309,7 @@ class TimerApp:
         """Encerra a aplicação"""
         for entry in self.timers:
             entry['controller'].stop()
+            entry['widget'].notification.hide()
             entry['widget'].close()
         self.tray.hide()
         self.app.quit()
