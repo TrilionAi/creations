@@ -29,6 +29,12 @@ export async function getDb() {
     } catch {
       // Column already exists, ignore
     }
+    // Migration: add bg_color column
+    try {
+      await db.execute(`ALTER TABLE postits ADD COLUMN bg_color TEXT NOT NULL DEFAULT '#FDFD96'`);
+    } catch {
+      // Column already exists, ignore
+    }
   }
   return db;
 }
@@ -47,8 +53,8 @@ export async function getPostIt(id: string): Promise<PostIt | null> {
 export async function createPostIt(postit: PostIt): Promise<void> {
   const database = await getDb();
   await database.execute(
-    'INSERT INTO postits (id, title, content, priority, skin, pos_x, pos_y, width, height, is_pinned, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-    [postit.id, postit.title, postit.content, postit.priority, postit.skin || 'glass', postit.pos_x, postit.pos_y, postit.width, postit.height, postit.is_pinned, postit.created_at, postit.updated_at]
+    'INSERT INTO postits (id, title, content, priority, skin, bg_color, pos_x, pos_y, width, height, is_pinned, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    [postit.id, postit.title, postit.content, postit.priority, postit.skin || 'glass', postit.bg_color || '#FDFD96', postit.pos_x, postit.pos_y, postit.width, postit.height, postit.is_pinned, postit.created_at, postit.updated_at]
   );
 }
 
@@ -57,7 +63,7 @@ export async function updatePostIt(postit: Partial<PostIt> & { id: string }): Pr
   const fields: string[] = [];
   const values: unknown[] = [];
 
-  const updatableFields = ['title', 'content', 'priority', 'skin', 'pos_x', 'pos_y', 'width', 'height', 'is_pinned'] as const;
+  const updatableFields = ['title', 'content', 'priority', 'skin', 'bg_color', 'pos_x', 'pos_y', 'width', 'height', 'is_pinned'] as const;
 
   for (const field of updatableFields) {
     if (postit[field] !== undefined) {

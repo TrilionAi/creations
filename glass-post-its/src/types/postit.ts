@@ -4,6 +4,7 @@ export interface PostIt {
   content: string;
   priority: Priority;
   skin: string;
+  bg_color: string; // hex color for paper background
   pos_x: number;
   pos_y: number;
   width: number;

@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { Editor } from '@tiptap/react';
-import { Priority } from '../types/postit';
+
+const AUTO_GREEN = '#A8E6A3';
 
 export function useAutoGreen(
   editor: Editor | null,
-  currentPriority: Priority,
-  onPriorityChange: (priority: Priority) => void
+  currentBgColor: string,
+  onColorChange: (color: string) => void
 ) {
   useEffect(() => {
     if (!editor) return;
@@ -24,8 +25,8 @@ export function useAutoGreen(
         }
       });
 
-      if (totalTasks > 0 && totalTasks === checkedTasks && currentPriority !== 'green') {
-        onPriorityChange('green');
+      if (totalTasks > 0 && totalTasks === checkedTasks && currentBgColor !== AUTO_GREEN) {
+        onColorChange(AUTO_GREEN);
       }
     };
 
@@ -33,5 +34,5 @@ export function useAutoGreen(
     return () => {
       editor.off('update', checkAllTasksDone);
     };
-  }, [editor, currentPriority, onPriorityChange]);
+  }, [editor, currentBgColor, onColorChange]);
 }

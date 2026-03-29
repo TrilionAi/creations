@@ -1,10 +1,10 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { usePostIt } from '../hooks/usePostIt';
 import { useAutoGreen } from '../hooks/useAutoGreen';
 import TitleBar from './TitleBar';
 import Editor from './Editor';
 import FormatToolbar from './FormatToolbar';
-import PriorityPicker from './PriorityPicker';
+import PostItColorPicker from './PriorityPicker';
 import { useEditor, ReactNodeViewRenderer } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import TaskList from '@tiptap/extension-task-list';
@@ -17,9 +17,9 @@ import Color from '@tiptap/extension-color';
 import CollapsibleTaskItem from './CollapsibleTaskItem';
 import { ToggleBlock } from '../extensions/ToggleBlock';
 import { FontSize } from '../extensions/FontSize';
-import { Priority } from '../types/postit';
 import { invoke } from '@tauri-apps/api/core';
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow';
+import { darkenColor, isLightColor, DEFAULT_BG_COLOR } from '../lib/colors';
 
 interface Props {
   id: string;
@@ -56,14 +56,11 @@ export default function PostItView({ id }: Props) {
     },
   }, [postit?.id]);
 
-  const handlePriorityChange = useCallback(async (priority: Priority) => {
-    updateField('priority', priority);
-    const win = getCurrentWebviewWindow();
-    const windowId = win.label.replace('postit-', '');
-    await invoke('update_glass_tint', { id: windowId, priority });
+  const handleColorChange = useCallback((color: string) => {
+    updateField('bg_color', color);
   }, [updateField]);
 
-  useAutoGreen(editor, postit?.priority || 'glass', handlePriorityChange);
+  useAutoGreen(editor, postit?.bg_color || DEFAULT_BG_COLOR, handleColorChange);
 
   // Restore and enforce always-on-top for pinned post-its
   useEffect(() => {
@@ -71,13 +68,10 @@ export default function PostItView({ id }: Props) {
 
     const win = getCurrentWebviewWindow();
 
-    // Apply always-on-top state (restores pin on startup)
     if (postit.is_pinned) {
       invoke('set_always_on_top', { id, pinned: true });
     }
 
-    // When pinned: re-apply topmost when window loses focus
-    // Windows can "forget" the topmost z-order when other windows activate
     if (!postit.is_pinned) return;
 
     const unlisten = win.onFocusChanged(({ payload: focused }) => {
@@ -91,11 +85,27 @@ export default function PostItView({ id }: Props) {
     return () => { unlisten.then(fn => fn()); };
   }, [id, postit?.is_pinned]);
 
+  const bgColor = postit?.bg_color || DEFAULT_BG_COLOR;
+  const light = isLightColor(bgColor);
+
+  const paperVars = useMemo(() => ({
+    '--paper-bg': bgColor,
+    '--paper-border': darkenColor(bgColor, 0.82),
+    '--paper-text': light ? '#2c2c2c' : '#f0f0f0',
+    '--paper-text-secondary': light ? '#555555' : '#cccccc',
+    '--paper-text-placeholder': light ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.35)',
+    '--paper-toolbar-bg': darkenColor(bgColor, 0.95),
+    '--paper-btn-hover': light ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.12)',
+    '--paper-btn-active': light ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.2)',
+    '--paper-separator': light ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.1)',
+    '--paper-accent': light ? '#2563eb' : '#74c0fc',
+  } as React.CSSProperties), [bgColor, light]);
+
   if (!postit) return null;
 
   return (
     <div className="postit-container">
-      <div className={`glass-surface priority-${postit.priority}`}>
+      <div className="paper-surface" style={paperVars}>
         <TitleBar
           id={id}
           title={postit.title}
@@ -106,9 +116,9 @@ export default function PostItView({ id }: Props) {
         <div className="toolbar-row">
           <FormatToolbar editor={editor} />
           <div className="toolbar-right">
-            <PriorityPicker
-              current={postit.priority}
-              onChange={handlePriorityChange}
+            <PostItColorPicker
+              currentColor={bgColor}
+              onChange={handleColorChange}
             />
           </div>
         </div>

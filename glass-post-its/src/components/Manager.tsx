@@ -37,6 +37,7 @@ export default function ManagerView() {
         content: '',
         priority: 'glass',
         skin: 'glass',
+        bg_color: '#FDFD96',
         pos_x: 100 + Math.random() * 200,
         pos_y: 100 + Math.random() * 200,
         width: 320,

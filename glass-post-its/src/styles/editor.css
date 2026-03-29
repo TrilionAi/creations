@@ -11,7 +11,7 @@
   padding: 4px 0;
   font-size: 13.5px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.88);
+  color: var(--paper-text, #2c2c2c);
 }
 
 .tiptap-editor .ProseMirror p {
@@ -21,7 +21,7 @@
 .tiptap-editor .ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   float: left;
-  color: rgba(255, 255, 255, 0.25);
+  color: var(--paper-text-placeholder, rgba(0, 0, 0, 0.3));
   pointer-events: none;
   height: 0;
   font-style: italic;
@@ -45,7 +45,7 @@
   gap: 4px;
 }
 
-/* Collapse/expand arrow - only shown when item has children */
+/* Collapse/expand arrow */
 .task-collapse-btn {
   flex-shrink: 0;
   width: 20px;
@@ -56,22 +56,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--paper-text-secondary, #555);
   border-radius: 4px;
   transition: all 0.15s ease;
   padding: 0;
 }
 
 .task-collapse-btn:hover {
-  color: rgba(255, 255, 255, 0.9);
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--paper-text, #2c2c2c);
+  background: var(--paper-btn-hover, rgba(0, 0, 0, 0.08));
 }
 
 .task-collapse-btn svg {
   transition: transform 0.2s ease;
 }
 
-/* Spacer when no arrow (normal checkbox item) */
+/* Spacer when no arrow */
 .task-no-arrow {
   width: 6px;
   flex-shrink: 0;
@@ -88,7 +88,7 @@
 .task-checkbox-label input[type="checkbox"] {
   width: 15px;
   height: 15px;
-  accent-color: #5ddf7a;
+  accent-color: #2e8b3e;
   cursor: pointer;
 }
 
@@ -106,17 +106,17 @@
 .task-item.is-checked > .task-item-row > .task-item-content {
   text-decoration: line-through;
   opacity: 0.4;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--paper-text-secondary, #555);
 }
 
-/* Nested task lists - children of a task item */
+/* Nested task lists */
 .task-item ul[data-type="taskList"] {
   margin-left: 22px;
   transition: max-height 0.25s ease, opacity 0.2s ease;
   overflow: hidden;
 }
 
-/* Collapsed state - hide nested lists */
+/* Collapsed state */
 .task-item.is-collapsed ul[data-type="taskList"] {
   max-height: 0 !important;
   opacity: 0;
@@ -130,7 +130,7 @@
   opacity: 1;
 }
 
-/* Legacy fallback for non-custom taskList items */
+/* Legacy fallback */
 .tiptap-editor .ProseMirror ul[data-type="taskList"] ul[data-type="taskList"] {
   margin-left: 22px;
 }
@@ -140,42 +140,42 @@
   font-size: 1.4em;
   margin: 10px 0 6px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--paper-text, #2c2c2c);
 }
 .tiptap-editor .ProseMirror h2 {
   font-size: 1.2em;
   margin: 8px 0 4px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.93);
+  color: var(--paper-text, #2c2c2c);
 }
 .tiptap-editor .ProseMirror h3 {
   font-size: 1.05em;
   margin: 6px 0 3px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--paper-text, #2c2c2c);
 }
 
 /* Highlight */
 .tiptap-editor .ProseMirror mark {
-  background: rgba(255, 220, 80, 0.25);
-  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 200, 50, 0.35);
+  color: var(--paper-text, #2c2c2c);
   padding: 1px 3px;
   border-radius: 3px;
 }
 
 /* Code */
 .tiptap-editor .ProseMirror code {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.06);
   padding: 2px 5px;
   border-radius: 4px;
   font-size: 0.88em;
   font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-  color: rgba(180, 210, 255, 0.9);
+  color: #c7254e;
 }
 
 .tiptap-editor .ProseMirror pre {
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   padding: 10px 14px;
   border-radius: 8px;
   margin: 6px 0;
@@ -185,7 +185,7 @@
   background: none;
   padding: 0;
   border: none;
-  color: rgba(200, 220, 255, 0.85);
+  color: #333;
 }
 
 /* Bullet and ordered lists */
@@ -200,37 +200,37 @@
 }
 
 .tiptap-editor .ProseMirror ul:not([data-type="taskList"]) li::marker {
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--paper-text-secondary, #555);
 }
 
 .tiptap-editor .ProseMirror ol li::marker {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--paper-text-secondary, #555);
 }
 
 /* Blockquote */
 .tiptap-editor .ProseMirror blockquote {
-  border-left: 3px solid rgba(140, 180, 255, 0.3);
+  border-left: 3px solid var(--paper-accent, #2563eb);
   padding-left: 14px;
   margin: 6px 0;
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--paper-text-secondary, #555);
   font-style: italic;
 }
 
 /* Links */
 .tiptap-editor .ProseMirror a {
-  color: rgba(140, 190, 255, 0.9);
+  color: var(--paper-accent, #2563eb);
   text-decoration: underline;
-  text-decoration-color: rgba(140, 190, 255, 0.3);
+  text-decoration-color: rgba(37, 99, 235, 0.3);
 }
 
 /* Horizontal rule */
 .tiptap-editor .ProseMirror hr {
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--paper-separator, rgba(0, 0, 0, 0.1));
   margin: 10px 0;
 }
 
-/* ===== TOGGLE BLOCK - Collapsible section (no checkboxes) ===== */
+/* ===== TOGGLE BLOCK ===== */
 .toggle-block {
   position: relative;
   margin: 4px 0;
@@ -252,15 +252,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--paper-text-secondary, #555);
   border-radius: 4px;
   transition: all 0.15s ease;
   padding: 0;
 }
 
 .toggle-arrow-btn:hover {
-  color: rgba(255, 255, 255, 0.9);
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--paper-text, #2c2c2c);
+  background: var(--paper-btn-hover, rgba(0, 0, 0, 0.08));
 }
 
 .toggle-arrow-btn svg {
@@ -282,7 +282,7 @@
 }
 
 .toggle-title-input::placeholder {
-  color: rgba(255, 255, 255, 0.25);
+  color: var(--paper-text-placeholder, rgba(0, 0, 0, 0.3));
 }
 
 .toggle-body {
@@ -290,12 +290,10 @@
   min-height: 1.6em;
 }
 
-/* When collapsed: hide body entirely */
 .toggle-block.is-closed .toggle-body {
   display: none;
 }
 
-/* When open: show body */
 .toggle-block.is-open .toggle-body {
   display: block;
 }

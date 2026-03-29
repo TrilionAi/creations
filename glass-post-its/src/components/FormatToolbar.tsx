@@ -36,8 +36,8 @@ const FONT_SIZES = ['10px', '12px', '13.5px', '16px', '20px', '24px', '32px'];
 const DEFAULT_SIZE = '13.5px';
 
 const QUICK_COLORS = [
-  '#ffffff', '#ff6b6b', '#ffa94d', '#ffd43b',
-  '#69db7c', '#74c0fc', '#b197fc', '#f783ac',
+  '#2c2c2c', '#d63031', '#e17055', '#fdcb6e',
+  '#00b894', '#0984e3', '#6c5ce7', '#e84393',
 ];
 
 /* ===== Color Picker Component ===== */

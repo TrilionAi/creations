@@ -10,7 +10,7 @@ html, body, #root {
   overflow: visible;
   background: transparent !important;
   font-family: 'Segoe UI Variable', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
-  color: rgba(255, 255, 255, 0.92);
+  color: #2c2c2c;
   font-size: 13px;
 }
 
@@ -20,7 +20,7 @@ body {
 }
 
 ::selection {
-  background: rgba(130, 170, 255, 0.4);
+  background: rgba(37, 99, 235, 0.25);
 }
 
 ::-webkit-scrollbar {
@@ -32,10 +32,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.25);
 }
