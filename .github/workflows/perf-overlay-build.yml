@@ -43,19 +43,31 @@ jobs:
         with:
           name: "Perf Overlay ${{ github.ref_name }}"
           body: |
-            ## Perf Overlay ${{ github.ref_name }}
+            # Perf Overlay ${{ github.ref_name }}
 
-            Lightweight system performance monitoring overlay.
+            Lightweight system performance monitor that stays on top of everything. Keep an eye on your CPU, GPU, RAM, and temperatures without alt-tabbing.
 
             ### Download
-            - **Windows**: `.zip` with portable `.exe`
+            | Platform | File |
+            |----------|------|
+            | Windows | Portable `.exe` (no install needed) + `.zip` |
 
-            ### Features
-            - CPU, GPU, RAM and temperature monitoring
-            - Transparent always-on-top overlay
-            - Configurable hotkeys
-            - Drag mode for positioning
-            - System tray integration
+            > macOS support coming soon — [help us build it!](https://github.com/TrilionAi/creations/issues/2)
+
+            ### What's inside
+            - Real-time CPU, GPU, RAM usage and temperatures
+            - Transparent overlay that doesn't get in the way
+            - `Ctrl+Num1` — toggle overlay visibility
+            - `Ctrl+Num2` — drag mode to reposition
+            - `Ctrl+Num3` — quit
+            - Right-click system tray to customize fonts, colors, temperature thresholds, and hotkeys
+            - Auto-start with Windows option
+            - Works great alongside games or full-screen apps
+
+            ### Quick start
+            Just download the `.exe` and run it — no installation needed. A small transparent overlay appears on your desktop showing your system stats.
+
+            > **Antivirus notice:** Windows Defender may flag this app as unknown — this is a common false positive for open-source apps. Click "More info" → "Run anyway". [Learn more](https://github.com/TrilionAi/creations#antivirus--false-positive-warning)
           files: |
             perf-overlay/dist/PerfOverlay-${{ github.ref_name }}.zip
             perf-overlay/dist/PerfOverlay.exe

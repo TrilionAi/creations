@@ -1,10 +1,10 @@
-; Inno Setup Script - Editor Universal Desktop
+; Inno Setup Script - Universal Editor Desktop
 ; Requer Inno Setup 6.x
 
-#define MyAppName "Editor Universal Desktop"
-#define MyAppVersion "1.0.0"
+#define MyAppName "Universal Editor Desktop"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "Lucas"
-#define MyAppExeName "Editor Universal Desktop.exe"
+#define MyAppExeName "Universal Editor Desktop.exe"
 
 [Setup]
 AppId={{5953B558-3CC2-4E19-A4C5-8B86FD5311A8}
@@ -15,7 +15,7 @@ DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=installer_output
-OutputBaseFilename=Editor_Universal_Desktop_Setup_{#MyAppVersion}
+OutputBaseFilename=Universal_Editor_Desktop_Setup_{#MyAppVersion}
 SetupIconFile=icon.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma2/ultra64
@@ -34,7 +34,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "startupicon"; Description: "Start with Windows"; GroupDescription: "Other options:"
 
 [Files]
-Source: "dist\Editor Universal Desktop\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "dist\Universal Editor Desktop\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
@@ -57,7 +57,7 @@ var
   ResultCode: Integer;
 begin
   // Close app if it is running
-  Exec('taskkill', '/f /im "Editor Universal Desktop.exe"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Exec('taskkill', '/f /im "Universal Editor Desktop.exe"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
   Result := True;
 end;
 
@@ -66,6 +66,6 @@ var
   ResultCode: Integer;
 begin
   // Close app before uninstalling
-  Exec('taskkill', '/f /im "Editor Universal Desktop.exe"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Exec('taskkill', '/f /im "Universal Editor Desktop.exe"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
   Result := True;
 end;

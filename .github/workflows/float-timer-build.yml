@@ -93,22 +93,30 @@ jobs:
         with:
           name: "Float Timer ${{ github.ref_name }}"
           body: |
-            ## Float Timer ${{ github.ref_name }}
+            # Float Timer ${{ github.ref_name }}
 
-            Circular timer/stopwatch widget that stays always visible on your desktop.
+            Circular timer and stopwatch widget that stays always visible on your desktop. Perfect for Pomodoro sessions, cooking, meetings, or any time you need a timer in sight.
 
             ### Download
-            - **Windows**: `.exe` installer
-            - **macOS**: `.dmg` disk image
+            | Platform | File |
+            |----------|------|
+            | Windows | `.exe` installer |
+            | macOS | `.dmg` disk image |
 
-            ### Features
-            - Multiple independent timers
-            - Editable title per timer (click to rename)
-            - Timer and stopwatch modes
-            - Transparent circular widget
-            - Always-on-top
+            ### What's inside
+            - Multiple independent timers — run as many as you need at once
+            - Click the title to rename each timer (e.g., "Break", "Meeting", "Focus")
+            - Timer (countdown) and stopwatch (count up) modes
+            - Built-in Pomodoro presets (25min work, 5min break)
+            - Custom arc color per timer to tell them apart at a glance
+            - Looping alarm with silence button when time is up
+            - Transparent circular widget, always-on-top
             - System tray integration
-            - Pomodoro presets
+
+            ### Quick start
+            Download, install, and a circular timer appears on your desktop. Right-click to add more timers, switch modes, or change colors.
+
+            > **Antivirus notice:** Windows Defender may flag this app as unknown — this is a common false positive for open-source apps. Click "More info" → "Run anyway". [Learn more](https://github.com/TrilionAi/creations#antivirus--false-positive-warning)
           files: |
             windows-build/FloatTimer_Setup.exe
             macos-build/FloatTimer.dmg

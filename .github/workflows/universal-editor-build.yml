@@ -54,19 +54,31 @@ jobs:
         with:
           name: "Universal Editor ${{ github.ref_name }}"
           body: |
-            ## Universal Editor ${{ github.ref_name }}
+            # Universal Editor ${{ github.ref_name }}
 
-            Desktop drawing/annotation overlay + Chrome extension.
+            Draw, highlight, and annotate directly over any window on your screen. Includes a desktop overlay app and a Chrome extension for web annotations.
 
             ### Download
-            - **Desktop Overlay (Windows)**: `.exe` installer
-            - **Chrome Extension**: `.zip` to load as unpacked extension
+            | File | Description |
+            |------|-------------|
+            | `.exe` installer | Desktop overlay app (Windows) |
+            | `.zip` Chrome extension | Load as unpacked extension in Chrome |
 
-            ### Features
-            - Draw and annotate over any window
-            - Reading guide mode
-            - Text annotation mode
-            - Chrome extension for web annotations
+            ### What's inside
+            - **Draw mode** (`Ctrl+Num1`) — freehand drawing over any window with customizable pen color and thickness
+            - **Reading guide** (`Ctrl+Num2`) — highlights the line you're reading, great for long documents or code reviews
+            - **Text mode** (`Ctrl+Num3`) — place floating text annotations anywhere on screen
+            - **Chrome extension** — same annotation tools inside your browser on any webpage
+            - Right-click while drawing to change colors, thickness, or clear the canvas
+            - `Ctrl+Num0` to quit
+
+            ### How to install the Chrome extension
+            1. Download and extract the `.zip` file
+            2. Open Chrome → `chrome://extensions`
+            3. Enable "Developer mode" (top right)
+            4. Click "Load unpacked" and select the extracted folder
+
+            > **Antivirus notice:** Windows Defender may flag this app as unknown — this is a common false positive for open-source apps. Click "More info" → "Run anyway". [Learn more](https://github.com/TrilionAi/creations#antivirus--false-positive-warning)
           files: |
-            universal-editor/desktop-overlay/installer_output/Editor_Universal_Desktop_Setup_1.0.0.exe
+            universal-editor/desktop-overlay/installer_output/Universal_Editor_Desktop_Setup_1.1.0.exe
             universal-editor/UniversalEditor-Chrome-${{ github.ref_name }}.zip

@@ -48,20 +48,27 @@ jobs:
           tagName: ${{ github.ref_name }}
           releaseName: 'Desk Stickies ${{ github.ref_name }}'
           releaseBody: |
-            ## Desk Stickies ${{ github.ref_name }}
+            # Desk Stickies ${{ github.ref_name }}
 
-            Paper-style sticky notes that float on your desktop.
+            Paper-style sticky notes that float on your desktop. Keep your tasks, ideas, and quick notes always visible while you work.
 
             ### Download
-            - **Windows**: `.exe` installer
-            - **macOS**: `.dmg` disk image
+            | Platform | File |
+            |----------|------|
+            | Windows | `.exe` installer |
+            | macOS | `.dmg` disk image |
 
-            ### Features
-            - Native glass/acrylic transparency
-            - Rich text editor with formatting
-            - Nested checklists with auto-green
-            - Priority colors (red, orange, yellow, green)
-            - System tray integration
-            - SQLite persistence
+            ### What's inside
+            - Rich text editor — bold, italic, underline, strikethrough, highlights, headings, code blocks
+            - Nested checklists with checkboxes — auto-turns green when all tasks are done
+            - Free color picker to customize each note
+            - Pin notes as always-on-top so they stay visible over other windows
+            - All notes persist across restarts (SQLite)
+            - System tray integration — right-click to create, show/hide all notes
+
+            ### Quick start
+            Download, install, and right-click the system tray icon to create your first note.
+
+            > **Antivirus notice:** Windows Defender may flag this app as unknown — this is a common false positive for open-source apps. Click "More info" → "Run anyway". [Learn more](https://github.com/TrilionAi/creations#antivirus--false-positive-warning)
           releaseDraft: false
           prerelease: false
