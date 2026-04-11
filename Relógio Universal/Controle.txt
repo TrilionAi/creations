@@ -1,5 +1,0 @@
-Controles:
-Clique - Play/Pause
-Clique duplo - Resetar
-Clique direito - Menu com opções de tempo
-Arrastar - Mover o círculo

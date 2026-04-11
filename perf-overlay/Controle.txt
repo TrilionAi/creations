@@ -1,0 +1,5 @@
+Controls:
+PgUp - Show overlay
+End - Hide overlay
+PgDn - Enable dragging (move)
+Home - Open settings

@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  build-windows:
     runs-on: windows-latest
 
     steps:
@@ -23,20 +23,70 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        working-directory: "Relógio Universal"
+        working-directory: float-timer
         run: |
           pip install -r requirements.txt
           pip install pyinstaller
 
       - name: Build with PyInstaller
-        working-directory: "Relógio Universal"
+        working-directory: float-timer
         run: |
           pyinstaller --noconfirm "Float Timer.spec"
 
       - name: Build installer with Inno Setup
-        working-directory: "Relógio Universal"
+        working-directory: float-timer
         run: |
           iscc installer.iss
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: float-timer/installer_output/FloatTimer_Setup.exe
+
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        working-directory: float-timer
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build with PyInstaller
+        working-directory: float-timer
+        run: |
+          pyinstaller --noconfirm --windowed --name "Float Timer" --icon icon.ico main.py
+
+      - name: Create DMG
+        working-directory: float-timer
+        run: |
+          mkdir -p dmg_content
+          cp -r "dist/Float Timer.app" dmg_content/ 2>/dev/null || cp -r dist/Float\ Timer dmg_content/
+          hdiutil create -volname "Float Timer" -srcfolder dmg_content -ov -format UDZO "FloatTimer.dmg"
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: float-timer/FloatTimer.dmg
+
+  release:
+    needs: [build-windows, build-macos]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
@@ -49,6 +99,7 @@ jobs:
 
             ### Download
             - **Windows**: `.exe` installer
+            - **macOS**: `.dmg` disk image
 
             ### Features
             - Multiple independent timers
@@ -59,4 +110,5 @@ jobs:
             - System tray integration
             - Pomodoro presets
           files: |
-            Relógio Universal/installer_output/FloatTimer_Setup.exe
+            windows-build/FloatTimer_Setup.exe
+            macos-build/FloatTimer.dmg
