@@ -1,5 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
-# PyInstaller spec file para Editor Universal Desktop
+# PyInstaller spec file para Universal Editor Desktop
 
 block_cipher = None
 
@@ -17,11 +17,11 @@ a = Analysis(
     hooksconfig={},
     runtime_hooks=[],
     excludes=[
-        # Modulos Python desnecessarios
+        # Unnecessary Python modules
         'matplotlib', 'numpy', 'scipy', 'pandas', 'tkinter',
         'unittest', 'email', 'html', 'http', 'xml', 'xmlrpc',
         'pydoc', 'doctest', 'difflib',
-        # Modulos PySide6 nao utilizados (app usa apenas QtWidgets, QtCore, QtGui)
+        # Unused PySide6 modules (app only uses QtWidgets, QtCore, QtGui)
         'PySide6.QtWebEngine', 'PySide6.QtWebEngineWidgets',
         'PySide6.QtWebEngineCore', 'PySide6.QtMultimedia',
         'PySide6.QtNetwork', 'PySide6.QtSql', 'PySide6.QtSvg',
@@ -36,7 +36,7 @@ a = Analysis(
         'PySide6.Qt3DInput', 'PySide6.Qt3DLogic', 'PySide6.Qt3DAnimation',
         'PySide6.QtCharts', 'PySide6.QtDataVisualization',
         'PySide6.QtGraphs', 'PySide6.QtLocation',
-        # Excluir PyQt6 inteiramente (nao mais usado)
+        # Exclude PyQt6 entirely (no longer used)
         'PyQt6',
     ],
     win_no_prefer_redirects=False,
@@ -52,7 +52,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='Editor Universal Desktop',
+    name='Universal Editor Desktop',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -74,5 +74,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='Editor Universal Desktop',
+    name='Universal Editor Desktop',
 )

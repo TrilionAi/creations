@@ -60,12 +60,12 @@ jobs:
         working-directory: float-timer
         run: |
           pip install -r requirements.txt
-          pip install pyinstaller
+          pip install pyinstaller pillow
 
       - name: Build with PyInstaller
         working-directory: float-timer
         run: |
-          pyinstaller --noconfirm --windowed --name "Float Timer" --icon icon.ico main.py
+          pyinstaller --noconfirm --windowed --name "Float Timer" main.py
 
       - name: Create DMG
         working-directory: float-timer
