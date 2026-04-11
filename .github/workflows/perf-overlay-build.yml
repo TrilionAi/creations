@@ -31,7 +31,7 @@ jobs:
       - name: Build with PyInstaller
         working-directory: perf-overlay
         run: |
-          pyinstaller --onefile --noconsole --name "PerfOverlay" --icon icon.ico main.py
+          pyinstaller --onefile --noconsole --name "PerfOverlay" main.py
 
       - name: Create ZIP artifact
         working-directory: perf-overlay
