@@ -1,0 +1,31 @@
+CREATE TABLE IF NOT EXISTS postits (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL DEFAULT '',
+    content TEXT NOT NULL DEFAULT '',
+    priority TEXT NOT NULL DEFAULT 'glass',
+    pos_x REAL NOT NULL DEFAULT 100.0,
+    pos_y REAL NOT NULL DEFAULT 100.0,
+    width REAL NOT NULL DEFAULT 320.0,
+    height REAL NOT NULL DEFAULT 380.0,
+    is_pinned INTEGER NOT NULL DEFAULT 0,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS tasks (
+    id TEXT PRIMARY KEY,
+    postit_id TEXT NOT NULL,
+    text TEXT NOT NULL DEFAULT '',
+    is_checked INTEGER NOT NULL DEFAULT 0,
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY (postit_id) REFERENCES postits(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS subtasks (
+    id TEXT PRIMARY KEY,
+    task_id TEXT NOT NULL,
+    text TEXT NOT NULL DEFAULT '',
+    is_checked INTEGER NOT NULL DEFAULT 0,
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
+);

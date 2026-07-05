@@ -1,0 +1,5 @@
+Controls:
+Click - Play/Pause
+Double click - Reset
+Right click - Menu with time options
+Drag - Move the circle

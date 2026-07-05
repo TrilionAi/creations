@@ -1,0 +1,83 @@
+name: Desk Stickies - Build & Release
+
+on:
+  push:
+    tags:
+      - 'desk-stickies-v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - platform: windows-latest
+            target: x86_64-pc-windows-msvc
+          - platform: macos-latest
+            target: aarch64-apple-darwin
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Install dependencies (npm)
+        working-directory: desk-stickies
+        run: npm install
+
+      - name: Build Tauri app
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: desk-stickies
+          tagName: ${{ github.ref_name }}
+          releaseName: 'Desk Stickies ${{ github.ref_name }}'
+          releaseBody: |
+            # Desk Stickies ${{ github.ref_name }}
+
+            Paper-style sticky notes that float on your desktop. Keep your tasks, ideas, and quick notes always visible while you work.
+
+            ### Download
+            | Platform | File |
+            |----------|------|
+            | Windows | `.exe` installer |
+            | macOS | `.dmg` disk image |
+
+            ### What's new in v1.2
+            - **Floating format menu** — the fixed toolbar is gone; select text and a Notion-style bubble appears with all formatting options. Your note is 100% writing space now
+            - **"+" block menu** in the title bar — insert checklists, lists, toggles, headings, quotes and code blocks
+            - **Roll up** — collapse any note to just its title bar with one click
+            - **Trash with restore** — closing a note moves it to the trash (tray → "Notes & Trash"); permanently deleted only after 30 days
+            - **Notes & Trash window** — search across all your notes and jump to any of them
+            - **Per-note opacity** — make notes translucent so they blend into your desktop
+            - **Faster startup** — notes now restore in parallel when the app launches
+
+            ### What's inside
+            - Rich text editor — bold, italic, underline, strikethrough, highlights, headings, code blocks
+            - Nested checklists with checkboxes — auto-turns green when all tasks are done
+            - Free color picker + opacity per note
+            - Pin notes as always-on-top so they stay visible over other windows
+            - All notes persist across restarts (SQLite)
+            - System tray integration — right-click to create, search, show/hide all notes
+
+            ### Quick start
+            Download, install, and right-click the system tray icon to create your first note.
+
+            > **Antivirus notice:** Windows Defender may flag this app as unknown — this is a common false positive for open-source apps. Click "More info" → "Run anyway". [Learn more](https://github.com/TrilionAi/creations#antivirus--false-positive-warning)
+          releaseDraft: false
+          prerelease: false
