@@ -18,7 +18,7 @@ import platform
 # Add the current directory to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from PyQt6.QtWidgets import QApplication, QSystemTrayIcon, QMenu
+from PyQt6.QtWidgets import QApplication, QSystemTrayIcon, QMenu, QInputDialog
 from PyQt6.QtGui import QIcon, QAction
 from PyQt6.QtCore import QTimer
 from PyQt6.QtMultimedia import QSoundEffect
@@ -26,7 +26,107 @@ from PyQt6.QtCore import QUrl
 
 from circular_widget import CircularTimerWidget
 from timer_logic import TimerController
-from settings import settings
+from settings import settings, resolve_sound_path
+
+
+APP_NAME = "Float Timer"
+
+
+# --- Autostart (start with the system) ---
+
+def _launch_command():
+    """Command used to launch the app at login"""
+    if getattr(sys, 'frozen', False):
+        return f'"{sys.executable}"'
+    script = os.path.abspath(__file__)
+    return f'"{sys.executable}" "{script}"'
+
+
+def _macos_plist_path():
+    return os.path.expanduser('~/Library/LaunchAgents/com.trilionai.floattimer.plist')
+
+
+def _linux_desktop_path():
+    base = os.environ.get('XDG_CONFIG_HOME') or os.path.expanduser('~/.config')
+    return os.path.join(base, 'autostart', 'float-timer.desktop')
+
+
+def is_autostart_enabled():
+    """Checks whether the app is registered to start with the system"""
+    system = platform.system()
+    try:
+        if system == 'Windows':
+            import winreg
+            with winreg.OpenKey(
+                winreg.HKEY_CURRENT_USER,
+                r"Software\Microsoft\Windows\CurrentVersion\Run"
+            ) as key:
+                winreg.QueryValueEx(key, APP_NAME)
+            return True
+        if system == 'Darwin':
+            return os.path.exists(_macos_plist_path())
+        return os.path.exists(_linux_desktop_path())
+    except OSError:
+        return False
+
+
+def set_autostart(enabled):
+    """Registers/unregisters the app to start with the system"""
+    system = platform.system()
+    try:
+        if system == 'Windows':
+            import winreg
+            with winreg.OpenKey(
+                winreg.HKEY_CURRENT_USER,
+                r"Software\Microsoft\Windows\CurrentVersion\Run",
+                0, winreg.KEY_SET_VALUE
+            ) as key:
+                if enabled:
+                    winreg.SetValueEx(key, APP_NAME, 0, winreg.REG_SZ, _launch_command())
+                else:
+                    try:
+                        winreg.DeleteValue(key, APP_NAME)
+                    except FileNotFoundError:
+                        pass
+        elif system == 'Darwin':
+            plist = _macos_plist_path()
+            if enabled:
+                args = f"<string>{sys.executable}</string>"
+                if not getattr(sys, 'frozen', False):
+                    args += f"\n        <string>{os.path.abspath(__file__)}</string>"
+                os.makedirs(os.path.dirname(plist), exist_ok=True)
+                with open(plist, 'w', encoding='utf-8') as f:
+                    f.write(f"""<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.trilionai.floattimer</string>
+    <key>ProgramArguments</key>
+    <array>
+        {args}
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+</dict>
+</plist>
+""")
+            elif os.path.exists(plist):
+                os.remove(plist)
+        else:
+            desktop = _linux_desktop_path()
+            if enabled:
+                os.makedirs(os.path.dirname(desktop), exist_ok=True)
+                with open(desktop, 'w', encoding='utf-8') as f:
+                    f.write(
+                        "[Desktop Entry]\nType=Application\nName=Float Timer\n"
+                        f"Exec={_launch_command()}\nX-GNOME-Autostart-enabled=true\n"
+                    )
+            elif os.path.exists(desktop):
+                os.remove(desktop)
+        return True
+    except OSError:
+        return False
 
 
 class TimerApp:
@@ -45,22 +145,37 @@ class TimerApp:
         # Tray icon
         self.setup_tray()
 
-        # Load saved timers
-        saved_timers = settings.timers
+        # Load saved timers — startup layout takes precedence over last state
+        startup = settings.get('startup_template')
+        templates = settings.templates
+        if startup and startup in templates:
+            saved_timers = templates[startup]
+        else:
+            saved_timers = settings.timers
         for config in saved_timers:
-            self.create_timer(
-                title=config.get('title', 'Timer'),
-                pos_x=config.get('pos_x'),
-                pos_y=config.get('pos_y'),
-                arc_color=config.get('color', '#00c864'),
-            )
+            self.create_timer_from_config(config)
+
+        if not self.timers:
+            self.create_timer()
 
         self.update_removable_state()
 
         # Save immediately to persist migrated format and initial state
         self.save_timer_configs()
 
-    def create_timer(self, title="Timer", pos_x=None, pos_y=None, arc_color="#00c864"):
+    def create_timer_from_config(self, config):
+        """Creates a timer from a saved config dict"""
+        return self.create_timer(
+            title=config.get('title', 'Timer'),
+            pos_x=config.get('pos_x'),
+            pos_y=config.get('pos_y'),
+            arc_color=config.get('color', '#00c864'),
+            duration=config.get('duration', 0),
+            cycle=config.get('cycle'),
+        )
+
+    def create_timer(self, title="Timer", pos_x=None, pos_y=None, arc_color="#00c864",
+                     duration=0, cycle=None):
         """Creates a new timer instance (widget + controller)"""
         widget = CircularTimerWidget(150, title=title, arc_color=arc_color)
         controller = TimerController()
@@ -95,11 +210,38 @@ class TimerApp:
         # Connect silence button to stop sound
         widget.notification.silenced.connect(self.silence_alert)
 
-        entry = {'widget': widget, 'controller': controller}
+        # Pomodoro cycle / sound / layout signals
+        widget.cycle_selected.connect(
+            lambda work, brk, w=widget: self.on_cycle_selected(w, work, brk)
+        )
+        widget.alert_sound_changed.connect(lambda _: self.reload_sound())
+        widget.alert_volume_changed.connect(self.set_alert_volume)
+        widget.test_sound_requested.connect(self.play_test_sound)
+        widget.save_layout_requested.connect(self.save_layout_dialog)
+        widget.load_layout_requested.connect(self.apply_template)
+
+        entry = {'widget': widget, 'controller': controller, 'cycle': None, 'phase': 'work'}
         self.timers.append(entry)
+
+        # Restore saved cycle or duration (loaded paused, ready to start)
+        if cycle:
+            entry['cycle'] = list(cycle)
+            widget.set_cycle_active(True)
+            controller.set_timer(cycle[0])
+            widget.set_time(cycle[0], True)
+        elif duration and duration > 0:
+            controller.set_timer(duration)
+            widget.set_time(duration, True)
 
         widget.show()
         return entry
+
+    def find_entry(self, widget):
+        """Finds the timer entry for a widget"""
+        for entry in self.timers:
+            if entry['widget'] is widget:
+                return entry
+        return None
 
     def add_timer_near(self, source_widget):
         """Add a new timer positioned near the source widget"""
@@ -152,38 +294,121 @@ class TimerApp:
         for entry in self.timers:
             entry['widget'].set_removable(removable)
 
-    def save_timer_configs(self):
-        """Save all timer positions, titles and colors to settings"""
+    def current_configs(self):
+        """Snapshot of all timers: position, title, color, duration and cycle"""
         configs = []
         for entry in self.timers:
             w = entry['widget']
+            c = entry['controller']
             pos = w.pos()
             configs.append({
                 'title': w.title,
                 'pos_x': pos.x(),
                 'pos_y': pos.y(),
                 'color': w.arc_color.name(),
+                'duration': c.initial_seconds if c.is_timer_mode else 0,
+                'cycle': entry.get('cycle'),
             })
-        settings.timers = configs
+        return configs
+
+    def save_timer_configs(self):
+        """Save all timer configs to settings"""
+        settings.timers = self.current_configs()
         settings.save()
+
+    # --- Layouts (templates) ---
+
+    def save_layout_dialog(self):
+        """Asks for a name and saves the current arrangement as a layout"""
+        name, ok = QInputDialog.getText(
+            None, settings.tr('layouts'), settings.tr('layout_name_prompt')
+        )
+        if not ok or not name.strip():
+            return
+        name = name.strip()
+        templates = settings.templates
+        templates[name] = self.current_configs()
+        settings.templates = templates
+        settings.save()
+        self.rebuild_tray_menu()
+        if self.timers:
+            self.timers[0]['widget'].show_notification(
+                settings.tr('layouts'),
+                settings.tr('layout_saved').format(name=name),
+                2500
+            )
+
+    def apply_template(self, name):
+        """Replaces all current timers with the ones from a saved layout"""
+        configs = settings.templates.get(name)
+        if not configs:
+            return
+
+        self.silence_alert()
+        for entry in list(self.timers):
+            entry['controller'].stop()
+            entry['widget'].notification.hide()
+            entry['widget'].close()
+        self.timers.clear()
+
+        for config in configs:
+            self.create_timer_from_config(config)
+        if not self.timers:
+            self.create_timer()
+
+        self.update_removable_state()
+        self.save_timer_configs()
+        self.rebuild_tray_menu()
+        self.timers[0]['widget'].show_notification(
+            settings.tr('layouts'),
+            settings.tr('layout_loaded').format(name=name),
+            2500
+        )
+
+    def delete_template(self, name):
+        """Deletes a saved layout"""
+        templates = settings.templates
+        templates.pop(name, None)
+        settings.templates = templates
+        if settings.get('startup_template') == name:
+            settings.set('startup_template', None)
+        settings.save()
+        self.rebuild_tray_menu()
+
+    def set_startup_template(self, name):
+        """Sets the layout loaded on startup (None = last state)"""
+        settings.set('startup_template', name)
+        settings.save()
+        self.rebuild_tray_menu()
 
     # --- Sound ---
 
     def setup_sound(self):
-        """Sets up alert sound with loop support"""
+        """Sets up alert sound with loop support (sound and volume from settings)"""
         self.alert_sound = None
-        sound_path = None
-        if platform.system() == 'Windows':
-            sound_path = "C:/Windows/Media/Alarm01.wav"
-        elif platform.system() == 'Darwin':
-            for p in ["/System/Library/Sounds/Glass.aiff", "/System/Library/Sounds/Ping.aiff"]:
-                if os.path.exists(p):
-                    sound_path = p
-                    break
+        sound_path = resolve_sound_path(settings.get('alert_sound', ''))
         if sound_path and os.path.exists(sound_path):
             self.alert_sound = QSoundEffect()
             self.alert_sound.setSource(QUrl.fromLocalFile(sound_path))
-            self.alert_sound.setVolume(0.5)
+            self.alert_sound.setVolume(settings.get('alert_volume', 50) / 100.0)
+
+    def reload_sound(self):
+        """Reloads the alert sound after the user picks a different one"""
+        if self.alert_sound:
+            self.alert_sound.stop()
+        self.setup_sound()
+
+    def set_alert_volume(self, value):
+        """Applies a new alarm volume (0-100)"""
+        if self.alert_sound:
+            self.alert_sound.setVolume(value / 100.0)
+
+    def play_test_sound(self):
+        """Plays the alarm sound once so the user can preview it"""
+        if self.alert_sound:
+            self.alert_sound.stop()
+            self.alert_sound.setLoopCount(1)
+            self.alert_sound.play()
 
     def start_alert_sound(self):
         """Start looping the alert sound"""
@@ -236,6 +461,51 @@ class TimerApp:
 
         menu.addSeparator()
 
+        # Layouts submenu
+        layouts_menu = menu.addMenu(settings.tr('layouts'))
+        save_action = QAction(settings.tr('save_layout'), layouts_menu)
+        save_action.triggered.connect(self.save_layout_dialog)
+        layouts_menu.addAction(save_action)
+
+        template_names = list(settings.templates.keys())
+        if template_names:
+            load_menu = layouts_menu.addMenu(settings.tr('load_layout'))
+            for name in template_names:
+                action = QAction(name, load_menu)
+                action.triggered.connect(lambda _, n=name: self.apply_template(n))
+                load_menu.addAction(action)
+
+            startup_menu = layouts_menu.addMenu(settings.tr('startup_layout'))
+            current_startup = settings.get('startup_template')
+            none_label = settings.tr('none')
+            if current_startup is None:
+                none_label = f"✓ {none_label}"
+            none_action = QAction(none_label, startup_menu)
+            none_action.triggered.connect(lambda: self.set_startup_template(None))
+            startup_menu.addAction(none_action)
+            for name in template_names:
+                label = f"✓ {name}" if name == current_startup else name
+                action = QAction(label, startup_menu)
+                action.triggered.connect(lambda _, n=name: self.set_startup_template(n))
+                startup_menu.addAction(action)
+
+            delete_menu = layouts_menu.addMenu(settings.tr('delete_layout'))
+            for name in template_names:
+                action = QAction(name, delete_menu)
+                action.triggered.connect(lambda _, n=name: self.delete_template(n))
+                delete_menu.addAction(action)
+
+        menu.addSeparator()
+
+        # Start with system toggle
+        autostart_action = QAction(settings.tr('autostart'), menu)
+        autostart_action.setCheckable(True)
+        autostart_action.setChecked(is_autostart_enabled())
+        autostart_action.triggered.connect(lambda checked: set_autostart(checked))
+        menu.addAction(autostart_action)
+
+        menu.addSeparator()
+
         quit_action = QAction(settings.tr('quit'), menu)
         quit_action.triggered.connect(self.quit_app)
         menu.addAction(quit_action)
@@ -266,9 +536,17 @@ class TimerApp:
 
     def on_time_selected(self, seconds, widget, controller):
         """When a time is selected from a timer's menu"""
+        # Picking a plain time turns off any active Pomodoro cycle
+        entry = self.find_entry(widget)
+        if entry:
+            entry['cycle'] = None
+            entry['phase'] = 'work'
+        widget.set_cycle_active(False)
+
         controller.set_timer(seconds)
         is_timer = seconds > 0
         widget.set_time(seconds, is_timer)
+        self.save_timer_configs()
 
         title = widget.title
         if seconds > 0:
@@ -295,8 +573,67 @@ class TimerApp:
         else:
             return f"{minutes:02d}:{secs:02d}"
 
+    def on_cycle_selected(self, widget, work_seconds, break_seconds):
+        """When a Pomodoro cycle is chosen (or disabled) from a timer's menu"""
+        entry = self.find_entry(widget)
+        if not entry:
+            return
+        controller = entry['controller']
+
+        if work_seconds <= 0:
+            entry['cycle'] = None
+            entry['phase'] = 'work'
+            widget.set_cycle_active(False)
+            widget.show_notification(
+                widget.title, settings.tr('cycle_disabled'), 2000
+            )
+        else:
+            entry['cycle'] = [work_seconds, break_seconds]
+            entry['phase'] = 'work'
+            widget.set_cycle_active(True)
+            controller.set_timer(work_seconds)
+            widget.set_time(work_seconds, True)
+            widget.show_notification(
+                widget.title,
+                settings.tr('cycle_set').format(
+                    work=work_seconds // 60, brk=break_seconds // 60
+                ),
+                2500
+            )
+        self.save_timer_configs()
+
     def on_timer_finished(self, widget):
         """When a timer reaches zero"""
+        entry = self.find_entry(widget)
+
+        # Pomodoro cycle: auto-switch to the next phase and keep going
+        if entry and entry.get('cycle'):
+            work_seconds, break_seconds = entry['cycle']
+            next_phase = 'break' if entry.get('phase', 'work') == 'work' else 'work'
+            entry['phase'] = next_phase
+            next_seconds = break_seconds if next_phase == 'break' else work_seconds
+            phase_label = settings.tr('break') if next_phase == 'break' else settings.tr('focus')
+
+            # Short chime (not the looping alarm) between phases
+            if self.alert_sound:
+                self.alert_sound.stop()
+                self.alert_sound.setLoopCount(2)
+                self.alert_sound.play()
+
+            widget.show_notification(
+                widget.title,
+                settings.tr('phase_started').format(
+                    phase=phase_label, min=next_seconds // 60
+                ),
+                4000
+            )
+
+            controller = entry['controller']
+            controller.set_timer(next_seconds)
+            widget.set_time(next_seconds, True)
+            controller.start()
+            return
+
         # Start looping sound
         self.start_alert_sound()
 

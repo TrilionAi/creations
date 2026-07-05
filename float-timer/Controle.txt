@@ -1,5 +1,12 @@
 Controls:
 Click - Play/Pause
+Click on title - Rename timer
 Double click - Reset
-Right click - Menu with time options
+Right click - Menu (times, Pomodoro cycle, color, alarm sound, layouts)
 Drag - Move the circle
+
+Layouts:
+Right click > Layouts > Save layout as... - saves the current arrangement
+Right click > Layouts > [name] - loads a saved layout
+Tray menu > Layouts - load / delete / set startup layout
+Tray menu > Start with system - launch on boot

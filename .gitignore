@@ -1,2 +1,10 @@
 CLAUDE.md
 .claude/
+
+# Python build artifacts
+__pycache__/
+*.pyc
+float-timer/build/
+float-timer/dist/
+float-timer/installer_output/
+float-timer/settings.json
