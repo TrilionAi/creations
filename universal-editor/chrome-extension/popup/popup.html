@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <h1 class="popup-title">Editor Universal</h1>
+    <p class="popup-subtitle">Study Tool</p>
+
+    <div class="popup-section">
+      <div class="popup-toggle-row">
+        <span class="popup-label">&#9776; Reading Guide</span>
+        <label class="popup-switch">
+          <input type="checkbox" id="guide-toggle">
+          <span class="popup-slider"></span>
+        </label>
+      </div>
+
+      <div class="popup-toggle-row">
+        <span class="popup-label">&#9998; Highlighter</span>
+        <label class="popup-switch">
+          <input type="checkbox" id="highlight-toggle">
+          <span class="popup-slider"></span>
+        </label>
+      </div>
+
+      <div class="popup-toggle-row">
+        <span class="popup-label">&#127912; Toolbar</span>
+        <label class="popup-switch">
+          <input type="checkbox" id="toolbar-toggle">
+          <span class="popup-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="popup-footer">
+      <span>Right-click on page = full menu</span>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

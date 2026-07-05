@@ -1,0 +1,122 @@
+name: Float Timer - Build & Release
+
+on:
+  push:
+    tags:
+      - 'float-timer-v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        working-directory: float-timer
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build with PyInstaller
+        working-directory: float-timer
+        run: |
+          pyinstaller --noconfirm "Float Timer.spec"
+
+      - name: Build installer with Inno Setup
+        working-directory: float-timer
+        run: |
+          iscc installer.iss
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: float-timer/installer_output/FloatTimer_Setup.exe
+
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        working-directory: float-timer
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller pillow
+
+      - name: Build with PyInstaller
+        working-directory: float-timer
+        run: |
+          pyinstaller --noconfirm --windowed --name "Float Timer" main.py
+
+      - name: Create DMG
+        working-directory: float-timer
+        run: |
+          mkdir -p dmg_content
+          cp -r "dist/Float Timer.app" dmg_content/ 2>/dev/null || cp -r dist/Float\ Timer dmg_content/
+          hdiutil create -volname "Float Timer" -srcfolder dmg_content -ov -format UDZO "FloatTimer.dmg"
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: float-timer/FloatTimer.dmg
+
+  release:
+    needs: [build-windows, build-macos]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Float Timer ${{ github.ref_name }}"
+          body: |
+            # Float Timer ${{ github.ref_name }}
+
+            Circular timer and stopwatch widget that stays always visible on your desktop. Perfect for Pomodoro sessions, cooking, meetings, or any time you need a timer in sight.
+
+            ### Download
+            | Platform | File |
+            |----------|------|
+            | Windows | `.exe` installer |
+            | macOS | `.dmg` disk image |
+
+            ### What's inside
+            - Multiple independent timers — run as many as you need at once
+            - Click the title to rename each timer (e.g., "Break", "Meeting", "Focus")
+            - Timer (countdown) and stopwatch (count up) modes
+            - Built-in Pomodoro presets (25min work, 5min break)
+            - Custom arc color per timer to tell them apart at a glance
+            - Looping alarm with silence button when time is up
+            - Transparent circular widget, always-on-top
+            - System tray integration
+
+            ### Quick start
+            Download, install, and a circular timer appears on your desktop. Right-click to add more timers, switch modes, or change colors.
+
+            > **Antivirus notice:** Windows Defender may flag this app as unknown — this is a common false positive for open-source apps. Click "More info" → "Run anyway". [Learn more](https://github.com/TrilionAi/creations#antivirus--false-positive-warning)
+          files: |
+            windows-build/FloatTimer_Setup.exe
+            macos-build/FloatTimer.dmg

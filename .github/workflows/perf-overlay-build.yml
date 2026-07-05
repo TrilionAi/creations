@@ -1,0 +1,73 @@
+name: Perf Overlay - Build & Release
+
+on:
+  push:
+    tags:
+      - 'perf-overlay-v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        working-directory: perf-overlay
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build with PyInstaller
+        working-directory: perf-overlay
+        run: |
+          pyinstaller --onefile --noconsole --name "PerfOverlay" main.py
+
+      - name: Create ZIP artifact
+        working-directory: perf-overlay
+        run: |
+          Compress-Archive -Path "dist/PerfOverlay.exe" -DestinationPath "dist/PerfOverlay-${{ github.ref_name }}.zip"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Perf Overlay ${{ github.ref_name }}"
+          body: |
+            # Perf Overlay ${{ github.ref_name }}
+
+            Lightweight system performance monitor that stays on top of everything. Keep an eye on your CPU, GPU, RAM, and temperatures without alt-tabbing.
+
+            ### Download
+            | Platform | File |
+            |----------|------|
+            | Windows | Portable `.exe` (no install needed) + `.zip` |
+
+            > macOS support coming soon — [help us build it!](https://github.com/TrilionAi/creations/issues/2)
+
+            ### What's inside
+            - Real-time CPU, GPU, RAM usage and temperatures
+            - Transparent overlay that doesn't get in the way
+            - `Ctrl+Num1` — toggle overlay visibility
+            - `Ctrl+Num2` — drag mode to reposition
+            - `Ctrl+Num3` — quit
+            - Right-click system tray to customize fonts, colors, temperature thresholds, and hotkeys
+            - Auto-start with Windows option
+            - Works great alongside games or full-screen apps
+
+            ### Quick start
+            Just download the `.exe` and run it — no installation needed. A small transparent overlay appears on your desktop showing your system stats.
+
+            > **Antivirus notice:** Windows Defender may flag this app as unknown — this is a common false positive for open-source apps. Click "More info" → "Run anyway". [Learn more](https://github.com/TrilionAi/creations#antivirus--false-positive-warning)
+          files: |
+            perf-overlay/dist/PerfOverlay-${{ github.ref_name }}.zip
+            perf-overlay/dist/PerfOverlay.exe
