@@ -13,7 +13,7 @@ from PyQt6.QtGui import (
     QRadialGradient, QPainterPath, QPixmap, QIcon
 )
 
-from settings import settings, TRANSLATIONS
+from settings import settings, TRANSLATIONS, get_sound_options
 
 
 class NotificationPopup(QWidget):
@@ -167,6 +167,12 @@ class CircularTimerWidget(QWidget):
     position_changed = pyqtSignal()
     add_timer_requested = pyqtSignal()
     remove_requested = pyqtSignal()
+    cycle_selected = pyqtSignal(int, int)  # work seconds, break seconds (0,0 = off)
+    alert_sound_changed = pyqtSignal(str)
+    alert_volume_changed = pyqtSignal(int)
+    test_sound_requested = pyqtSignal()
+    save_layout_requested = pyqtSignal()
+    load_layout_requested = pyqtSignal(str)
 
     def __init__(self, size=150, title="Timer", arc_color="#00c864"):
         super().__init__()
@@ -187,6 +193,7 @@ class CircularTimerWidget(QWidget):
         self.title = title
         self.title_rect = QRectF()
         self.removable = False
+        self.cycle_active = False
 
         # Arc color
         self.arc_color = QColor(arc_color)
@@ -253,6 +260,11 @@ class CircularTimerWidget(QWidget):
         """Sets whether this timer can be removed"""
         self.removable = removable
 
+    def set_cycle_active(self, active):
+        """Sets whether this timer runs a Pomodoro cycle (shows ⟳ next to title)"""
+        self.cycle_active = active
+        self.update()
+
     def show_notification(self, title, message, duration=3000, alert=False):
         """Shows a colored notification popup above this widget"""
         self.notification.show_at(
@@ -308,7 +320,8 @@ class CircularTimerWidget(QWidget):
 
         metrics = painter.fontMetrics()
         max_width = int(radius * 1.5)
-        display_title = metrics.elidedText(self.title, Qt.TextElideMode.ElideRight, max_width)
+        full_title = f"⟳ {self.title}" if self.cycle_active else self.title
+        display_title = metrics.elidedText(full_title, Qt.TextElideMode.ElideRight, max_width)
 
         text_width = metrics.horizontalAdvance(display_title)
         text_x = cx - text_width / 2
@@ -557,8 +570,60 @@ class CircularTimerWidget(QWidget):
         menu.addAction(settings.tr('custom'), self.show_custom_time_dialog)
         menu.addSeparator()
 
+        # Pomodoro cycle submenu (auto-alternates focus/break)
+        cycle_menu = menu.addMenu(settings.tr('pomodoro_cycle'))
+        cycle_menu.addAction("25 + 5", lambda: self.cycle_selected.emit(1500, 300))
+        cycle_menu.addAction("50 + 10", lambda: self.cycle_selected.emit(3000, 600))
+        if self.cycle_active:
+            cycle_menu.addSeparator()
+            cycle_menu.addAction(settings.tr('cycle_off'), lambda: self.cycle_selected.emit(0, 0))
+        menu.addSeparator()
+
         # Color picker with swatch icon
         menu.addAction(self._make_color_icon(), settings.tr('arc_color'), self.choose_arc_color)
+        menu.addSeparator()
+
+        # Alarm sound submenu with volume slider
+        sound_menu = menu.addMenu(settings.tr('alarm_sound'))
+        sound_options = get_sound_options()
+        current_sound = settings.get('alert_sound', '')
+        if sound_options and not any(k == current_sound for k, _l, _p in sound_options):
+            current_sound = sound_options[0][0]
+        for key, label, _path in sound_options:
+            display = f"✓ {label}" if key == current_sound else label
+            sound_menu.addAction(display, lambda k=key: self._select_alert_sound(k))
+        if sound_options:
+            sound_menu.addSeparator()
+
+        volume_widget = QWidget()
+        volume_layout = QHBoxLayout(volume_widget)
+        volume_layout.setContentsMargins(10, 5, 10, 5)
+        volume_label = QLabel(settings.tr('volume'))
+        volume_label.setStyleSheet("color: white;")
+        volume_layout.addWidget(volume_label)
+        volume_slider = QSlider(Qt.Orientation.Horizontal)
+        volume_slider.setMinimum(0)
+        volume_slider.setMaximum(100)
+        volume_slider.setValue(int(settings.get('alert_volume', 50)))
+        volume_slider.setFixedWidth(100)
+        volume_slider.valueChanged.connect(self._set_alert_volume)
+        volume_layout.addWidget(volume_slider)
+        volume_action = QWidgetAction(sound_menu)
+        volume_action.setDefaultWidget(volume_widget)
+        sound_menu.addAction(volume_action)
+
+        sound_menu.addSeparator()
+        sound_menu.addAction(settings.tr('test_sound'), lambda: self.test_sound_requested.emit())
+        menu.addSeparator()
+
+        # Layouts submenu (save current arrangement / load a saved one)
+        layouts_menu = menu.addMenu(settings.tr('layouts'))
+        layouts_menu.addAction(settings.tr('save_layout'), lambda: self.save_layout_requested.emit())
+        template_names = list(settings.templates.keys())
+        if template_names:
+            layouts_menu.addSeparator()
+            for name in template_names:
+                layouts_menu.addAction(name, lambda n=name: self.load_layout_requested.emit(n))
         menu.addSeparator()
 
         # Transparency slider
@@ -607,6 +672,18 @@ class CircularTimerWidget(QWidget):
         settings.opacity = self.opacity
         settings.save()
         self.update()
+
+    def _select_alert_sound(self, key):
+        """Sets the global alarm sound"""
+        settings.set('alert_sound', key)
+        settings.save()
+        self.alert_sound_changed.emit(key)
+
+    def _set_alert_volume(self, value):
+        """Sets the global alarm volume (0-100)"""
+        settings.set('alert_volume', value)
+        settings.save()
+        self.alert_volume_changed.emit(value)
 
     def set_language(self, lang_code):
         """Sets the app language"""

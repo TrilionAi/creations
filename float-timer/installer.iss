@@ -2,7 +2,7 @@
 ; To compile: open this file in Inno Setup and click Build > Compile
 
 #define MyAppName "Float Timer"
-#define MyAppVersion "2.3.0"
+#define MyAppVersion "2.4.0"
 #define MyAppPublisher "Lucas Morosov"
 #define MyAppExeName "Float Timer.exe"
 
@@ -58,6 +58,10 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilen
 
 [Registry]
 Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "{#MyAppName}"; ValueData: """{app}\{#MyAppExeName}"""; Flags: uninsdeletevalue; Tasks: startupicon
+
+[UninstallDelete]
+; Clean uninstall: remove user settings and layouts (AppData)
+Type: filesandordirs; Name: "{userappdata}\FloatTimer"
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent

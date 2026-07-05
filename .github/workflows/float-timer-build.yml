@@ -103,18 +103,29 @@ jobs:
             | Windows | `.exe` installer |
             | macOS | `.dmg` disk image |
 
+            ### ✨ New in this release
+            - **Layouts (templates)** — arrange any number of timers exactly how you like (titles, colors, positions, durations), save the whole setup under a name, and bring it back anytime with one click. Perfect for "Work", "Kitchen" or "Study" setups
+            - **Startup layout** — pick a saved layout to load automatically every time the app starts
+            - **Start with system** — optional one-click toggle to launch Float Timer when your computer boots
+            - **Pomodoro cycles** — 25+5 or 50+10 modes that automatically alternate between focus and break, with a subtle chime between phases
+            - **Alarm sound picker** — choose from several alarm sounds, adjust the volume, and preview before committing
+            - **Everything is remembered** — timers now restore their configured durations after a restart, not just their positions
+
             ### What's inside
             - Multiple independent timers — run as many as you need at once
+            - Save and load complete timer layouts, including a startup layout
+            - Pomodoro cycles that alternate focus/break automatically
             - Click the title to rename each timer (e.g., "Break", "Meeting", "Focus")
             - Timer (countdown) and stopwatch (count up) modes
             - Built-in Pomodoro presets (25min work, 5min break)
             - Custom arc color per timer to tell them apart at a glance
-            - Looping alarm with silence button when time is up
+            - Selectable looping alarm with volume control and silence button
             - Transparent circular widget, always-on-top
-            - System tray integration
+            - System tray integration and optional start-with-system
+            - Clean uninstall — removes all local data, no leftovers
 
             ### Quick start
-            Download, install, and a circular timer appears on your desktop. Right-click to add more timers, switch modes, or change colors.
+            Download, install, and a circular timer appears on your desktop. Right-click to add more timers, set times, pick colors or start a Pomodoro cycle. When your setup is perfect, right-click → Layouts → *Save layout as...* — next time, load it back in one click (or set it as your startup layout in the tray menu).
 
             > **Antivirus notice:** Windows Defender may flag this app as unknown — this is a common false positive for open-source apps. Click "More info" → "Run anyway". [Learn more](https://github.com/TrilionAi/creations#antivirus--false-positive-warning)
           files: |
