@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# PyInstaller build output
+build/
+dist/
+*.spec
+!BlockApp.spec
+
+# Local app data / test artifacts
+.blockapp/
+*.log

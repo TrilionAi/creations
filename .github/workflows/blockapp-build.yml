@@ -1,0 +1,143 @@
+name: BlockApp - Build & Release
+
+on:
+  push:
+    tags:
+      - 'blockapp-v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        working-directory: blockapp
+        run: pip install -r requirements.txt
+
+      - name: Run headless core tests
+        working-directory: blockapp
+        run: python tests/test_core.py
+
+  build-windows:
+    needs: test
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        working-directory: blockapp
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build with PyInstaller (requests admin via UAC)
+        working-directory: blockapp
+        run: |
+          pyinstaller --noconfirm --onefile --windowed --uac-admin --name BlockApp main.py
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: blockapp/dist/BlockApp.exe
+
+  build-macos:
+    needs: test
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        working-directory: blockapp
+        run: |
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build with PyInstaller
+        working-directory: blockapp
+        run: |
+          pyinstaller --noconfirm --windowed --name BlockApp main.py
+
+      - name: Create DMG
+        working-directory: blockapp
+        run: |
+          mkdir -p dmg_content
+          cp -r "dist/BlockApp.app" dmg_content/ 2>/dev/null || cp -r dist/BlockApp dmg_content/
+          hdiutil create -volname "BlockApp" -srcfolder dmg_content -ov -format UDZO "BlockApp.dmg"
+
+      - name: Upload macOS artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: blockapp/BlockApp.dmg
+
+  release:
+    needs: [build-windows, build-macos]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "BlockApp ${{ github.ref_name }}"
+          body: |
+            # BlockApp ${{ github.ref_name }}
+
+            **Block distractions. Build discipline.**
+
+            BlockApp lets you block an application, a website, or a folder — for a
+            fixed duration (minutes to months) or on a recurring weekly schedule.
+            Once a block is confirmed it is locked in for the day and can only be
+            removed the next day, after a short motivational challenge. The design
+            is intentional friction so your disciplined self wins over the impulse.
+
+            ### Download
+            | Platform | File |
+            |----------|------|
+            | Windows | `BlockApp.exe` (portable, requests administrator) |
+            | macOS | `BlockApp.dmg` |
+
+            ### Highlights
+            - Block **apps**, **websites** (system-wide, every browser), and **folders**
+            - Duration or recurring-schedule blocking
+            - 2 confirmations for short blocks, an extra warning + 3 for long ones (5h+)
+            - Locked in for the day — no early undo
+            - Master password to remove; a wrong password freezes changes for 24h
+            - Background guardian keeps enforcing even if you close the window
+            - System files and folders can never be blocked
+
+            ### Requirements
+            Administrator / elevated privileges are required (to edit the hosts
+            file, change folder permissions, and stop blocked apps). The Windows
+            build requests this automatically.
+
+            > First public build (v0.1.0). Windows is the primary target; macOS is
+            > best-effort. Code-signed installers are planned for a later release.
+          files: |
+            windows-build/BlockApp.exe
+            macos-build/BlockApp.dmg
