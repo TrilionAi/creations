@@ -45,7 +45,12 @@ export function LessonScreen({ stripe, onBack, onStart }: LessonScreenProps) {
           {t.startPractice}
         </button>
         <p className={styles.meta}>
-          {t.lessonMeta(stripe.mastery.setSize, Math.round(stripe.mastery.passAccuracy * 100), stripe.mastery.targetTimeSec)}
+          {t.lessonMeta(
+            stripe.mastery.pagesToMaster,
+            stripe.mastery.problemsPerPage,
+            Math.round(stripe.mastery.passAccuracy * 100),
+            stripe.mastery.targetTimeSec,
+          )}
         </p>
       </div>
     </div>

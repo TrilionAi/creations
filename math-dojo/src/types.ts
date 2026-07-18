@@ -22,7 +22,8 @@ export interface Lesson {
 }
 
 export interface MasteryRequirement {
-  setSize: number;
+  problemsPerPage: number;
+  pagesToMaster: number;
   passAccuracy: number;
   targetTimeSec: number;
 }

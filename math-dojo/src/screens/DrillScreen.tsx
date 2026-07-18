@@ -18,11 +18,13 @@ type Feedback = "correct" | "incorrect" | null;
 export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
   const { locale } = useLocale();
   const t = UI_STRINGS[locale];
-  const totalCount = stripe.mastery.setSize;
+  const { problemsPerPage, pagesToMaster } = stripe.mastery;
+  const totalCount = problemsPerPage * pagesToMaster;
   const [queue, setQueue] = useState<Problem[]>(() => stripe.generate(totalCount));
   const [input, setInput] = useState("");
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [solvedCount, setSolvedCount] = useState(0);
+  const [pageBreak, setPageBreak] = useState<number | null>(null);
 
   const attemptsRef = useRef<Map<string, AttemptRecord>>(new Map());
   const firstShownAtRef = useRef<Map<string, number>>(new Map());
@@ -86,13 +88,23 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
       const shownAt = firstShownAtRef.current.get(current.id) ?? Date.now();
       record.timeToFirstCorrectMs = Date.now() - shownAt;
       setFeedback("correct");
-      setSolvedCount((c) => c + 1);
+
+      const newSolved = solvedCount + 1;
+      setSolvedCount(newSolved);
+      const justFinishedPage = newSolved % problemsPerPage === 0;
+      const isLastProblem = newSolved === totalCount;
+      const delay = justFinishedPage && !isLastProblem ? 1500 : 450;
+      if (justFinishedPage && !isLastProblem) {
+        setPageBreak(newSolved / problemsPerPage);
+      }
+
       window.setTimeout(() => {
         setQueue((q) => q.slice(1));
         setInput("");
         setFeedback(null);
+        setPageBreak(null);
         lockRef.current = false;
-      }, 450);
+      }, delay);
     } else {
       record.mistakeCount += 1;
       setFeedback("incorrect");
@@ -127,6 +139,10 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
 
   if (!current) return null;
 
+  const pageIndex0 = Math.min(Math.floor(solvedCount / problemsPerPage), pagesToMaster - 1);
+  const currentPageNumber = pageIndex0 + 1;
+  const inPageSolved = solvedCount - pageIndex0 * problemsPerPage;
+
   return (
     <div className={styles.page}>
       <div className={styles.topBar}>
@@ -134,41 +150,48 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
           ✕
         </button>
         <div className={styles.progressWrap}>
-          <ProgressBar value={solvedCount} max={totalCount} />
+          <ProgressBar value={inPageSolved} max={problemsPerPage} />
         </div>
-        <span className={styles.count}>
-          {solvedCount}/{totalCount}
-        </span>
+        <span className={styles.count}>{t.pageLabel(currentPageNumber, pagesToMaster)}</span>
       </div>
 
       <div className={styles.problemArea}>
-        <div
-          className={[
-            styles.card,
-            feedback === "correct" ? styles.cardCorrect : "",
-            feedback === "incorrect" ? styles.cardIncorrect : "",
-          ].join(" ")}
-        >
-          <div className={styles.prompt}>{current.prompt}</div>
-          <div className={styles.equalsRow}>
-            <span className={styles.equalsSign}>=</span>
-            <span className={[styles.answerBox, input === "" ? styles.answerBoxEmpty : ""].join(" ")}>
-              {input || "?"}
-            </span>
+        {pageBreak !== null ? (
+          <div className={styles.pageBreakCard}>
+            <div className={styles.pageBreakEmoji}>📖</div>
+            <div className={styles.pageBreakText}>{t.pageComplete(pageBreak, pagesToMaster)}</div>
           </div>
-          {feedback === "incorrect" && (
-            <div className={styles.revealCorrect}>{t.correctAnswerReveal(current.answer)}</div>
-          )}
-        </div>
+        ) : (
+          <>
+            <div
+              className={[
+                styles.card,
+                feedback === "correct" ? styles.cardCorrect : "",
+                feedback === "incorrect" ? styles.cardIncorrect : "",
+              ].join(" ")}
+            >
+              <div className={styles.prompt}>{current.prompt}</div>
+              <div className={styles.equalsRow}>
+                <span className={styles.equalsSign}>=</span>
+                <span className={[styles.answerBox, input === "" ? styles.answerBoxEmpty : ""].join(" ")}>
+                  {input || "?"}
+                </span>
+              </div>
+              {feedback === "incorrect" && (
+                <div className={styles.revealCorrect}>{t.correctAnswerReveal(current.answer)}</div>
+              )}
+            </div>
 
-        <div className={styles.padArea}>
-          <NumPad
-            onDigit={handleDigit}
-            onBackspace={handleBackspace}
-            onSubmit={handleSubmit}
-            submitDisabled={input === "" || feedback !== null}
-          />
-        </div>
+            <div className={styles.padArea}>
+              <NumPad
+                onDigit={handleDigit}
+                onBackspace={handleBackspace}
+                onSubmit={handleSubmit}
+                submitDisabled={input === "" || feedback !== null}
+              />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
