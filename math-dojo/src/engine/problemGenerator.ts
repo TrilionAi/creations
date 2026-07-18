@@ -20,6 +20,15 @@ function makeSum(operands: number[]): Problem {
   };
 }
 
+function makeDifference(operands: number[]): Problem {
+  return {
+    id: nextId(),
+    prompt: operands.join(" - "),
+    answer: operands.reduce((diff, n, i) => (i === 0 ? n : diff - n)),
+    operands,
+  };
+}
+
 function pairKey(operands: number[]): string {
   return [...operands].sort((x, y) => x - y).join(",");
 }
@@ -170,5 +179,128 @@ export function generateThreeDigitDoubleCarry(count: number): Problem[] {
     const a = aHundreds * 100 + aTens * 10 + aUnits;
     const b = bHundreds * 100 + bTens * 10 + bUnits;
     return makeSum([a, b]);
+  });
+}
+
+/** Both single digits, minuend never exceeds 10, result always positive. */
+export function generateSubWithin10(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 10);
+    const b = randomInt(1, a - 1);
+    return makeDifference([a, b]);
+  });
+}
+
+/** Teen minuend, subtrahend forces bridging back through 10. */
+export function generateSubWithin20(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(11, 18);
+    const unitsA = a - 10;
+    const b = randomInt(unitsA + 1, 9);
+    return makeDifference([a, b]);
+  });
+}
+
+/** Chain two subtractions from a single starting number. */
+export function generateSubThreeNumbers(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(12, 18);
+    const b = randomInt(1, 7);
+    const remaining = a - b;
+    const c = randomInt(1, Math.min(7, remaining));
+    return makeDifference([a, b, c]);
+  });
+}
+
+/** Two-digit − one-digit, units digit never needs to borrow. */
+export function generateTwoDigitMinusOneNoCarry(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const aUnits = randomInt(1, 9);
+    const b = randomInt(1, aUnits);
+    const aTens = randomInt(1, 9);
+    const a = aTens * 10 + aUnits;
+    return makeDifference([a, b]);
+  });
+}
+
+/** Two-digit − one-digit, units digit always forces a borrow from the tens. */
+export function generateTwoDigitMinusOneWithCarry(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const aUnits = randomInt(0, 8);
+    const b = randomInt(aUnits + 1, 9);
+    const aTens = randomInt(1, 9);
+    const a = aTens * 10 + aUnits;
+    return makeDifference([a, b]);
+  });
+}
+
+/** Two-digit − two-digit, neither column ever borrows. */
+export function generateTwoDigitMinusTwoDigitNoCarry(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const aUnits = randomInt(0, 9);
+    const bUnits = randomInt(0, aUnits);
+    const aTens = randomInt(1, 9);
+    const bTens = randomInt(1, aTens);
+    const a = aTens * 10 + aUnits;
+    const b = bTens * 10 + bUnits;
+    return makeDifference([a, b]);
+  });
+}
+
+/** Two-digit − two-digit, units column always forces a borrow from the tens. */
+export function generateTwoDigitMinusTwoDigitWithCarry(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const aUnits = randomInt(0, 8);
+    const bUnits = randomInt(aUnits + 1, 9);
+    const aTens = randomInt(2, 9);
+    const bTens = randomInt(1, aTens - 1);
+    const a = aTens * 10 + aUnits;
+    const b = bTens * 10 + bUnits;
+    return makeDifference([a, b]);
+  });
+}
+
+/** Three-digit − three-digit, no column ever borrows. */
+export function generateThreeDigitMinusThreeDigitNoCarry(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const aUnits = randomInt(0, 9);
+    const bUnits = randomInt(0, aUnits);
+    const aTens = randomInt(0, 9);
+    const bTens = randomInt(0, aTens);
+    const aHundreds = randomInt(1, 9);
+    const bHundreds = randomInt(1, aHundreds);
+    const a = aHundreds * 100 + aTens * 10 + aUnits;
+    const b = bHundreds * 100 + bTens * 10 + bUnits;
+    return makeDifference([a, b]);
+  });
+}
+
+/** Three-digit − three-digit, units borrow from tens only — hundreds stays clean. */
+export function generateThreeDigitMinusThreeDigitSingleCarry(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const aUnits = randomInt(0, 8);
+    const bUnits = randomInt(aUnits + 1, 9);
+    const aTens = randomInt(1, 9);
+    const bTens = randomInt(0, aTens - 1);
+    const aHundreds = randomInt(1, 9);
+    const bHundreds = randomInt(1, aHundreds);
+    const a = aHundreds * 100 + aTens * 10 + aUnits;
+    const b = bHundreds * 100 + bTens * 10 + bUnits;
+    return makeDifference([a, b]);
+  });
+}
+
+/** Three-digit − three-digit, the borrow cascades from units into tens into hundreds. */
+export function generateThreeDigitMinusThreeDigitDoubleCarry(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const aUnits = randomInt(0, 8);
+    const bUnits = randomInt(aUnits + 1, 9);
+    const aTens = randomInt(1, 8);
+    const bTens = randomInt(aTens, 9);
+    const aHundreds = randomInt(2, 9);
+    const bHundreds = randomInt(1, aHundreds - 1);
+    const a = aHundreds * 100 + aTens * 10 + aUnits;
+    const b = bHundreds * 100 + bTens * 10 + bUnits;
+    return makeDifference([a, b]);
   });
 }
