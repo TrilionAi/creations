@@ -63,6 +63,18 @@ function makeFraction(prompt: string, numerator: number, denominator: number, op
   };
 }
 
+/** A decimal-valued answer, whole part + a single tenths digit (e.g. 3.5 -> whole=3, tenths=5). */
+function makeDecimal(prompt: string, whole: number, tenths: number, operands: number[]): Problem {
+  return {
+    id: nextId(),
+    prompt,
+    answer: whole,
+    operands,
+    secondaryAnswer: tenths,
+    secondaryFormat: "decimal",
+  };
+}
+
 function gcd(a: number, b: number): number {
   return b === 0 ? a : gcd(b, a % b);
 }
@@ -668,5 +680,118 @@ export function generateMixedToImproper(count: number): Problem[] {
     const d = randomInt(2, 9);
     const n = randomInt(1, d - 1);
     return makeFraction(`${whole} ${n}/${d}`, whole * d + n, d, [whole, n, d]);
+  });
+}
+
+/** Identify a decimal (tenths only) from a shaded bar — no prompt text, the diagram is the problem. */
+export function generateIdentifyDecimalTenths(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const tenths = randomInt(1, 9);
+    const problem = makeDecimal("", 0, tenths, [0, tenths]);
+    return { ...problem, diagram: { kind: "fraction" as const, total: 10, shaded: tenths } };
+  });
+}
+
+/** Writing a tenths fraction (n/10) as a decimal. */
+export function generateFractionTenthsToDecimal(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const n = randomInt(1, 9);
+    return makeDecimal(`${n}/10`, 0, n, [n]);
+  });
+}
+
+/** Writing a mixed number with tenths (whole n/10) as a decimal. */
+export function generateMixedTenthsToDecimal(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const whole = randomInt(1, 9);
+    const tenths = randomInt(1, 9);
+    return makeDecimal(`${whole} ${tenths}/10`, whole, tenths, [whole, tenths]);
+  });
+}
+
+/** Adding decimals (tenths only), no carry into the whole part. */
+export function generateAddDecimalsNoCarry(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const w1 = randomInt(1, 8);
+    const w2 = randomInt(1, 8);
+    const t1 = randomInt(0, 9);
+    const t2 = randomInt(0, 9 - t1);
+    return makeDecimal(`${w1}.${t1} + ${w2}.${t2}`, w1 + w2, t1 + t2, [w1, t1, w2, t2]);
+  });
+}
+
+/** Adding decimals (tenths only), the tenths always carry into the whole part. */
+export function generateAddDecimalsWithCarry(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const w1 = randomInt(1, 8);
+    const w2 = randomInt(1, 8);
+    const t1 = randomInt(1, 9);
+    const t2 = randomInt(10 - t1, 9);
+    return makeDecimal(`${w1}.${t1} + ${w2}.${t2}`, w1 + w2 + 1, t1 + t2 - 10, [w1, t1, w2, t2]);
+  });
+}
+
+/** Subtracting decimals (tenths only), no borrowing needed. */
+export function generateSubtractDecimalsNoBorrow(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const w1 = randomInt(1, 9);
+    const w2 = randomInt(0, w1 - 1);
+    const t1 = randomInt(0, 9);
+    const t2 = randomInt(0, t1);
+    return makeDecimal(`${w1}.${t1} - ${w2}.${t2}`, w1 - w2, t1 - t2, [w1, t1, w2, t2]);
+  });
+}
+
+/** Subtracting decimals (tenths only), always borrows from the whole part. */
+export function generateSubtractDecimalsWithBorrow(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const w1 = randomInt(2, 9);
+    const w2 = randomInt(1, w1 - 1);
+    const t1 = randomInt(0, 8);
+    const t2 = randomInt(t1 + 1, 9);
+    return makeDecimal(`${w1}.${t1} - ${w2}.${t2}`, w1 - 1 - w2, t1 + 10 - t2, [w1, t1, w2, t2]);
+  });
+}
+
+/** Multiplying a decimal (tenths only) by 10 or 100 — the result is always a whole number. */
+export function generateMultiplyDecimalBy10Or100(count: number): Problem[] {
+  const multipliers = [10, 100];
+  return withoutImmediateRepeats(count, () => {
+    const whole = randomInt(1, 9);
+    const tenths = randomInt(1, 9);
+    const multiplier = multipliers[randomInt(0, multipliers.length - 1)];
+    const valueTimesTen = whole * 10 + tenths;
+    const answer = multiplier === 10 ? valueTimesTen : valueTimesTen * 10;
+    return {
+      id: nextId(),
+      prompt: `${whole}.${tenths} × ${multiplier}`,
+      answer,
+      operands: [whole, tenths, multiplier],
+    };
+  });
+}
+
+/** Dividing a whole number by 10 — the reverse place-value shift, giving a decimal. */
+export function generateDivideWholeBy10(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const whole = randomInt(1, 9);
+    const tenths = randomInt(0, 9);
+    const dividend = whole * 10 + tenths;
+    return makeDecimal(`${dividend} ÷ 10`, whole, tenths, [dividend]);
+  });
+}
+
+/** Rounding a decimal (tenths only) to the nearest whole number — the capstone. */
+export function generateRoundDecimal(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const whole = randomInt(1, 9);
+    const tenths = randomInt(1, 9);
+    const answer = tenths >= 5 ? whole + 1 : whole;
+    return {
+      id: nextId(),
+      prompt: `${whole}.${tenths}`,
+      answer,
+      operands: [whole, tenths],
+    };
   });
 }

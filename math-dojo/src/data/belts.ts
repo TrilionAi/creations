@@ -49,6 +49,16 @@ import {
   generateMultiplyFractions,
   generateDivideFractions,
   generateMixedToImproper,
+  generateIdentifyDecimalTenths,
+  generateFractionTenthsToDecimal,
+  generateMixedTenthsToDecimal,
+  generateAddDecimalsNoCarry,
+  generateAddDecimalsWithCarry,
+  generateSubtractDecimalsNoBorrow,
+  generateSubtractDecimalsWithBorrow,
+  generateMultiplyDecimalBy10Or100,
+  generateDivideWholeBy10,
+  generateRoundDecimal,
 } from "../engine/problemGenerator";
 import type { Belt, LocalizedText } from "../types";
 
@@ -1812,6 +1822,11 @@ const fractionsDegree = {
   name: { en: "Fractions", pt: "Frações", es: "Fracciones" } as LocalizedText,
 };
 
+const decimalsDegree = {
+  index: 2,
+  name: { en: "Decimals", pt: "Decimais", es: "Decimales" } as LocalizedText,
+};
+
 const blackBelt: Belt = {
   id: "black",
   name: { en: "Black Belt", pt: "Faixa Preta", es: "Cinturón Negro" },
@@ -2220,6 +2235,391 @@ const blackBelt: Belt = {
       },
       mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 16 },
       generate: generateMixedToImproper,
+    },
+    {
+      id: "black-11",
+      beltId: "black",
+      index: 1,
+      degree: decimalsDegree,
+      title: { en: "What a decimal means", pt: "O que significa um decimal", es: "Qué significa un decimal" },
+      summary: {
+        en: "A decimal is a fraction of ten, written a new way.",
+        pt: "Um decimal é uma fração de dez, escrita de um jeito novo.",
+        es: "Un decimal es una fracción de diez, escrita de una manera nueva.",
+      },
+      lesson: {
+        intro: {
+          en: "The digit after the decimal point counts tenths — how many of 10 equal parts you have.",
+          pt: "O dígito depois do ponto decimal conta os décimos — quantas das 10 partes iguais você tem.",
+          es: "El dígito después del punto decimal cuenta los décimos — cuántas de las 10 partes iguales tienes.",
+        },
+        example: { id: "ex-black-11", prompt: "", answer: 0, secondaryAnswer: 3, secondaryFormat: "decimal", operands: [0, 3] },
+        diagram: { kind: "fraction", total: 10, shaded: 3 },
+        steps: [
+          {
+            text: {
+              en: "The bar is split into 10 equal parts — tenths.",
+              pt: "A barra está dividida em 10 partes iguais — décimos.",
+              es: "La barra está dividida en 10 partes iguales — décimos.",
+            },
+          },
+          {
+            text: {
+              en: "3 of those parts are shaded.",
+              pt: "3 dessas partes estão pintadas.",
+              es: "3 de esas partes están sombreadas.",
+            },
+          },
+          {
+            text: {
+              en: "Written as a decimal: 0.3.",
+              pt: "Escrito como decimal: 0.3.",
+              es: "Escrito como decimal: 0.3.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 10 },
+      generate: generateIdentifyDecimalTenths,
+    },
+    {
+      id: "black-12",
+      beltId: "black",
+      index: 2,
+      degree: decimalsDegree,
+      title: {
+        en: "Fractions of ten as decimals",
+        pt: "Frações de dez como decimais",
+        es: "Fracciones de diez como decimales",
+      },
+      summary: {
+        en: "A fraction with 10 on the bottom converts directly.",
+        pt: "Uma fração com 10 embaixo se converte direto.",
+        es: "Una fracción con 10 abajo se convierte directo.",
+      },
+      lesson: {
+        intro: {
+          en: "The top number of a tenths fraction becomes the decimal digit — no calculation needed.",
+          pt: "O número de cima de uma fração de décimos vira o dígito decimal — sem precisar calcular.",
+          es: "El número de arriba de una fracción de décimos se convierte en el dígito decimal — sin necesidad de calcular.",
+        },
+        example: { id: "ex-black-12", prompt: "7/10", answer: 0, secondaryAnswer: 7, secondaryFormat: "decimal", operands: [7] },
+        steps: [
+          { text: { en: "7/10 means 7 tenths.", pt: "7/10 significa 7 décimos.", es: "7/10 significa 7 décimos." } },
+          {
+            text: {
+              en: "Write the 7 right after the decimal point.",
+              pt: "Escreva o 7 logo depois do ponto decimal.",
+              es: "Escribe el 7 justo después del punto decimal.",
+            },
+          },
+          { text: { en: "7/10 = 0.7.", pt: "7/10 = 0.7.", es: "7/10 = 0.7." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 8 },
+      generate: generateFractionTenthsToDecimal,
+    },
+    {
+      id: "black-13",
+      beltId: "black",
+      index: 3,
+      degree: decimalsDegree,
+      title: {
+        en: "Mixed numbers with tenths as decimals",
+        pt: "Números mistos com décimos como decimais",
+        es: "Números mixtos con décimos como decimales",
+      },
+      summary: {
+        en: "The whole number stays, the fraction becomes the decimal part.",
+        pt: "O número inteiro fica, a fração vira a parte decimal.",
+        es: "El número entero se queda, la fracción se convierte en la parte decimal.",
+      },
+      lesson: {
+        intro: {
+          en: "Keep the whole number as is, and turn the tenths fraction into the decimal digit after the point.",
+          pt: "Mantenha o número inteiro como está, e transforme a fração de décimos no dígito decimal depois do ponto.",
+          es: "Mantén el número entero tal cual, y convierte la fracción de décimos en el dígito decimal después del punto.",
+        },
+        example: { id: "ex-black-13", prompt: "2 4/10", answer: 2, secondaryAnswer: 4, secondaryFormat: "decimal", operands: [2, 4] },
+        steps: [
+          {
+            text: {
+              en: "The whole number 2 stays the same.",
+              pt: "O número inteiro 2 fica igual.",
+              es: "El número entero 2 se mantiene igual.",
+            },
+          },
+          {
+            text: {
+              en: "4/10 becomes the decimal digit: .4.",
+              pt: "4/10 vira o dígito decimal: .4.",
+              es: "4/10 se convierte en el dígito decimal: .4.",
+            },
+          },
+          { text: { en: "2 4/10 = 2.4.", pt: "2 4/10 = 2.4.", es: "2 4/10 = 2.4." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 10 },
+      generate: generateMixedTenthsToDecimal,
+    },
+    {
+      id: "black-14",
+      beltId: "black",
+      index: 4,
+      degree: decimalsDegree,
+      title: { en: "Adding decimals, no carrying", pt: "Somar decimais, sem 'vai um'", es: "Sumar decimales, sin llevar" },
+      summary: {
+        en: "Add the whole numbers and the tenths separately.",
+        pt: "Some os números inteiros e os décimos separadamente.",
+        es: "Suma los números enteros y los décimos por separado.",
+      },
+      lesson: {
+        intro: {
+          en: "Line up the decimal points, then add the whole numbers and the tenths digits separately.",
+          pt: "Alinhe os pontos decimais, depois some os números inteiros e os dígitos dos décimos separadamente.",
+          es: "Alinea los puntos decimales, luego suma los números enteros y los dígitos de los décimos por separado.",
+        },
+        example: { id: "ex-black-14", prompt: "2.3 + 1.4", answer: 3, secondaryAnswer: 7, secondaryFormat: "decimal", operands: [2, 3, 1, 4] },
+        steps: [
+          {
+            text: { en: "Add the whole numbers: 2 + 1 = 3.", pt: "Some os inteiros: 2 + 1 = 3.", es: "Suma los enteros: 2 + 1 = 3." },
+          },
+          { text: { en: "Add the tenths: 3 + 4 = 7.", pt: "Some os décimos: 3 + 4 = 7.", es: "Suma los décimos: 3 + 4 = 7." } },
+          { text: { en: "2.3 + 1.4 = 3.7.", pt: "2.3 + 1.4 = 3.7.", es: "2.3 + 1.4 = 3.7." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 14 },
+      generate: generateAddDecimalsNoCarry,
+    },
+    {
+      id: "black-15",
+      beltId: "black",
+      index: 5,
+      degree: decimalsDegree,
+      title: {
+        en: "Adding decimals, with carrying",
+        pt: "Somar decimais, com 'vai um'",
+        es: "Sumar decimales, llevando",
+      },
+      summary: {
+        en: "When the tenths overflow 9, carry the 1 into the whole numbers.",
+        pt: "Quando os décimos passam de 9, o 1 vai para os inteiros.",
+        es: "Cuando los décimos pasan de 9, el 1 se lleva a los enteros.",
+      },
+      lesson: {
+        intro: {
+          en: "Add the tenths first. If it's 10 or more, carry the 1 into the whole-number sum.",
+          pt: "Some os décimos primeiro. Se der 10 ou mais, leve o 1 para a soma dos inteiros.",
+          es: "Suma los décimos primero. Si da 10 o más, lleva el 1 a la suma de los enteros.",
+        },
+        example: { id: "ex-black-15", prompt: "2.7 + 1.6", answer: 4, secondaryAnswer: 3, secondaryFormat: "decimal", operands: [2, 7, 1, 6] },
+        steps: [
+          {
+            text: {
+              en: "Add the tenths: 7 + 6 = 13. Write the 3, carry the {{1}}.",
+              pt: "Some os décimos: 7 + 6 = 13. Escreva o 3 e leve o {{1}}.",
+              es: "Suma los décimos: 7 + 6 = 13. Escribe el 3 y lleva el {{1}}.",
+            },
+          },
+          {
+            text: {
+              en: "Add the whole numbers plus the carry: 2 + 1 + {{1}} = 4.",
+              pt: "Some os inteiros mais o que veio: 2 + 1 + {{1}} = 4.",
+              es: "Suma los enteros más el acarreo: 2 + 1 + {{1}} = 4.",
+            },
+          },
+          { text: { en: "2.7 + 1.6 = 4.3.", pt: "2.7 + 1.6 = 4.3.", es: "2.7 + 1.6 = 4.3." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 16 },
+      generate: generateAddDecimalsWithCarry,
+    },
+    {
+      id: "black-16",
+      beltId: "black",
+      index: 6,
+      degree: decimalsDegree,
+      title: {
+        en: "Subtracting decimals, no borrowing",
+        pt: "Subtrair decimais, sem 'emprestar'",
+        es: "Restar decimales, sin prestar",
+      },
+      summary: {
+        en: "Subtract the whole numbers and the tenths separately.",
+        pt: "Subtraia os números inteiros e os décimos separadamente.",
+        es: "Resta los números enteros y los décimos por separado.",
+      },
+      lesson: {
+        intro: {
+          en: "Line up the decimal points, then subtract the whole numbers and the tenths digits separately.",
+          pt: "Alinhe os pontos decimais, depois subtraia os números inteiros e os dígitos dos décimos separadamente.",
+          es: "Alinea los puntos decimales, luego resta los números enteros y los dígitos de los décimos por separado.",
+        },
+        example: { id: "ex-black-16", prompt: "5.8 - 2.3", answer: 3, secondaryAnswer: 5, secondaryFormat: "decimal", operands: [5, 8, 2, 3] },
+        steps: [
+          { text: { en: "Subtract the whole numbers: 5 - 2 = 3.", pt: "Subtraia os inteiros: 5 - 2 = 3.", es: "Resta los enteros: 5 - 2 = 3." } },
+          { text: { en: "Subtract the tenths: 8 - 3 = 5.", pt: "Subtraia os décimos: 8 - 3 = 5.", es: "Resta los décimos: 8 - 3 = 5." } },
+          { text: { en: "5.8 - 2.3 = 3.5.", pt: "5.8 - 2.3 = 3.5.", es: "5.8 - 2.3 = 3.5." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 14 },
+      generate: generateSubtractDecimalsNoBorrow,
+    },
+    {
+      id: "black-17",
+      beltId: "black",
+      index: 7,
+      degree: decimalsDegree,
+      title: {
+        en: "Subtracting decimals, with borrowing",
+        pt: "Subtrair decimais, com 'emprestar'",
+        es: "Restar decimales, prestando",
+      },
+      summary: {
+        en: "When the top tenths digit is smaller, borrow from the whole numbers.",
+        pt: "Quando o décimo de cima é menor, empreste dos inteiros.",
+        es: "Cuando el décimo de arriba es menor, presta de los enteros.",
+      },
+      lesson: {
+        intro: {
+          en: "If the top tenths digit is smaller than the bottom one, borrow 1 whole (worth 10 tenths) before subtracting.",
+          pt: "Se o décimo de cima for menor que o de baixo, empreste 1 inteiro (que vale 10 décimos) antes de subtrair.",
+          es: "Si el décimo de arriba es menor que el de abajo, presta 1 entero (que vale 10 décimos) antes de restar.",
+        },
+        example: { id: "ex-black-17", prompt: "5.2 - 2.6", answer: 2, secondaryAnswer: 6, secondaryFormat: "decimal", operands: [5, 2, 2, 6] },
+        steps: [
+          {
+            text: {
+              en: "2 is smaller than 6, so borrow {{1}} whole: 12 - 6 = 6 tenths.",
+              pt: "2 é menor que 6, então empreste {{1}} inteiro: 12 - 6 = 6 décimos.",
+              es: "2 es menor que 6, así que presta {{1}} entero: 12 - 6 = 6 décimos.",
+            },
+          },
+          {
+            text: {
+              en: "The whole numbers: 5 - {{1}} - 2 = 2.",
+              pt: "Os inteiros: 5 - {{1}} - 2 = 2.",
+              es: "Los enteros: 5 - {{1}} - 2 = 2.",
+            },
+          },
+          { text: { en: "5.2 - 2.6 = 2.6.", pt: "5.2 - 2.6 = 2.6.", es: "5.2 - 2.6 = 2.6." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 18 },
+      generate: generateSubtractDecimalsWithBorrow,
+    },
+    {
+      id: "black-18",
+      beltId: "black",
+      index: 8,
+      degree: decimalsDegree,
+      title: {
+        en: "Multiplying decimals by 10 and 100",
+        pt: "Multiplicar decimais por 10 e por 100",
+        es: "Multiplicar decimales por 10 y por 100",
+      },
+      summary: {
+        en: "The decimal point shifts to the right.",
+        pt: "O ponto decimal se desloca para a direita.",
+        es: "El punto decimal se desplaza hacia la derecha.",
+      },
+      lesson: {
+        intro: {
+          en: "Multiplying by 10 moves the decimal point one place right. Multiplying by 100 moves it two places right.",
+          pt: "Multiplicar por 10 desloca o ponto decimal uma casa para a direita. Multiplicar por 100 desloca duas casas.",
+          es: "Multiplicar por 10 desplaza el punto decimal un lugar a la derecha. Multiplicar por 100 desplaza dos lugares.",
+        },
+        example: { id: "ex-black-18", prompt: "3.4 × 10", answer: 34, operands: [3, 4, 10] },
+        steps: [
+          {
+            text: {
+              en: "×10 moves the point one place right.",
+              pt: "×10 desloca o ponto uma casa para a direita.",
+              es: "×10 desplaza el punto un lugar a la derecha.",
+            },
+          },
+          { text: { en: "3.4 becomes 34.", pt: "3.4 vira 34.", es: "3.4 se convierte en 34." } },
+          { text: { en: "3.4 × 10 = 34.", pt: "3.4 × 10 = 34.", es: "3.4 × 10 = 34." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 8 },
+      generate: generateMultiplyDecimalBy10Or100,
+    },
+    {
+      id: "black-19",
+      beltId: "black",
+      index: 9,
+      degree: decimalsDegree,
+      title: {
+        en: "Dividing a whole number by 10",
+        pt: "Dividir um número inteiro por 10",
+        es: "Dividir un número entero entre 10",
+      },
+      summary: {
+        en: "The decimal point shifts back to the left.",
+        pt: "O ponto decimal volta uma casa para a esquerda.",
+        es: "El punto decimal vuelve un lugar a la izquierda.",
+      },
+      lesson: {
+        intro: {
+          en: "Dividing by 10 moves the decimal point one place left — the last digit becomes the tenths.",
+          pt: "Dividir por 10 desloca o ponto decimal uma casa para a esquerda — o último dígito vira o décimo.",
+          es: "Dividir entre 10 desplaza el punto decimal un lugar a la izquierda — el último dígito se convierte en el décimo.",
+        },
+        example: { id: "ex-black-19", prompt: "47 ÷ 10", answer: 4, secondaryAnswer: 7, secondaryFormat: "decimal", operands: [47] },
+        steps: [
+          {
+            text: {
+              en: "÷10 moves the point one place left.",
+              pt: "÷10 desloca o ponto uma casa para a esquerda.",
+              es: "÷10 desplaza el punto un lugar a la izquierda.",
+            },
+          },
+          { text: { en: "47 becomes 4.7.", pt: "47 vira 4.7.", es: "47 se convierte en 4.7." } },
+          { text: { en: "47 ÷ 10 = 4.7.", pt: "47 ÷ 10 = 4.7.", es: "47 ÷ 10 = 4.7." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 14 },
+      generate: generateDivideWholeBy10,
+    },
+    {
+      id: "black-20",
+      beltId: "black",
+      index: 10,
+      degree: decimalsDegree,
+      title: { en: "Rounding decimals", pt: "Arredondar decimais", es: "Redondear decimales" },
+      summary: {
+        en: "Round to the nearest whole number using the tenths digit.",
+        pt: "Arredonde para o inteiro mais próximo usando o dígito dos décimos.",
+        es: "Redondea al número entero más cercano usando el dígito de los décimos.",
+      },
+      lesson: {
+        intro: {
+          en: "Look at the tenths digit. If it's 5 or more, round up. If it's less than 5, round down.",
+          pt: "Olhe o dígito dos décimos. Se for 5 ou mais, arredonde para cima. Se for menos de 5, arredonde para baixo.",
+          es: "Mira el dígito de los décimos. Si es 5 o más, redondea hacia arriba. Si es menos de 5, redondea hacia abajo.",
+        },
+        example: { id: "ex-black-20", prompt: "3.7", answer: 4, operands: [3, 7] },
+        steps: [
+          {
+            text: {
+              en: "The tenths digit is 7, which is 5 or more.",
+              pt: "O dígito dos décimos é 7, que é 5 ou mais.",
+              es: "El dígito de los décimos es 7, que es 5 o más.",
+            },
+          },
+          {
+            text: {
+              en: "Round up: 3 becomes 4.",
+              pt: "Arredonde para cima: 3 vira 4.",
+              es: "Redondea hacia arriba: 3 se convierte en 4.",
+            },
+          },
+          { text: { en: "3.7 rounds to 4.", pt: "3.7 arredonda para 4.", es: "3.7 se redondea a 4." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 10 },
+      generate: generateRoundDecimal,
     },
   ],
 };
