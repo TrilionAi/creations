@@ -4,7 +4,7 @@ export type Locale = "en" | "pt" | "es";
 
 export type LocalizedText = Record<Locale, string>;
 
-export type SecondaryAnswerFormat = "remainder" | "fraction" | "decimal";
+export type SecondaryAnswerFormat = "remainder" | "fraction" | "decimal" | "pair" | "radical";
 
 /** A visual: dots clustered into groups (multiplication/division), a hop-by-hop
  * number line (addition/subtraction, and reused as-is for negative integers since
@@ -13,10 +13,12 @@ export type SecondaryAnswerFormat = "remainder" | "fraction" | "decimal";
  * concretely shows what a variable holds), a level balance scale with x on one
  * pan (equations — shows that solving means keeping both sides equal), an
  * input/rule/output "function machine" (functions — shows a function as a
- * mapping), a rise-over-run staircase (functions — shows what slope means), or
- * a handful of plotted points forming a U (functions — the shape of a parabola).
- * Used both on lesson worked examples and, optionally, on individual drill
- * problems where reading a picture *is* the skill. */
+ * mapping), a rise-over-run staircase (functions — shows what slope means), a
+ * handful of plotted points forming a U (functions — the shape of a parabola),
+ * or a 2×2 area grid for (x+a)(x+b) (pre-calculus — the "box method" for
+ * factoring, showing x², ax, bx, ab as the four partial areas). Used both on
+ * lesson worked examples and, optionally, on individual drill problems where
+ * reading a picture *is* the skill. */
 export type Diagram =
   | { kind: "groups"; groups: number; perGroup: number }
   | { kind: "numberLine"; start: number; end: number }
@@ -25,7 +27,8 @@ export type Diagram =
   | { kind: "balanceScale"; leftUnits: number; rightUnits: number }
   | { kind: "functionMachine"; input: number; rule: string; output: number }
   | { kind: "slopeStaircase"; rise: number; run: number }
-  | { kind: "parabola"; points: { x: number; y: number }[] };
+  | { kind: "parabola"; points: { x: number; y: number }[] }
+  | { kind: "factorArea"; a: number; b: number };
 
 export interface Problem {
   id: string;
@@ -36,7 +39,10 @@ export interface Problem {
    * or a decimal's single tenths digit. */
   secondaryAnswer?: number;
   /** How to display/label the two-part answer: "12 R 3" side-by-side, a stacked
-   * fraction bar, or "3.5" with a "." separator (decimal — tenths digit only). */
+   * fraction bar, "3.5" with a "." separator (decimal — tenths digit only), "2, 5"
+   * with a "," separator (pair — two independently meaningful numbers, e.g. two
+   * roots or an x/y solution pair), or "5√2" with a "√" separator (radical — a
+   * coefficient outside the root, a value remaining inside it). */
   secondaryFormat?: SecondaryAnswerFormat;
   /** Present when the drill itself is "read this picture" — e.g. identifying a shaded fraction. */
   diagram?: Diagram;
@@ -48,6 +54,9 @@ export interface Problem {
    * are labeled — never concatenate "prompt = answer", since the prompt already contains
    * an "=" and a second one would misleadingly chain a third, false equality. */
   isEquation?: boolean;
+  /** Overrides the default "x =" label shown for `isEquation` problems — e.g. "x, y ="
+   * for a system of two equations, where the pair answer isn't two roots of one x. */
+  equationLabel?: string;
 }
 
 export interface LessonStep {

@@ -11,6 +11,7 @@ import { BalanceScaleDiagram } from "../components/BalanceScaleDiagram";
 import { FunctionMachineDiagram } from "../components/FunctionMachineDiagram";
 import { SlopeStaircaseDiagram } from "../components/SlopeStaircaseDiagram";
 import { ParabolaDiagram } from "../components/ParabolaDiagram";
+import { FactorAreaDiagram } from "../components/FactorAreaDiagram";
 import { useLocale } from "../i18n/LocaleContext";
 import { UI_STRINGS } from "../i18n/ui";
 import styles from "./DrillScreen.module.css";
@@ -269,10 +270,15 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
                     <SlopeStaircaseDiagram rise={current.diagram.rise} run={current.diagram.run} />
                   )}
                   {current.diagram.kind === "parabola" && <ParabolaDiagram points={current.diagram.points} />}
+                  {current.diagram.kind === "factorArea" && (
+                    <FactorAreaDiagram a={current.diagram.a} b={current.diagram.b} />
+                  )}
                 </div>
               )}
               <div className={styles.equalsRow}>
-                <span className={styles.equalsSign}>{current.isEquation ? "x =" : "="}</span>
+                <span className={styles.equalsSign}>
+                  {current.isEquation ? (current.equationLabel ?? "x =") : "="}
+                </span>
                 {isFraction ? (
                   <div className={styles.fractionAnswer}>
                     <button
@@ -317,7 +323,13 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
                     {hasSecondary && (
                       <>
                         <span className={styles.remainderLabel}>
-                          {current.secondaryFormat === "decimal" ? "." : t.remainderLabel}
+                          {current.secondaryFormat === "decimal"
+                            ? "."
+                            : current.secondaryFormat === "pair"
+                              ? ","
+                              : current.secondaryFormat === "radical"
+                                ? "√"
+                                : t.remainderLabel}
                         </span>
                         <button
                           type="button"
@@ -342,7 +354,11 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
                       ? t.correctAnswerRevealFraction(current.answer, current.secondaryAnswer!)
                       : current.secondaryFormat === "decimal"
                         ? t.correctAnswerRevealDecimal(current.answer, current.secondaryAnswer!)
-                        : t.correctAnswerRevealWithRemainder(current.answer, current.secondaryAnswer!)
+                        : current.secondaryFormat === "pair"
+                          ? t.correctAnswerRevealPair(current.answer, current.secondaryAnswer!)
+                          : current.secondaryFormat === "radical"
+                            ? t.correctAnswerRevealRadical(current.answer, current.secondaryAnswer!)
+                            : t.correctAnswerRevealWithRemainder(current.answer, current.secondaryAnswer!)
                     : t.correctAnswerReveal(current.answer)}
                 </div>
               )}

@@ -9,6 +9,7 @@ import { BalanceScaleDiagram } from "../components/BalanceScaleDiagram";
 import { FunctionMachineDiagram } from "../components/FunctionMachineDiagram";
 import { SlopeStaircaseDiagram } from "../components/SlopeStaircaseDiagram";
 import { ParabolaDiagram } from "../components/ParabolaDiagram";
+import { FactorAreaDiagram } from "../components/FactorAreaDiagram";
 import styles from "./LessonScreen.module.css";
 
 interface LessonScreenProps {
@@ -58,7 +59,13 @@ export function LessonScreen({ stripe, onBack, onStart }: LessonScreenProps) {
             <div className={styles.exampleEquation}>
               <div>{lesson.example.prompt}</div>
               <div>
-                x = <span className={styles.exampleAnswer}>{lesson.example.answer}</span>
+                {lesson.example.equationLabel ?? "x ="}{" "}
+                <span className={styles.exampleAnswer}>{lesson.example.answer}</span>
+                {lesson.example.secondaryAnswer !== undefined && (
+                  <>
+                    , <span className={styles.exampleAnswer}>{lesson.example.secondaryAnswer}</span>
+                  </>
+                )}
               </div>
             </div>
           ) : (
@@ -82,7 +89,11 @@ export function LessonScreen({ stripe, onBack, onStart }: LessonScreenProps) {
                   {lesson.example.secondaryAnswer !== undefined && (
                     <>
                       {" "}
-                      {t.remainderLabel}{" "}
+                      {lesson.example.secondaryFormat === "pair"
+                        ? ","
+                        : lesson.example.secondaryFormat === "radical"
+                          ? "√"
+                          : t.remainderLabel}{" "}
                       <span className={styles.exampleAnswer}>{lesson.example.secondaryAnswer}</span>
                     </>
                   )}
@@ -120,6 +131,9 @@ export function LessonScreen({ stripe, onBack, onStart }: LessonScreenProps) {
               <SlopeStaircaseDiagram rise={lesson.diagram.rise} run={lesson.diagram.run} />
             )}
             {lesson.diagram.kind === "parabola" && <ParabolaDiagram points={lesson.diagram.points} />}
+            {lesson.diagram.kind === "factorArea" && (
+              <FactorAreaDiagram a={lesson.diagram.a} b={lesson.diagram.b} />
+            )}
           </div>
         )}
 
