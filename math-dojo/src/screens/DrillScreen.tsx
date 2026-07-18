@@ -3,6 +3,9 @@ import type { AttemptRecord, Problem, SessionSummary, Stripe } from "../types";
 import { evaluateSession } from "../engine/progress";
 import { NumPad } from "../components/NumPad";
 import { ProgressBar } from "../components/ProgressBar";
+import { GroupDiagram } from "../components/GroupDiagram";
+import { NumberLineDiagram } from "../components/NumberLineDiagram";
+import { FractionDiagram } from "../components/FractionDiagram";
 import { useLocale } from "../i18n/LocaleContext";
 import { UI_STRINGS } from "../i18n/ui";
 import styles from "./DrillScreen.module.css";
@@ -14,6 +17,7 @@ interface DrillScreenProps {
 }
 
 type Feedback = "correct" | "incorrect" | null;
+type ActiveField = "primary" | "secondary";
 
 export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
   const { locale } = useLocale();
@@ -22,8 +26,8 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
   const totalCount = problemsPerPage * pagesToMaster;
   const [queue, setQueue] = useState<Problem[]>(() => stripe.generate(totalCount));
   const [input, setInput] = useState("");
-  const [remainderInput, setRemainderInput] = useState("");
-  const [activeField, setActiveField] = useState<"quotient" | "remainder">("quotient");
+  const [secondaryInput, setSecondaryInput] = useState("");
+  const [activeField, setActiveField] = useState<ActiveField>("primary");
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [solvedCount, setSolvedCount] = useState(0);
   const [pageBreak, setPageBreak] = useState<number | null>(null);
@@ -68,12 +72,13 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queue.length]);
 
-  const hasRemainder = current?.remainder !== undefined;
+  const hasSecondary = current?.secondaryAnswer !== undefined;
+  const isFraction = current?.secondaryFormat === "fraction";
 
   function handleDigit(digit: string) {
     if (feedback || lockRef.current) return;
-    if (hasRemainder && activeField === "remainder") {
-      setRemainderInput((v) => (v.length < 6 ? v + digit : v));
+    if (hasSecondary && activeField === "secondary") {
+      setSecondaryInput((v) => (v.length < 6 ? v + digit : v));
     } else {
       setInput((v) => (v.length < 6 ? v + digit : v));
     }
@@ -81,8 +86,8 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
 
   function handleBackspace() {
     if (feedback || lockRef.current) return;
-    if (hasRemainder && activeField === "remainder") {
-      setRemainderInput((v) => v.slice(0, -1));
+    if (hasSecondary && activeField === "secondary") {
+      setSecondaryInput((v) => v.slice(0, -1));
     } else {
       setInput((v) => v.slice(0, -1));
     }
@@ -90,12 +95,12 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
 
   function handleSubmit() {
     if (!current || lockRef.current) return;
-    if (input === "" || (hasRemainder && remainderInput === "")) return;
+    if (input === "" || (hasSecondary && secondaryInput === "")) return;
     lockRef.current = true;
     const numeric = Number(input);
     const record = attemptsRef.current.get(current.id)!;
-    const isCorrect = hasRemainder
-      ? numeric === current.answer && Number(remainderInput) === current.remainder
+    const isCorrect = hasSecondary
+      ? numeric === current.answer && Number(secondaryInput) === current.secondaryAnswer
       : numeric === current.answer;
 
     if (isCorrect) {
@@ -113,8 +118,8 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
       window.setTimeout(() => {
         setQueue((q) => q.slice(1));
         setInput("");
-        setRemainderInput("");
-        setActiveField("quotient");
+        setSecondaryInput("");
+        setActiveField("primary");
         setFeedback(null);
         if (pageJustCompleted !== null) {
           // hold here — lockRef stays true until the person taps continue
@@ -132,8 +137,8 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
           return [...rest, first];
         });
         setInput("");
-        setRemainderInput("");
-        setActiveField("quotient");
+        setSecondaryInput("");
+        setActiveField("primary");
         setFeedback(null);
         lockRef.current = false;
       }, 1000);
@@ -155,8 +160,8 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
   digitRef.current = handleDigit;
   const backspaceRef = useRef(handleBackspace);
   backspaceRef.current = handleBackspace;
-  const hasRemainderRef = useRef(hasRemainder);
-  hasRemainderRef.current = hasRemainder;
+  const hasSecondaryRef = useRef(hasSecondary);
+  hasSecondaryRef.current = hasSecondary;
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -168,9 +173,9 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
         digitRef.current(e.key);
       } else if (e.key === "Backspace") {
         backspaceRef.current();
-      } else if (e.key === "Tab" && hasRemainderRef.current) {
+      } else if (e.key === "Tab" && hasSecondaryRef.current) {
         e.preventDefault();
-        setActiveField((f) => (f === "quotient" ? "remainder" : "quotient"));
+        setActiveField((f) => (f === "primary" ? "secondary" : "primary"));
       } else if (e.key === "Enter") {
         submitRef.current();
       }
@@ -215,41 +220,88 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
                 feedback === "incorrect" ? styles.cardIncorrect : "",
               ].join(" ")}
             >
-              <div className={styles.prompt}>{current.prompt}</div>
+              {current.prompt && <div className={styles.prompt}>{current.prompt}</div>}
+              {current.diagram && (
+                <div className={styles.diagramWrap}>
+                  {current.diagram.kind === "groups" && (
+                    <GroupDiagram groups={current.diagram.groups} perGroup={current.diagram.perGroup} />
+                  )}
+                  {current.diagram.kind === "numberLine" && (
+                    <NumberLineDiagram start={current.diagram.start} end={current.diagram.end} />
+                  )}
+                  {current.diagram.kind === "fraction" && (
+                    <FractionDiagram total={current.diagram.total} shaded={current.diagram.shaded} />
+                  )}
+                </div>
+              )}
               <div className={styles.equalsRow}>
                 <span className={styles.equalsSign}>=</span>
-                <button
-                  type="button"
-                  onClick={() => setActiveField("quotient")}
-                  className={[
-                    styles.answerBox,
-                    input === "" ? styles.answerBoxEmpty : "",
-                    hasRemainder && activeField === "quotient" ? styles.answerBoxActive : "",
-                  ].join(" ")}
-                >
-                  {input || "?"}
-                </button>
-                {hasRemainder && (
-                  <>
-                    <span className={styles.remainderLabel}>{t.remainderLabel}</span>
+                {isFraction ? (
+                  <div className={styles.fractionAnswer}>
                     <button
                       type="button"
-                      onClick={() => setActiveField("remainder")}
+                      onClick={() => setActiveField("primary")}
                       className={[
                         styles.answerBox,
-                        remainderInput === "" ? styles.answerBoxEmpty : "",
-                        activeField === "remainder" ? styles.answerBoxActive : "",
+                        styles.fractionBox,
+                        input === "" ? styles.answerBoxEmpty : "",
+                        activeField === "primary" ? styles.answerBoxActive : "",
                       ].join(" ")}
                     >
-                      {remainderInput || "?"}
+                      {input || "?"}
                     </button>
+                    <div className={styles.fractionBar} />
+                    <button
+                      type="button"
+                      onClick={() => setActiveField("secondary")}
+                      className={[
+                        styles.answerBox,
+                        styles.fractionBox,
+                        secondaryInput === "" ? styles.answerBoxEmpty : "",
+                        activeField === "secondary" ? styles.answerBoxActive : "",
+                      ].join(" ")}
+                    >
+                      {secondaryInput || "?"}
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setActiveField("primary")}
+                      className={[
+                        styles.answerBox,
+                        input === "" ? styles.answerBoxEmpty : "",
+                        hasSecondary && activeField === "primary" ? styles.answerBoxActive : "",
+                      ].join(" ")}
+                    >
+                      {input || "?"}
+                    </button>
+                    {hasSecondary && (
+                      <>
+                        <span className={styles.remainderLabel}>{t.remainderLabel}</span>
+                        <button
+                          type="button"
+                          onClick={() => setActiveField("secondary")}
+                          className={[
+                            styles.answerBox,
+                            secondaryInput === "" ? styles.answerBoxEmpty : "",
+                            activeField === "secondary" ? styles.answerBoxActive : "",
+                          ].join(" ")}
+                        >
+                          {secondaryInput || "?"}
+                        </button>
+                      </>
+                    )}
                   </>
                 )}
               </div>
               {feedback === "incorrect" && (
                 <div className={styles.revealCorrect}>
-                  {hasRemainder
-                    ? t.correctAnswerRevealWithRemainder(current.answer, current.remainder!)
+                  {hasSecondary
+                    ? isFraction
+                      ? t.correctAnswerRevealFraction(current.answer, current.secondaryAnswer!)
+                      : t.correctAnswerRevealWithRemainder(current.answer, current.secondaryAnswer!)
                     : t.correctAnswerReveal(current.answer)}
                 </div>
               )}
@@ -260,7 +312,7 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
                 onDigit={handleDigit}
                 onBackspace={handleBackspace}
                 onSubmit={handleSubmit}
-                submitDisabled={input === "" || (hasRemainder && remainderInput === "") || feedback !== null}
+                submitDisabled={input === "" || (hasSecondary && secondaryInput === "") || feedback !== null}
               />
             </div>
           </>

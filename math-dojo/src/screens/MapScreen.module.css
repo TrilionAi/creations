@@ -71,11 +71,26 @@
   font-size: var(--fs-sm);
 }
 
+.stripeGroups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  margin-top: var(--sp-4);
+}
+
+.degreeHeading {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-ink-faint);
+  margin-bottom: var(--sp-2);
+}
+
 .stripeRow {
   display: flex;
   flex-wrap: wrap;
   gap: var(--sp-2);
-  margin-top: var(--sp-4);
 }
 
 .stripeBtn {

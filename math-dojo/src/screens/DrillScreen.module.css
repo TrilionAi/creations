@@ -81,6 +81,12 @@
   white-space: nowrap;
 }
 
+.diagramWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--sp-3);
+}
+
 .pageBreakCard {
   width: 100%;
   background: var(--color-secondary-soft);
@@ -165,6 +171,25 @@
   font-size: var(--fs-lg);
   font-weight: 700;
   color: var(--color-ink-soft);
+}
+
+.fractionAnswer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+.fractionBox {
+  min-width: 80px;
+  min-height: 56px;
+}
+
+.fractionBar {
+  width: 56px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--color-ink);
 }
 
 .revealCorrect {

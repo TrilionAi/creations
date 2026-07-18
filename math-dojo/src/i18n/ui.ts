@@ -4,6 +4,7 @@ interface UiStrings {
   tagline: string;
   comingSoon: string;
   stripeLabel: string;
+  degreeLabel: string;
   backToMap: string;
   startPractice: string;
   lessonMeta: (pagesToMaster: number, problemsPerPage: number, pct: number, sec: number) => string;
@@ -11,6 +12,7 @@ interface UiStrings {
   pageComplete: (page: number, totalPages: number) => string;
   correctAnswerReveal: (answer: number) => string;
   correctAnswerRevealWithRemainder: (quotient: number, remainder: number) => string;
+  correctAnswerRevealFraction: (numerator: number, denominator: number) => string;
   remainderLabel: string;
   exitDrillAria: string;
   resultsPassHeadline: string;
@@ -28,6 +30,7 @@ const en: UiStrings = {
   tagline: "Earn your belt, one small step at a time.",
   comingSoon: "Coming soon",
   stripeLabel: "Stripe",
+  degreeLabel: "Degree",
   backToMap: "Back to map",
   startPractice: "I've got it — start practice",
   lessonMeta: (pagesToMaster, problemsPerPage, pct, sec) =>
@@ -36,6 +39,7 @@ const en: UiStrings = {
   pageComplete: (page, totalPages) => `Page ${page} of ${totalPages} done!`,
   correctAnswerReveal: (answer) => `Correct answer: ${answer} — try it again`,
   correctAnswerRevealWithRemainder: (q, r) => `Correct answer: ${q} R ${r} — try it again`,
+  correctAnswerRevealFraction: (n, d) => `Correct answer: ${n}/${d} — try it again`,
   remainderLabel: "R",
   exitDrillAria: "Exit drill",
   resultsPassHeadline: "Stripe earned!",
@@ -53,6 +57,7 @@ const pt: UiStrings = {
   tagline: "Conquiste sua faixa, um passo de cada vez.",
   comingSoon: "Em breve",
   stripeLabel: "Grau",
+  degreeLabel: "Nível",
   backToMap: "Voltar ao mapa",
   startPractice: "Entendi — começar a praticar",
   lessonMeta: (pagesToMaster, problemsPerPage, pct, sec) =>
@@ -61,6 +66,7 @@ const pt: UiStrings = {
   pageComplete: (page, totalPages) => `Página ${page} de ${totalPages} concluída!`,
   correctAnswerReveal: (answer) => `Resposta certa: ${answer} — tente de novo`,
   correctAnswerRevealWithRemainder: (q, r) => `Resposta certa: ${q} R ${r} — tente de novo`,
+  correctAnswerRevealFraction: (n, d) => `Resposta certa: ${n}/${d} — tente de novo`,
   remainderLabel: "R",
   exitDrillAria: "Sair do treino",
   resultsPassHeadline: "Grau conquistado!",
@@ -78,6 +84,7 @@ const es: UiStrings = {
   tagline: "Gana tu cinturón, un paso a la vez.",
   comingSoon: "Próximamente",
   stripeLabel: "Grado",
+  degreeLabel: "Nivel",
   backToMap: "Volver al mapa",
   startPractice: "Entendido — empezar a practicar",
   lessonMeta: (pagesToMaster, problemsPerPage, pct, sec) =>
@@ -86,6 +93,7 @@ const es: UiStrings = {
   pageComplete: (page, totalPages) => `¡Página ${page} de ${totalPages} lista!`,
   correctAnswerReveal: (answer) => `Respuesta correcta: ${answer} — inténtalo de nuevo`,
   correctAnswerRevealWithRemainder: (q, r) => `Respuesta correcta: ${q} R ${r} — inténtalo de nuevo`,
+  correctAnswerRevealFraction: (n, d) => `Respuesta correcta: ${n}/${d} — inténtalo de nuevo`,
   remainderLabel: "R",
   exitDrillAria: "Salir del ejercicio",
   resultsPassHeadline: "¡Grado conseguido!",
