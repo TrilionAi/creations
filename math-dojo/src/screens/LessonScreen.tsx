@@ -9,6 +9,23 @@ interface LessonScreenProps {
   onStart: () => void;
 }
 
+/**
+ * Step text can wrap a number in {{...}} to mark it as the "linking" value
+ * that carries across steps (a carry, a borrow, a bridge amount) — rendered
+ * in a consistent accent color so the eye can track it step to step.
+ */
+function renderHighlighted(text: string) {
+  return text.split(/(\{\{.+?\}\})/g).map((part, i) => {
+    const match = part.match(/^\{\{(.+)\}\}$/);
+    if (!match) return part;
+    return (
+      <span key={i} className={styles.linkNum}>
+        {match[1]}
+      </span>
+    );
+  });
+}
+
 export function LessonScreen({ stripe, onBack, onStart }: LessonScreenProps) {
   const { locale } = useLocale();
   const t = UI_STRINGS[locale];
@@ -36,7 +53,7 @@ export function LessonScreen({ stripe, onBack, onStart }: LessonScreenProps) {
           {lesson.steps.map((step, i) => (
             <li key={i} className={styles.step} style={{ animationDelay: `${i * 90}ms` }}>
               <span className={styles.stepNumber}>{i + 1}</span>
-              <span className={styles.stepText}>{step.text[locale]}</span>
+              <span className={styles.stepText}>{renderHighlighted(step.text[locale])}</span>
             </li>
           ))}
         </ol>
