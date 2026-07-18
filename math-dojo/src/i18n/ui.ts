@@ -10,6 +10,8 @@ interface UiStrings {
   pageLabel: (page: number, totalPages: number) => string;
   pageComplete: (page: number, totalPages: number) => string;
   correctAnswerReveal: (answer: number) => string;
+  correctAnswerRevealWithRemainder: (quotient: number, remainder: number) => string;
+  remainderLabel: string;
   exitDrillAria: string;
   resultsPassHeadline: string;
   resultsFailHeadline: string;
@@ -33,6 +35,8 @@ const en: UiStrings = {
   pageLabel: (page, totalPages) => `Page ${page}/${totalPages}`,
   pageComplete: (page, totalPages) => `Page ${page} of ${totalPages} done!`,
   correctAnswerReveal: (answer) => `Correct answer: ${answer} — try it again`,
+  correctAnswerRevealWithRemainder: (q, r) => `Correct answer: ${q} R ${r} — try it again`,
+  remainderLabel: "R",
   exitDrillAria: "Exit drill",
   resultsPassHeadline: "Stripe earned!",
   resultsFailHeadline: "So close — one more round",
@@ -56,6 +60,8 @@ const pt: UiStrings = {
   pageLabel: (page, totalPages) => `Página ${page}/${totalPages}`,
   pageComplete: (page, totalPages) => `Página ${page} de ${totalPages} concluída!`,
   correctAnswerReveal: (answer) => `Resposta certa: ${answer} — tente de novo`,
+  correctAnswerRevealWithRemainder: (q, r) => `Resposta certa: ${q} R ${r} — tente de novo`,
+  remainderLabel: "R",
   exitDrillAria: "Sair do treino",
   resultsPassHeadline: "Grau conquistado!",
   resultsFailHeadline: "Quase lá — mais uma rodada",
@@ -79,6 +85,8 @@ const es: UiStrings = {
   pageLabel: (page, totalPages) => `Página ${page}/${totalPages}`,
   pageComplete: (page, totalPages) => `¡Página ${page} de ${totalPages} lista!`,
   correctAnswerReveal: (answer) => `Respuesta correcta: ${answer} — inténtalo de nuevo`,
+  correctAnswerRevealWithRemainder: (q, r) => `Respuesta correcta: ${q} R ${r} — inténtalo de nuevo`,
+  remainderLabel: "R",
   exitDrillAria: "Salir del ejercicio",
   resultsPassHeadline: "¡Grado conseguido!",
   resultsFailHeadline: "Casi — una ronda más",

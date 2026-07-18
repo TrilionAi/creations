@@ -47,6 +47,12 @@ export function LessonScreen({ stripe, onBack, onStart }: LessonScreenProps) {
 
         <div className={styles.exampleProblem}>
           {lesson.example.prompt} = <span className={styles.exampleAnswer}>{lesson.example.answer}</span>
+          {lesson.example.remainder !== undefined && (
+            <>
+              {" "}
+              {t.remainderLabel} <span className={styles.exampleAnswer}>{lesson.example.remainder}</span>
+            </>
+          )}
         </div>
 
         <ol className={styles.steps}>

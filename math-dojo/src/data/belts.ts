@@ -29,6 +29,16 @@ import {
   generateTwoDigitByTwoDigit,
   generateThreeDigitByOneDigit,
   generateThreeDigitByTwoDigit,
+  generateExactDivision,
+  generateDivisionWithRemainder,
+  generateDivideBy10And100,
+  generateTwoDigitByOneDigitExact,
+  generateTwoDigitByOneDigitWithRemainder,
+  generateThreeDigitByOneDigitExact,
+  generateThreeDigitByOneDigitWithRemainder,
+  generateTwoDigitDivisorExact,
+  generateThreeDigitByTwoDigitExact,
+  generateThreeDigitByTwoDigitWithRemainder,
 } from "../engine/problemGenerator";
 import type { Belt } from "../types";
 
@@ -1336,8 +1346,425 @@ const brownBelt: Belt = {
     pt: "Divida números com precisão, restos e tudo.",
     es: "Divide números con precisión, restos incluidos.",
   },
-  stripes: [],
-  locked: true,
+  stripes: [
+    {
+      id: "brown-1",
+      beltId: "brown",
+      index: 1,
+      title: { en: "Exact division", pt: "Divisão exata", es: "División exacta" },
+      summary: {
+        en: "Division undoes multiplication — find the missing factor.",
+        pt: "A divisão desfaz a multiplicação — ache o fator que falta.",
+        es: "La división deshace la multiplicación — encuentra el factor que falta.",
+      },
+      lesson: {
+        intro: {
+          en: "Think of division as the reverse of a times table fact: what number times the divisor gives this?",
+          pt: "Pense na divisão como o contrário da tabuada: que número multiplicado pelo divisor dá esse valor?",
+          es: "Piensa en la división como lo contrario de una tabla de multiplicar: ¿qué número multiplicado por el divisor da este valor?",
+        },
+        example: { id: "ex-brown-1", prompt: "42 ÷ 6", answer: 7, operands: [42, 6] },
+        steps: [
+          { text: { en: "Think: 6 × ? = 42.", pt: "Pense: 6 × ? = 42.", es: "Piensa: 6 × ? = 42." } },
+          {
+            text: {
+              en: "You already know 6 × 7 = 42 from the tables.",
+              pt: "Você já sabe que 6 × 7 = 42 pela tabuada.",
+              es: "Ya sabes que 6 × 7 = 42 por las tablas.",
+            },
+          },
+          { text: { en: "42 ÷ 6 = 7.", pt: "42 ÷ 6 = 7.", es: "42 ÷ 6 = 7." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 6 },
+      generate: generateExactDivision,
+    },
+    {
+      id: "brown-2",
+      beltId: "brown",
+      index: 2,
+      title: { en: "Dividing with a remainder", pt: "Dividir com resto", es: "Dividir con resto" },
+      summary: {
+        en: "Find the closest multiple you can reach without going over.",
+        pt: "Ache o múltiplo mais próximo sem passar do número.",
+        es: "Encuentra el múltiplo más cercano sin pasarte del número.",
+      },
+      lesson: {
+        intro: {
+          en: "Find the biggest multiple of the divisor that still fits, then see what's left over.",
+          pt: "Ache o maior múltiplo do divisor que ainda cabe, depois veja o que sobra.",
+          es: "Encuentra el múltiplo más grande del divisor que todavía cabe, luego mira qué sobra.",
+        },
+        example: { id: "ex-brown-2", prompt: "23 ÷ 5", answer: 4, remainder: 3, operands: [23, 5] },
+        steps: [
+          {
+            text: {
+              en: "The biggest multiple of 5 that fits in 23 is {{20}} (5 × 4).",
+              pt: "O maior múltiplo de 5 que cabe em 23 é {{20}} (5 × 4).",
+              es: "El múltiplo más grande de 5 que cabe en 23 es {{20}} (5 × 4).",
+            },
+          },
+          {
+            text: {
+              en: "23 − {{20}} = 3 left over.",
+              pt: "23 − {{20}} = 3 que sobra.",
+              es: "23 − {{20}} = 3 que sobra.",
+            },
+          },
+          { text: { en: "23 ÷ 5 = 4 R 3.", pt: "23 ÷ 5 = 4 R 3.", es: "23 ÷ 5 = 4 R 3." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 8 },
+      generate: generateDivisionWithRemainder,
+    },
+    {
+      id: "brown-3",
+      beltId: "brown",
+      index: 3,
+      title: { en: "Dividing by 10 and 100", pt: "Dividir por 10 e por 100", es: "Dividir por 10 y por 100" },
+      summary: {
+        en: "The zero trick works in reverse too.",
+        pt: "O truque do zero funciona ao contrário também.",
+        es: "El truco del cero también funciona al revés.",
+      },
+      lesson: {
+        intro: {
+          en: "Dividing by 10 removes one zero. Dividing by 100 removes two zeros.",
+          pt: "Dividir por 10 remove um zero. Dividir por 100 remove dois zeros.",
+          es: "Dividir por 10 quita un cero. Dividir por 100 quita dos ceros.",
+        },
+        example: { id: "ex-brown-3", prompt: "700 ÷ 100", answer: 7, operands: [700, 100] },
+        steps: [
+          { text: { en: "÷100 removes two zeros.", pt: "÷100 remove dois zeros.", es: "÷100 quita dos ceros." } },
+          { text: { en: "700 becomes 7.", pt: "700 vira 7.", es: "700 se convierte en 7." } },
+          { text: { en: "700 ÷ 100 = 7.", pt: "700 ÷ 100 = 7.", es: "700 ÷ 100 = 7." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 5, passAccuracy: 0.8, targetTimeSec: 6 },
+      generate: generateDivideBy10And100,
+    },
+    {
+      id: "brown-4",
+      beltId: "brown",
+      index: 4,
+      title: {
+        en: "Two-digit ÷ one-digit, no remainder",
+        pt: "Dois dígitos ÷ um dígito, sem resto",
+        es: "Dos dígitos ÷ un dígito, sin resto",
+      },
+      summary: {
+        en: "Divide the tens, then the units, separately.",
+        pt: "Divida a dezena, depois a unidade, separadamente.",
+        es: "Divide la decena, luego la unidad, por separado.",
+      },
+      lesson: {
+        intro: {
+          en: "Divide the tens digit by the divisor, then the units digit, then combine.",
+          pt: "Divida o dígito da dezena pelo divisor, depois o da unidade, e junte.",
+          es: "Divide el dígito de la decena entre el divisor, luego el de la unidad, y júntalos.",
+        },
+        example: { id: "ex-brown-4", prompt: "84 ÷ 4", answer: 21, operands: [84, 4] },
+        steps: [
+          {
+            text: { en: "Divide the tens: 8 ÷ 4 = 2.", pt: "Divida a dezena: 8 ÷ 4 = 2.", es: "Divide la decena: 8 ÷ 4 = 2." },
+          },
+          {
+            text: {
+              en: "Divide the units: 4 ÷ 4 = 1.",
+              pt: "Divida a unidade: 4 ÷ 4 = 1.",
+              es: "Divide la unidad: 4 ÷ 4 = 1.",
+            },
+          },
+          { text: { en: "84 ÷ 4 = 21.", pt: "84 ÷ 4 = 21.", es: "84 ÷ 4 = 21." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 10 },
+      generate: generateTwoDigitByOneDigitExact,
+    },
+    {
+      id: "brown-5",
+      beltId: "brown",
+      index: 5,
+      title: {
+        en: "Two-digit ÷ one-digit, with remainder",
+        pt: "Dois dígitos ÷ um dígito, com resto",
+        es: "Dos dígitos ÷ un dígito, con resto",
+      },
+      summary: {
+        en: "Divide the tens, bring down the units, divide again.",
+        pt: "Divida a dezena, desça a unidade, divida de novo.",
+        es: "Divide la decena, baja la unidad, divide de nuevo.",
+      },
+      lesson: {
+        intro: {
+          en: "Divide the tens first. Whatever's left over joins the units — then divide that combined number.",
+          pt: "Divida a dezena primeiro. O que sobrar se junta à unidade — depois divida esse número combinado.",
+          es: "Divide la decena primero. Lo que sobre se junta a la unidad — luego divide ese número combinado.",
+        },
+        example: { id: "ex-brown-5", prompt: "47 ÷ 3", answer: 15, remainder: 2, operands: [47, 3] },
+        steps: [
+          {
+            text: {
+              en: "Divide the tens: 4 ÷ 3 = 1, remainder {{1}}.",
+              pt: "Divida a dezena: 4 ÷ 3 = 1, resto {{1}}.",
+              es: "Divide la decena: 4 ÷ 3 = 1, resto {{1}}.",
+            },
+          },
+          {
+            text: {
+              en: "Bring down the units: {{1}} and 7 make 17.",
+              pt: "Desça a unidade: {{1}} e 7 formam 17.",
+              es: "Baja la unidad: {{1}} y 7 forman 17.",
+            },
+          },
+          {
+            text: {
+              en: "Divide again: 17 ÷ 3 = 5, remainder 2.",
+              pt: "Divida de novo: 17 ÷ 3 = 5, resto 2.",
+              es: "Divide de nuevo: 17 ÷ 3 = 5, resto 2.",
+            },
+          },
+          { text: { en: "47 ÷ 3 = 15 R 2.", pt: "47 ÷ 3 = 15 R 2.", es: "47 ÷ 3 = 15 R 2." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 14 },
+      generate: generateTwoDigitByOneDigitWithRemainder,
+    },
+    {
+      id: "brown-6",
+      beltId: "brown",
+      index: 6,
+      title: {
+        en: "Three-digit ÷ one-digit, no remainder",
+        pt: "Três dígitos ÷ um dígito, sem resto",
+        es: "Tres dígitos ÷ un dígito, sin resto",
+      },
+      summary: {
+        en: "Same column method, one more digit: hundreds, tens, units.",
+        pt: "Mesmo método das colunas, mais um dígito: centena, dezena, unidade.",
+        es: "Mismo método de columnas, un dígito más: centena, decena, unidad.",
+      },
+      lesson: {
+        intro: {
+          en: "Divide the hundreds, then the tens, then the units — each on its own.",
+          pt: "Divida a centena, depois a dezena, depois a unidade — cada uma separadamente.",
+          es: "Divide la centena, luego la decena, luego la unidad — cada una por separado.",
+        },
+        example: { id: "ex-brown-6", prompt: "936 ÷ 3", answer: 312, operands: [936, 3] },
+        steps: [
+          {
+            text: {
+              en: "Divide the hundreds: 9 ÷ 3 = 3.",
+              pt: "Divida a centena: 9 ÷ 3 = 3.",
+              es: "Divide la centena: 9 ÷ 3 = 3.",
+            },
+          },
+          {
+            text: { en: "Divide the tens: 3 ÷ 3 = 1.", pt: "Divida a dezena: 3 ÷ 3 = 1.", es: "Divide la decena: 3 ÷ 3 = 1." },
+          },
+          {
+            text: {
+              en: "Divide the units: 6 ÷ 3 = 2.",
+              pt: "Divida a unidade: 6 ÷ 3 = 2.",
+              es: "Divide la unidad: 6 ÷ 3 = 2.",
+            },
+          },
+          { text: { en: "936 ÷ 3 = 312.", pt: "936 ÷ 3 = 312.", es: "936 ÷ 3 = 312." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 16 },
+      generate: generateThreeDigitByOneDigitExact,
+    },
+    {
+      id: "brown-7",
+      beltId: "brown",
+      index: 7,
+      title: {
+        en: "Three-digit ÷ one-digit, with remainder",
+        pt: "Três dígitos ÷ um dígito, com resto",
+        es: "Tres dígitos ÷ un dígito, con resto",
+      },
+      summary: {
+        en: "Long division: divide, multiply, subtract, bring down, repeat.",
+        pt: "Divisão longa: divida, multiplique, subtraia, desça o próximo, repita.",
+        es: "División larga: divide, multiplica, resta, baja el siguiente, repite.",
+      },
+      lesson: {
+        intro: {
+          en: "Work left to right. After each division, subtract to find what's left, then bring down the next digit.",
+          pt: "Trabalhe da esquerda para a direita. Depois de cada divisão, subtraia para achar o que sobra, depois desça o próximo dígito.",
+          es: "Trabaja de izquierda a derecha. Después de cada división, resta para ver qué sobra, luego baja el siguiente dígito.",
+        },
+        example: { id: "ex-brown-7", prompt: "137 ÷ 4", answer: 34, remainder: 1, operands: [137, 4] },
+        steps: [
+          {
+            text: {
+              en: "Divide 13 by 4: 3 times (4 × 3 = 12), remainder {{1}}.",
+              pt: "Divida 13 por 4: 3 vezes (4 × 3 = 12), resto {{1}}.",
+              es: "Divide 13 entre 4: 3 veces (4 × 3 = 12), resto {{1}}.",
+            },
+          },
+          {
+            text: {
+              en: "Bring down the 7: {{1}} and 7 make 17.",
+              pt: "Desça o 7: {{1}} e 7 formam 17.",
+              es: "Baja el 7: {{1}} y 7 forman 17.",
+            },
+          },
+          {
+            text: {
+              en: "Divide 17 by 4: 4 times (4 × 4 = 16), remainder 1.",
+              pt: "Divida 17 por 4: 4 vezes (4 × 4 = 16), resto 1.",
+              es: "Divide 17 entre 4: 4 veces (4 × 4 = 16), resto 1.",
+            },
+          },
+          { text: { en: "137 ÷ 4 = 34 R 1.", pt: "137 ÷ 4 = 34 R 1.", es: "137 ÷ 4 = 34 R 1." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 20 },
+      generate: generateThreeDigitByOneDigitWithRemainder,
+    },
+    {
+      id: "brown-8",
+      beltId: "brown",
+      index: 8,
+      title: {
+        en: "Dividing by a two-digit number",
+        pt: "Dividir por um número de dois dígitos",
+        es: "Dividir entre un número de dos dígitos",
+      },
+      summary: {
+        en: "Estimate using a nearby friendly multiple.",
+        pt: "Estime usando um múltiplo redondo próximo.",
+        es: "Estima usando un múltiplo redondo cercano.",
+      },
+      lesson: {
+        intro: {
+          en: "Round the divisor to a friendly multiple of 10 to guess how many times it fits, then check by multiplying.",
+          pt: "Arredonde o divisor para um múltiplo de 10 próximo para estimar quantas vezes ele cabe, depois confira multiplicando.",
+          es: "Redondea el divisor a un múltiplo de 10 cercano para estimar cuántas veces cabe, luego comprueba multiplicando.",
+        },
+        example: { id: "ex-brown-8", prompt: "84 ÷ 21", answer: 4, operands: [84, 21] },
+        steps: [
+          {
+            text: {
+              en: "21 is close to 20. About how many 20s fit in 84? Around {{4}}.",
+              pt: "21 é próximo de 20. Quantos 20 cabem em 84, aproximadamente? Uns {{4}}.",
+              es: "21 está cerca de 20. ¿Cuántos 20 caben en 84, aproximadamente? Unos {{4}}.",
+            },
+          },
+          {
+            text: {
+              en: "Check: 21 × {{4}} = 84. Exact!",
+              pt: "Confira: 21 × {{4}} = 84. Exato!",
+              es: "Comprueba: 21 × {{4}} = 84. ¡Exacto!",
+            },
+          },
+          { text: { en: "84 ÷ 21 = 4.", pt: "84 ÷ 21 = 4.", es: "84 ÷ 21 = 4." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 20 },
+      generate: generateTwoDigitDivisorExact,
+    },
+    {
+      id: "brown-9",
+      beltId: "brown",
+      index: 9,
+      title: {
+        en: "Three-digit ÷ two-digit, no remainder",
+        pt: "Três dígitos ÷ dois dígitos, sem resto",
+        es: "Tres dígitos ÷ dos dígitos, sin resto",
+      },
+      summary: {
+        en: "The full long-division process, one more digit.",
+        pt: "O processo completo da divisão longa, mais um dígito.",
+        es: "El proceso completo de la división larga, un dígito más.",
+      },
+      lesson: {
+        intro: {
+          en: "Estimate how many times the divisor fits into the first digits, multiply, subtract, then bring down the last digit and repeat.",
+          pt: "Estime quantas vezes o divisor cabe nos primeiros dígitos, multiplique, subtraia, depois desça o último dígito e repita.",
+          es: "Estima cuántas veces cabe el divisor en las primeras cifras, multiplica, resta, luego baja la última cifra y repite.",
+        },
+        example: { id: "ex-brown-9", prompt: "276 ÷ 23", answer: 12, operands: [276, 23] },
+        steps: [
+          {
+            text: {
+              en: "How many times does 23 fit into 27? Once: 23 × 1 = 23.",
+              pt: "Quantas vezes o 23 cabe em 27? Uma vez: 23 × 1 = 23.",
+              es: "¿Cuántas veces cabe 23 en 27? Una vez: 23 × 1 = 23.",
+            },
+          },
+          {
+            text: {
+              en: "27 − 23 = {{4}}. Bring down the 6: {{4}}6.",
+              pt: "27 − 23 = {{4}}. Desça o 6: {{4}}6.",
+              es: "27 − 23 = {{4}}. Baja el 6: {{4}}6.",
+            },
+          },
+          {
+            text: {
+              en: "How many times does 23 fit into 46? Twice: 23 × 2 = 46.",
+              pt: "Quantas vezes o 23 cabe em 46? Duas vezes: 23 × 2 = 46.",
+              es: "¿Cuántas veces cabe 23 en 46? Dos veces: 23 × 2 = 46.",
+            },
+          },
+          { text: { en: "276 ÷ 23 = 12.", pt: "276 ÷ 23 = 12.", es: "276 ÷ 23 = 12." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 26 },
+      generate: generateThreeDigitByTwoDigitExact,
+    },
+    {
+      id: "brown-10",
+      beltId: "brown",
+      index: 10,
+      title: {
+        en: "Three-digit ÷ two-digit, with remainder",
+        pt: "Três dígitos ÷ dois dígitos, com resto",
+        es: "Tres dígitos ÷ dos dígitos, con resto",
+      },
+      summary: {
+        en: "The complete long-division process, remainder and all.",
+        pt: "O processo completo da divisão longa, com resto e tudo.",
+        es: "El proceso completo de la división larga, con resto incluido.",
+      },
+      lesson: {
+        intro: {
+          en: "Same process as before — estimate, multiply, subtract, bring down — but this time it won't divide evenly, so end with what's left over.",
+          pt: "Mesmo processo de antes — estime, multiplique, subtraia, desça — mas dessa vez não vai dividir certinho, então termine com o que sobrar.",
+          es: "Mismo proceso de antes — estima, multiplica, resta, baja — pero esta vez no dividirá exacto, así que termina con lo que sobre.",
+        },
+        example: { id: "ex-brown-10", prompt: "287 ÷ 23", answer: 12, remainder: 11, operands: [287, 23] },
+        steps: [
+          {
+            text: {
+              en: "How many times does 23 fit into 28? Once: 23 × 1 = 23.",
+              pt: "Quantas vezes o 23 cabe em 28? Uma vez: 23 × 1 = 23.",
+              es: "¿Cuántas veces cabe 23 en 28? Una vez: 23 × 1 = 23.",
+            },
+          },
+          {
+            text: {
+              en: "28 − 23 = {{5}}. Bring down the 7: {{5}}7.",
+              pt: "28 − 23 = {{5}}. Desça o 7: {{5}}7.",
+              es: "28 − 23 = {{5}}. Baja el 7: {{5}}7.",
+            },
+          },
+          {
+            text: {
+              en: "How many times does 23 fit into 57? Twice: 23 × 2 = 46. That leaves 57 − 46 = 11.",
+              pt: "Quantas vezes o 23 cabe em 57? Duas vezes: 23 × 2 = 46. Sobra 57 − 46 = 11.",
+              es: "¿Cuántas veces cabe 23 en 57? Dos veces: 23 × 2 = 46. Sobra 57 − 46 = 11.",
+            },
+          },
+          { text: { en: "287 ÷ 23 = 12 R 11.", pt: "287 ÷ 23 = 12 R 11.", es: "287 ÷ 23 = 12 R 11." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 32 },
+      generate: generateThreeDigitByTwoDigitWithRemainder,
+    },
+  ],
 };
 
 const blackBelt: Belt = {
