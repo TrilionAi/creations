@@ -79,6 +79,16 @@ import {
   generateCombineLikeTermsFirst,
   generateDistributionBothSides,
   generateMultiStepEquation,
+  generateFunctionMachineReading,
+  generateEvaluateFunctionPositive,
+  generateEvaluateFunctionNegative,
+  generateSlopeStaircaseReading,
+  generateSlopeFromTwoPoints,
+  generateFindYIntercept,
+  generateFindXIntercept,
+  generateEvaluateBasicQuadratic,
+  generateEvaluateFullQuadratic,
+  generateCombineFunctions,
 } from "../engine/problemGenerator";
 import type { Belt, LocalizedText } from "../types";
 
@@ -1857,6 +1867,11 @@ const equationsDegree = {
   name: { en: "Equations", pt: "Equações", es: "Ecuaciones" } as LocalizedText,
 };
 
+const functionsDegree = {
+  index: 5,
+  name: { en: "Functions", pt: "Funções", es: "Funciones" } as LocalizedText,
+};
+
 const blackBelt: Belt = {
   id: "black",
   name: { en: "Black Belt", pt: "Faixa Preta", es: "Cinturón Negro" },
@@ -3565,6 +3580,521 @@ const blackBelt: Belt = {
       },
       mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 24 },
       generate: generateMultiStepEquation,
+    },
+    {
+      id: "black-41",
+      beltId: "black",
+      index: 1,
+      degree: functionsDegree,
+      title: {
+        en: "What a function means",
+        pt: "O que significa uma função",
+        es: "Qué significa una función",
+      },
+      summary: {
+        en: "A function is a machine — put a number in, a new number comes out.",
+        pt: "Uma função é uma máquina — coloca um número, sai outro número.",
+        es: "Una función es una máquina — metes un número, sale otro número.",
+      },
+      lesson: {
+        intro: {
+          en: "The machine always applies the same rule to whatever goes in. Read the rule, apply it to the input, and find the output.",
+          pt: "A máquina sempre aplica a mesma regra ao que entra. Leia a regra, aplique ao valor de entrada e descubra a saída.",
+          es: "La máquina siempre aplica la misma regla a lo que entra. Lee la regla, aplícala al valor de entrada y descubre la salida.",
+        },
+        example: { id: "ex-black-41", prompt: "", answer: 6, operands: [3, 6] },
+        diagram: { kind: "functionMachine", input: 3, rule: "× 2", output: 6 },
+        steps: [
+          {
+            text: {
+              en: "The machine's rule is × 2 — it doubles whatever goes in.",
+              pt: "A regra da máquina é × 2 — ela dobra o que entra.",
+              es: "La regla de la máquina es × 2 — duplica lo que entra.",
+            },
+          },
+          {
+            text: {
+              en: "Put in 3: 3 × 2 = {{6}}.",
+              pt: "Coloque 3: 3 × 2 = {{6}}.",
+              es: "Mete 3: 3 × 2 = {{6}}.",
+            },
+          },
+          { text: { en: "The output is 6.", pt: "A saída é 6.", es: "La salida es 6." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 10 },
+      generate: generateFunctionMachineReading,
+    },
+    {
+      id: "black-42",
+      beltId: "black",
+      index: 2,
+      degree: functionsDegree,
+      title: {
+        en: "Function notation: evaluating f(x)",
+        pt: "Notação de função: avaliando f(x)",
+        es: "Notación de función: evaluando f(x)",
+      },
+      summary: {
+        en: "f(x) just means \"the output when you put x in.\"",
+        pt: "f(x) só significa \"o resultado quando você coloca x.\"",
+        es: "f(x) solo significa \"el resultado cuando pones x.\"",
+      },
+      lesson: {
+        intro: {
+          en: "f(x) is just a labeled version of the machine from before — replace every x with the given number, then solve like usual.",
+          pt: "f(x) é só uma versão rotulada da máquina de antes — troque cada x pelo número dado e resolva normalmente.",
+          es: "f(x) es solo una versión etiquetada de la máquina de antes — cambia cada x por el número dado y resuelve normalmente.",
+        },
+        example: { id: "ex-black-42", prompt: "f(x) = 3x + 2, find f(4)", answer: 14, operands: [3, 2, 4] },
+        steps: [
+          {
+            text: {
+              en: "Replace x with 4: f(4) = 3 × {{4}} + 2.",
+              pt: "Troque x por 4: f(4) = 3 × {{4}} + 2.",
+              es: "Cambia x por 4: f(4) = 3 × {{4}} + 2.",
+            },
+          },
+          {
+            text: {
+              en: "Multiply: 3 × 4 = {{12}}.",
+              pt: "Multiplique: 3 × 4 = {{12}}.",
+              es: "Multiplica: 3 × 4 = {{12}}.",
+            },
+          },
+          {
+            text: {
+              en: "Add: 12 + 2 = 14. So f(4) = 14.",
+              pt: "Some: 12 + 2 = 14. Então f(4) = 14.",
+              es: "Suma: 12 + 2 = 14. Entonces f(4) = 14.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateEvaluateFunctionPositive,
+    },
+    {
+      id: "black-43",
+      beltId: "black",
+      index: 3,
+      degree: functionsDegree,
+      title: {
+        en: "Evaluating f(x) with negative inputs",
+        pt: "Avaliando f(x) com entradas negativas",
+        es: "Evaluando f(x) con entradas negativas",
+      },
+      summary: {
+        en: "The same rule works no matter what sign x has.",
+        pt: "A mesma regra funciona não importa o sinal de x.",
+        es: "La misma regla funciona sin importar el signo de x.",
+      },
+      lesson: {
+        intro: {
+          en: "Substitute the negative value exactly the same way — just keep careful track of the signs while you multiply and add.",
+          pt: "Substitua o valor negativo do mesmo jeito — só preste atenção nos sinais enquanto multiplica e soma.",
+          es: "Sustituye el valor negativo de la misma manera — solo presta atención a los signos mientras multiplicas y sumas.",
+        },
+        example: { id: "ex-black-43", prompt: "f(x) = 2x + 5, find f(-4)", answer: -3, operands: [2, 5, -4] },
+        steps: [
+          {
+            text: {
+              en: "Replace x with -4: f(-4) = 2 × ({{-4}}) + 5.",
+              pt: "Troque x por -4: f(-4) = 2 × ({{-4}}) + 5.",
+              es: "Cambia x por -4: f(-4) = 2 × ({{-4}}) + 5.",
+            },
+          },
+          {
+            text: {
+              en: "Multiply: 2 × (-4) = -8.",
+              pt: "Multiplique: 2 × (-4) = -8.",
+              es: "Multiplica: 2 × (-4) = -8.",
+            },
+          },
+          {
+            text: {
+              en: "Add: -8 + 5 = -3. So f(-4) = -3.",
+              pt: "Some: -8 + 5 = -3. Então f(-4) = -3.",
+              es: "Suma: -8 + 5 = -3. Entonces f(-4) = -3.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 14 },
+      generate: generateEvaluateFunctionNegative,
+    },
+    {
+      id: "black-44",
+      beltId: "black",
+      index: 4,
+      degree: functionsDegree,
+      title: {
+        en: "What slope means",
+        pt: "O que significa inclinação",
+        es: "Qué significa la pendiente",
+      },
+      summary: {
+        en: "Slope is how steep a line is — rise over run.",
+        pt: "Inclinação é o quão íngreme uma reta é — subida sobre avanço.",
+        es: "La pendiente es qué tan inclinada es una recta — subida sobre avance.",
+      },
+      lesson: {
+        intro: {
+          en: "Count how many steps up the staircase climbs (the rise), and how many steps across it goes (the run). Slope is rise over run.",
+          pt: "Conte quantos degraus a escada sobe (a subida) e quantos ela avança (o avanço). Inclinação é subida sobre avanço.",
+          es: "Cuenta cuántos escalones sube la escalera (la subida) y cuántos avanza (el avance). La pendiente es subida sobre avance.",
+        },
+        example: {
+          id: "ex-black-44",
+          prompt: "",
+          answer: 3,
+          secondaryAnswer: 4,
+          secondaryFormat: "fraction",
+          operands: [3, 4],
+        },
+        diagram: { kind: "slopeStaircase", rise: 3, run: 4 },
+        steps: [
+          {
+            text: {
+              en: "Count the rise (steps up): {{3}}.",
+              pt: "Conte a subida (degraus para cima): {{3}}.",
+              es: "Cuenta la subida (escalones hacia arriba): {{3}}.",
+            },
+          },
+          {
+            text: {
+              en: "Count the run (steps across): 4.",
+              pt: "Conte o avanço (degraus para o lado): 4.",
+              es: "Cuenta el avance (escalones hacia el lado): 4.",
+            },
+          },
+          {
+            text: {
+              en: "Slope = rise/run = 3/4.",
+              pt: "Inclinação = subida/avanço = 3/4.",
+              es: "Pendiente = subida/avance = 3/4.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateSlopeStaircaseReading,
+    },
+    {
+      id: "black-45",
+      beltId: "black",
+      index: 5,
+      degree: functionsDegree,
+      title: {
+        en: "Calculating slope from two points",
+        pt: "Calculando a inclinação a partir de dois pontos",
+        es: "Calculando la pendiente a partir de dos puntos",
+      },
+      summary: {
+        en: "Two points are enough to find the slope between them.",
+        pt: "Dois pontos são suficientes para achar a inclinação entre eles.",
+        es: "Dos puntos son suficientes para hallar la pendiente entre ellos.",
+      },
+      lesson: {
+        intro: {
+          en: "The rise is how much y changes between the two points; the run is how much x changes. Slope is still rise over run.",
+          pt: "A subida é quanto y muda entre os dois pontos; o avanço é quanto x muda. Inclinação continua sendo subida sobre avanço.",
+          es: "La subida es cuánto cambia y entre los dos puntos; el avance es cuánto cambia x. La pendiente sigue siendo subida sobre avance.",
+        },
+        example: {
+          id: "ex-black-45",
+          prompt: "Point A: (1, 2), Point B: (3, 5)",
+          answer: 3,
+          secondaryAnswer: 2,
+          secondaryFormat: "fraction",
+          operands: [1, 2, 3, 5],
+        },
+        steps: [
+          {
+            text: {
+              en: "Find the rise: change in y = 5 - 2 = {{3}}.",
+              pt: "Ache a subida: mudança em y = 5 - 2 = {{3}}.",
+              es: "Halla la subida: cambio en y = 5 - 2 = {{3}}.",
+            },
+          },
+          {
+            text: {
+              en: "Find the run: change in x = 3 - 1 = 2.",
+              pt: "Ache o avanço: mudança em x = 3 - 1 = 2.",
+              es: "Halla el avance: cambio en x = 3 - 1 = 2.",
+            },
+          },
+          {
+            text: {
+              en: "Slope = rise/run = 3/2.",
+              pt: "Inclinação = subida/avanço = 3/2.",
+              es: "Pendiente = subida/avance = 3/2.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 16 },
+      generate: generateSlopeFromTwoPoints,
+    },
+    {
+      id: "black-46",
+      beltId: "black",
+      index: 6,
+      degree: functionsDegree,
+      title: {
+        en: "Finding the y-intercept",
+        pt: "Achando o intercepto em y",
+        es: "Hallando el intercepto en y",
+      },
+      summary: {
+        en: "The y-intercept is just the constant term.",
+        pt: "O intercepto em y é só o termo constante.",
+        es: "El intercepto en y es solo el término constante.",
+      },
+      lesson: {
+        intro: {
+          en: "A line crosses the y-axis exactly where x = 0. For f(x) = ax + b, that's always just b — no calculation needed once you see the pattern.",
+          pt: "Uma reta cruza o eixo y exatamente onde x = 0. Para f(x) = ax + b, isso é sempre só b — sem precisar calcular depois que você vê o padrão.",
+          es: "Una recta cruza el eje y exactamente donde x = 0. Para f(x) = ax + b, eso siempre es solo b — sin necesidad de calcular una vez que ves el patrón.",
+        },
+        example: { id: "ex-black-46", prompt: "f(x) = 3x + 7, find the y-intercept", answer: 7, operands: [3, 7] },
+        steps: [
+          {
+            text: {
+              en: "The y-intercept is where the line crosses the y-axis — that happens when x = 0.",
+              pt: "O intercepto em y é onde a reta cruza o eixo y — isso acontece quando x = 0.",
+              es: "El intercepto en y es donde la recta cruza el eje y — eso pasa cuando x = 0.",
+            },
+          },
+          {
+            text: {
+              en: "f(0) = 3 × 0 + 7 = {{7}}.",
+              pt: "f(0) = 3 × 0 + 7 = {{7}}.",
+              es: "f(0) = 3 × 0 + 7 = {{7}}.",
+            },
+          },
+          {
+            text: {
+              en: "The y-intercept is 7 — it's always just the constant term.",
+              pt: "O intercepto em y é 7 — é sempre só o termo constante.",
+              es: "El intercepto en y es 7 — siempre es solo el término constante.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 10 },
+      generate: generateFindYIntercept,
+    },
+    {
+      id: "black-47",
+      beltId: "black",
+      index: 7,
+      degree: functionsDegree,
+      title: {
+        en: "Finding the x-intercept (the zero)",
+        pt: "Achando o intercepto em x (o zero)",
+        es: "Hallando el intercepto en x (el cero)",
+      },
+      summary: {
+        en: "The zero is where the function crosses the x-axis — solve like any equation.",
+        pt: "O zero é onde a função cruza o eixo x — resolva como qualquer equação.",
+        es: "El cero es donde la función cruza el eje x — resuélvela como cualquier ecuación.",
+      },
+      lesson: {
+        intro: {
+          en: "The x-intercept (or \"zero\") of a function is the input that makes the output 0. That's exactly the same skill as solving an equation from the last belt — just set the function equal to 0 and solve for x.",
+          pt: "O intercepto em x (ou \"zero\") de uma função é a entrada que faz a saída ser 0. É exatamente a mesma habilidade de resolver uma equação da faixa passada — só iguale a função a 0 e resolva para x.",
+          es: "El intercepto en x (o \"cero\") de una función es la entrada que hace que la salida sea 0. Es exactamente la misma habilidad de resolver una ecuación del cinturón anterior — solo iguala la función a 0 y resuelve para x.",
+        },
+        example: { id: "ex-black-47", prompt: "2x - 8 = 0", answer: 4, operands: [2, -8], isEquation: true },
+        steps: [
+          {
+            text: {
+              en: "This is where f(x) = 2x - 8 crosses zero — solve it like any equation.",
+              pt: "É onde f(x) = 2x - 8 cruza o zero — resolva como qualquer equação.",
+              es: "Es donde f(x) = 2x - 8 cruza el cero — resuélvela como cualquier ecuación.",
+            },
+          },
+          {
+            text: {
+              en: "Undo the -8: add 8 to both sides. 0 + 8 = {{8}}.",
+              pt: "Desfaça o -8: some 8 nos dois lados. 0 + 8 = {{8}}.",
+              es: "Deshaz el -8: suma 8 en ambos lados. 0 + 8 = {{8}}.",
+            },
+          },
+          {
+            text: {
+              en: "Now it's 2x = 8. Undo the ×2: 8 ÷ 2 = 4. x = 4.",
+              pt: "Agora é 2x = 8. Desfaça o ×2: 8 ÷ 2 = 4. x = 4.",
+              es: "Ahora es 2x = 8. Deshaz el ×2: 8 ÷ 2 = 4. x = 4.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 16 },
+      generate: generateFindXIntercept,
+    },
+    {
+      id: "black-48",
+      beltId: "black",
+      index: 8,
+      degree: functionsDegree,
+      title: {
+        en: "What a quadratic function means",
+        pt: "O que significa uma função quadrática",
+        es: "Qué significa una función cuadrática",
+      },
+      summary: {
+        en: "Squaring makes negative inputs positive — that's what shapes the U.",
+        pt: "Elevar ao quadrado deixa entradas negativas positivas — é isso que forma o U.",
+        es: "Elevar al cuadrado hace que las entradas negativas sean positivas — eso forma la U.",
+      },
+      lesson: {
+        intro: {
+          en: "In f(x) = x², both a positive and its matching negative input give the same output, since squaring removes the sign. Plotting several inputs traces out a U-shaped curve called a parabola.",
+          pt: "Em f(x) = x², tanto uma entrada positiva quanto a negativa correspondente dão a mesma saída, já que elevar ao quadrado remove o sinal. Marcando várias entradas, forma-se uma curva em U chamada parábola.",
+          es: "En f(x) = x², tanto una entrada positiva como su negativa correspondiente dan la misma salida, ya que elevar al cuadrado quita el signo. Marcando varias entradas, se traza una curva en forma de U llamada parábola.",
+        },
+        example: { id: "ex-black-48", prompt: "f(x) = x², find f(3)", answer: 9, operands: [3] },
+        diagram: {
+          kind: "parabola",
+          points: [
+            { x: -2, y: 4 },
+            { x: -1, y: 1 },
+            { x: 0, y: 0 },
+            { x: 1, y: 1 },
+            { x: 2, y: 4 },
+          ],
+        },
+        steps: [
+          {
+            text: {
+              en: "Squaring a negative number gives a positive result: (-2)² = {{4}}, just like 2² = 4.",
+              pt: "Elevar um número negativo ao quadrado dá um resultado positivo: (-2)² = {{4}}, igual a 2² = 4.",
+              es: "Elevar un número negativo al cuadrado da un resultado positivo: (-2)² = {{4}}, igual que 2² = 4.",
+            },
+          },
+          {
+            text: {
+              en: "That's why the graph curves back up on both sides — it's shaped like a U, called a parabola.",
+              pt: "Por isso o gráfico curva para cima nos dois lados — tem formato de U, chamado de parábola.",
+              es: "Por eso la gráfica se curva hacia arriba en ambos lados — tiene forma de U, llamada parábola.",
+            },
+          },
+          {
+            text: {
+              en: "f(3) = 3² = 9.",
+              pt: "f(3) = 3² = 9.",
+              es: "f(3) = 3² = 9.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateEvaluateBasicQuadratic,
+    },
+    {
+      id: "black-49",
+      beltId: "black",
+      index: 9,
+      degree: functionsDegree,
+      title: {
+        en: "Evaluating quadratic functions",
+        pt: "Avaliando funções quadráticas",
+        es: "Evaluando funciones cuadráticas",
+      },
+      summary: {
+        en: "Square first, then multiply, then add — order of operations still applies.",
+        pt: "Eleve ao quadrado primeiro, depois multiplique, depois some — a ordem das operações continua valendo.",
+        es: "Eleva al cuadrado primero, luego multiplica, luego suma — el orden de las operaciones sigue aplicando.",
+      },
+      lesson: {
+        intro: {
+          en: "A full quadratic has three parts — a squared term, an x term, and a constant. Substitute, then work through order of operations just like any other expression.",
+          pt: "Uma quadrática completa tem três partes — um termo ao quadrado, um termo com x, e uma constante. Substitua e siga a ordem das operações como em qualquer expressão.",
+          es: "Una cuadrática completa tiene tres partes — un término al cuadrado, un término con x, y una constante. Sustituye y sigue el orden de las operaciones como en cualquier expresión.",
+        },
+        example: { id: "ex-black-49", prompt: "f(x) = x² + 3x - 4, find f(2)", answer: 6, operands: [3, -4, 2] },
+        steps: [
+          {
+            text: {
+              en: "Replace x with 2: f(2) = 2² + 3 × 2 - 4.",
+              pt: "Troque x por 2: f(2) = 2² + 3 × 2 - 4.",
+              es: "Cambia x por 2: f(2) = 2² + 3 × 2 - 4.",
+            },
+          },
+          {
+            text: {
+              en: "Square first: 2² = {{4}}. Then multiply: 3 × 2 = 6.",
+              pt: "Eleve ao quadrado primeiro: 2² = {{4}}. Depois multiplique: 3 × 2 = 6.",
+              es: "Eleva al cuadrado primero: 2² = {{4}}. Luego multiplica: 3 × 2 = 6.",
+            },
+          },
+          {
+            text: {
+              en: "Add it up: 4 + 6 - 4 = 6.",
+              pt: "Some tudo: 4 + 6 - 4 = 6.",
+              es: "Suma todo: 4 + 6 - 4 = 6.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 18 },
+      generate: generateEvaluateFullQuadratic,
+    },
+    {
+      id: "black-50",
+      beltId: "black",
+      index: 10,
+      degree: functionsDegree,
+      title: {
+        en: "Combining two functions",
+        pt: "Combinando duas funções",
+        es: "Combinando dos funciones",
+      },
+      summary: {
+        en: "Evaluate each function separately, then add the results — every Functions skill in one problem.",
+        pt: "Avalie cada função separadamente, depois some os resultados — todas as habilidades de Funções em um problema.",
+        es: "Evalúa cada función por separado, luego suma los resultados — todas las habilidades de Funciones en un problema.",
+      },
+      lesson: {
+        intro: {
+          en: "f and g are two different machines. Run the same input through each one separately, then combine the outputs — this pulls together linear and quadratic evaluation from this whole degree.",
+          pt: "f e g são duas máquinas diferentes. Passe a mesma entrada por cada uma separadamente, depois combine as saídas — isso reúne avaliação linear e quadrática de toda essa faixa.",
+          es: "f y g son dos máquinas diferentes. Pasa la misma entrada por cada una por separado, luego combina las salidas — esto reúne evaluación lineal y cuadrática de todo este cinturón.",
+        },
+        example: {
+          id: "ex-black-50",
+          prompt: "f(x) = 2x + 1 and g(x) = x² - 3. Find f(3) + g(3).",
+          answer: 13,
+          operands: [2, 1, -3, 3],
+        },
+        steps: [
+          {
+            text: {
+              en: "Evaluate f(3): f(3) = 2 × 3 + 1 = {{7}}.",
+              pt: "Avalie f(3): f(3) = 2 × 3 + 1 = {{7}}.",
+              es: "Evalúa f(3): f(3) = 2 × 3 + 1 = {{7}}.",
+            },
+          },
+          {
+            text: {
+              en: "Evaluate g(3): g(3) = 3² - 3 = 9 - 3 = 6.",
+              pt: "Avalie g(3): g(3) = 3² - 3 = 9 - 3 = 6.",
+              es: "Evalúa g(3): g(3) = 3² - 3 = 9 - 3 = 6.",
+            },
+          },
+          {
+            text: {
+              en: "Add the results: 7 + 6 = 13.",
+              pt: "Some os resultados: 7 + 6 = 13.",
+              es: "Suma los resultados: 7 + 6 = 13.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 24 },
+      generate: generateCombineFunctions,
     },
   ],
 };

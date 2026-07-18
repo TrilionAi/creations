@@ -8,6 +8,9 @@ import { NumberLineDiagram } from "../components/NumberLineDiagram";
 import { FractionDiagram } from "../components/FractionDiagram";
 import { VariableBoxDiagram } from "../components/VariableBoxDiagram";
 import { BalanceScaleDiagram } from "../components/BalanceScaleDiagram";
+import { FunctionMachineDiagram } from "../components/FunctionMachineDiagram";
+import { SlopeStaircaseDiagram } from "../components/SlopeStaircaseDiagram";
+import { ParabolaDiagram } from "../components/ParabolaDiagram";
 import { useLocale } from "../i18n/LocaleContext";
 import { UI_STRINGS } from "../i18n/ui";
 import styles from "./DrillScreen.module.css";
@@ -255,6 +258,17 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
                   {current.diagram.kind === "balanceScale" && (
                     <BalanceScaleDiagram leftUnits={current.diagram.leftUnits} rightUnits={current.diagram.rightUnits} />
                   )}
+                  {current.diagram.kind === "functionMachine" && (
+                    <FunctionMachineDiagram
+                      input={current.diagram.input}
+                      rule={current.diagram.rule}
+                      output={current.diagram.output}
+                    />
+                  )}
+                  {current.diagram.kind === "slopeStaircase" && (
+                    <SlopeStaircaseDiagram rise={current.diagram.rise} run={current.diagram.run} />
+                  )}
+                  {current.diagram.kind === "parabola" && <ParabolaDiagram points={current.diagram.points} />}
                 </div>
               )}
               <div className={styles.equalsRow}>
