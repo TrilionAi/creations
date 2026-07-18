@@ -1,8 +1,14 @@
 import {
   generateAddWithin10,
   generateAddWithin20,
+  generateThreeAddends,
+  generateTwoDigitPlusOneNoCarry,
+  generateTwoDigitPlusOneWithCarry,
   generateTwoDigitNoCarry,
   generateTwoDigitWithCarry,
+  generateThreeDigitNoCarry,
+  generateThreeDigitSingleCarry,
+  generateThreeDigitDoubleCarry,
 } from "../engine/problemGenerator";
 import type { Belt } from "../types";
 
@@ -105,6 +111,128 @@ const whiteBelt: Belt = {
       id: "white-3",
       beltId: "white",
       index: 3,
+      title: { en: "Adding three numbers", pt: "Somar três números", es: "Sumar tres números" },
+      summary: {
+        en: "Chain two additions together to combine three numbers.",
+        pt: "Encadeie duas somas para juntar três números.",
+        es: "Encadena dos sumas para juntar tres números.",
+      },
+      lesson: {
+        intro: {
+          en: "Add the first two numbers, then add the third to that total.",
+          pt: "Some os dois primeiros números, depois some o terceiro a esse total.",
+          es: "Suma los dos primeros números, luego suma el tercero a ese total.",
+        },
+        example: { id: "ex-white-3", prompt: "3 + 4 + 2", answer: 9, operands: [3, 4, 2] },
+        steps: [
+          {
+            text: {
+              en: "Add the first two: 3 + 4 = 7.",
+              pt: "Some os dois primeiros: 3 + 4 = 7.",
+              es: "Suma los dos primeros: 3 + 4 = 7.",
+            },
+          },
+          {
+            text: {
+              en: "Add the third to that: 7 + 2 = 9.",
+              pt: "Some o terceiro a esse total: 7 + 2 = 9.",
+              es: "Suma el tercero a ese total: 7 + 2 = 9.",
+            },
+          },
+          { text: { en: "3 + 4 + 2 = 9.", pt: "3 + 4 + 2 = 9.", es: "3 + 4 + 2 = 9." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 5, passAccuracy: 0.8, targetTimeSec: 8 },
+      generate: generateThreeAddends,
+    },
+    {
+      id: "white-4",
+      beltId: "white",
+      index: 4,
+      title: {
+        en: "Two-digit + one-digit, no carrying",
+        pt: "Dois dígitos + um dígito, sem 'vai um'",
+        es: "Dos dígitos + un dígito, sin llevar",
+      },
+      summary: {
+        en: "Add the single digit straight onto the units — the tens don't move.",
+        pt: "Some o dígito único direto nas unidades — a dezena não muda.",
+        es: "Suma el dígito único directo en las unidades — la decena no cambia.",
+      },
+      lesson: {
+        intro: {
+          en: "Only the units column changes. Add the small number there and keep the tens digit the same.",
+          pt: "Só a coluna das unidades muda. Some o número pequeno ali e mantenha a dezena igual.",
+          es: "Solo la columna de las unidades cambia. Suma el número pequeño ahí y mantén la decena igual.",
+        },
+        example: { id: "ex-white-4", prompt: "34 + 5", answer: 39, operands: [34, 5] },
+        steps: [
+          {
+            text: {
+              en: "Add to the units: 4 + 5 = 9.",
+              pt: "Some nas unidades: 4 + 5 = 9.",
+              es: "Suma en las unidades: 4 + 5 = 9.",
+            },
+          },
+          {
+            text: {
+              en: "The tens digit stays: 3.",
+              pt: "A dezena continua: 3.",
+              es: "La decena se mantiene: 3.",
+            },
+          },
+          { text: { en: "34 + 5 = 39.", pt: "34 + 5 = 39.", es: "34 + 5 = 39." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 5, passAccuracy: 0.8, targetTimeSec: 8 },
+      generate: generateTwoDigitPlusOneNoCarry,
+    },
+    {
+      id: "white-5",
+      beltId: "white",
+      index: 5,
+      title: {
+        en: "Two-digit + one-digit, with carrying",
+        pt: "Dois dígitos + um dígito, com 'vai um'",
+        es: "Dos dígitos + un dígito, llevando",
+      },
+      summary: {
+        en: "When the units overflow 9, carry the 1 into the tens.",
+        pt: "Quando as unidades passam de 9, o 1 vai para a dezena.",
+        es: "Cuando las unidades pasan de 9, el 1 se lleva a la decena.",
+      },
+      lesson: {
+        intro: {
+          en: "Add the units first. If it's 10 or more, carry the 1 into the tens digit.",
+          pt: "Some as unidades primeiro. Se der 10 ou mais, leve o 1 para a dezena.",
+          es: "Suma las unidades primero. Si da 10 o más, lleva el 1 a la decena.",
+        },
+        example: { id: "ex-white-5", prompt: "38 + 5", answer: 43, operands: [38, 5] },
+        steps: [
+          {
+            text: {
+              en: "Add the units: 8 + 5 = 13. Write the 3, carry the 1.",
+              pt: "Some as unidades: 8 + 5 = 13. Escreva o 3 e leve o 1.",
+              es: "Suma las unidades: 8 + 5 = 13. Escribe el 3 y lleva el 1.",
+            },
+          },
+          {
+            text: {
+              en: "Add the carried 1 to the tens: 3 + 1 = 4.",
+              pt: "Some o 1 que veio à dezena: 3 + 1 = 4.",
+              es: "Suma el 1 que llevaste a la decena: 3 + 1 = 4.",
+            },
+          },
+          { text: { en: "38 + 5 = 43.", pt: "38 + 5 = 43.", es: "38 + 5 = 43." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 10 },
+      generate: generateTwoDigitPlusOneWithCarry,
+    },
+    {
+      id: "white-6",
+      beltId: "white",
+      index: 6,
       title: {
         en: "Two digits, no carrying",
         pt: "Dois dígitos, sem 'vai um'",
@@ -121,7 +249,7 @@ const whiteBelt: Belt = {
           pt: "Alinhe as dezenas e unidades, depois some cada coluna separadamente.",
           es: "Alinea las decenas y unidades, luego suma cada columna por separado.",
         },
-        example: { id: "ex-white-3", prompt: "34 + 25", answer: 59, operands: [34, 25] },
+        example: { id: "ex-white-6", prompt: "34 + 25", answer: 59, operands: [34, 25] },
         steps: [
           {
             text: {
@@ -150,9 +278,9 @@ const whiteBelt: Belt = {
       generate: generateTwoDigitNoCarry,
     },
     {
-      id: "white-4",
+      id: "white-7",
       beltId: "white",
-      index: 4,
+      index: 7,
       title: {
         en: "Two digits, with carrying",
         pt: "Dois dígitos, com 'vai um'",
@@ -169,7 +297,7 @@ const whiteBelt: Belt = {
           pt: "Quando as unidades somam 10 ou mais, leve o 1 extra para a coluna das dezenas.",
           es: "Cuando las unidades suman 10 o más, lleva el 1 extra a la columna de las decenas.",
         },
-        example: { id: "ex-white-4", prompt: "27 + 46", answer: 73, operands: [27, 46] },
+        example: { id: "ex-white-7", prompt: "27 + 46", answer: 73, operands: [27, 46] },
         steps: [
           {
             text: {
@@ -190,6 +318,149 @@ const whiteBelt: Belt = {
       },
       mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 15 },
       generate: generateTwoDigitWithCarry,
+    },
+    {
+      id: "white-8",
+      beltId: "white",
+      index: 8,
+      title: {
+        en: "Three digits, no carrying",
+        pt: "Três dígitos, sem 'vai um'",
+        es: "Tres dígitos, sin llevar",
+      },
+      summary: {
+        en: "Same column method, one more column: hundreds, tens, units.",
+        pt: "Mesmo método das colunas, só mais uma: centena, dezena, unidade.",
+        es: "Mismo método de columnas, una más: centena, decena, unidad.",
+      },
+      lesson: {
+        intro: {
+          en: "Line up hundreds, tens and units, then add each column on its own — just like before, with one extra column.",
+          pt: "Alinhe centenas, dezenas e unidades, depois some cada coluna separadamente — igual antes, com mais uma coluna.",
+          es: "Alinea centenas, decenas y unidades, luego suma cada columna por separado — igual que antes, con una columna más.",
+        },
+        example: { id: "ex-white-8", prompt: "213 + 154", answer: 367, operands: [213, 154] },
+        steps: [
+          {
+            text: {
+              en: "Add the units: 3 + 4 = 7.",
+              pt: "Some as unidades: 3 + 4 = 7.",
+              es: "Suma las unidades: 3 + 4 = 7.",
+            },
+          },
+          {
+            text: {
+              en: "Add the tens: 1 + 5 = 6.",
+              pt: "Some as dezenas: 1 + 5 = 6.",
+              es: "Suma las decenas: 1 + 5 = 6.",
+            },
+          },
+          {
+            text: {
+              en: "Add the hundreds: 2 + 1 = 3.",
+              pt: "Some as centenas: 2 + 1 = 3.",
+              es: "Suma las centenas: 2 + 1 = 3.",
+            },
+          },
+          { text: { en: "213 + 154 = 367.", pt: "213 + 154 = 367.", es: "213 + 154 = 367." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 16 },
+      generate: generateThreeDigitNoCarry,
+    },
+    {
+      id: "white-9",
+      beltId: "white",
+      index: 9,
+      title: { en: "Three digits, one carry", pt: "Três dígitos, um 'vai um'", es: "Tres dígitos, un acarreo" },
+      summary: {
+        en: "The carry moves one column over, same as always.",
+        pt: "O 'vai um' passa para a próxima coluna, como sempre.",
+        es: "El acarreo pasa a la siguiente columna, como siempre.",
+      },
+      lesson: {
+        intro: {
+          en: "Work column by column. If units carry into tens, add that 1 in before moving to hundreds.",
+          pt: "Trabalhe coluna por coluna. Se as unidades gerarem 'vai um', some esse 1 antes de ir para as centenas.",
+          es: "Trabaja columna por columna. Si las unidades generan acarreo, súmalo antes de pasar a las centenas.",
+        },
+        example: { id: "ex-white-9", prompt: "217 + 156", answer: 373, operands: [217, 156] },
+        steps: [
+          {
+            text: {
+              en: "Add the units: 7 + 6 = 13. Write the 3, carry the 1.",
+              pt: "Some as unidades: 7 + 6 = 13. Escreva o 3 e leve o 1.",
+              es: "Suma las unidades: 7 + 6 = 13. Escribe el 3 y lleva el 1.",
+            },
+          },
+          {
+            text: {
+              en: "Add the tens plus the carry: 1 + 5 + 1 = 7.",
+              pt: "Some as dezenas mais o que veio: 1 + 5 + 1 = 7.",
+              es: "Suma las decenas más el acarreo: 1 + 5 + 1 = 7.",
+            },
+          },
+          {
+            text: {
+              en: "Add the hundreds: 2 + 1 = 3.",
+              pt: "Some as centenas: 2 + 1 = 3.",
+              es: "Suma las centenas: 2 + 1 = 3.",
+            },
+          },
+          { text: { en: "217 + 156 = 373.", pt: "217 + 156 = 373.", es: "217 + 156 = 373." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 20 },
+      generate: generateThreeDigitSingleCarry,
+    },
+    {
+      id: "white-10",
+      beltId: "white",
+      index: 10,
+      title: {
+        en: "Three digits, double carry",
+        pt: "Três dígitos, 'vai um' duplo",
+        es: "Tres dígitos, doble acarreo",
+      },
+      summary: {
+        en: "The carry can cascade — units into tens, and tens into hundreds.",
+        pt: "O 'vai um' pode se repetir — das unidades pra dezena, e da dezena pra centena.",
+        es: "El acarreo puede repetirse — de las unidades a las decenas, y de las decenas a las centenas.",
+      },
+      lesson: {
+        intro: {
+          en: "Sometimes one carry triggers another. Work column by column and carry every time a column passes 9.",
+          pt: "Às vezes um 'vai um' gera outro. Trabalhe coluna por coluna e leve o 1 sempre que uma coluna passar de 9.",
+          es: "A veces un acarreo genera otro. Trabaja columna por columna y lleva el 1 cada vez que una columna pase de 9.",
+        },
+        example: { id: "ex-white-10", prompt: "587 + 368", answer: 955, operands: [587, 368] },
+        steps: [
+          {
+            text: {
+              en: "Add the units: 7 + 8 = 15. Write the 5, carry the 1.",
+              pt: "Some as unidades: 7 + 8 = 15. Escreva o 5 e leve o 1.",
+              es: "Suma las unidades: 7 + 8 = 15. Escribe el 5 y lleva el 1.",
+            },
+          },
+          {
+            text: {
+              en: "Add the tens plus the carry: 8 + 6 + 1 = 15. Write the 5, carry the 1 again.",
+              pt: "Some as dezenas mais o que veio: 8 + 6 + 1 = 15. Escreva o 5 e leve o 1 de novo.",
+              es: "Suma las decenas más el acarreo: 8 + 6 + 1 = 15. Escribe el 5 y lleva el 1 de nuevo.",
+            },
+          },
+          {
+            text: {
+              en: "Add the hundreds plus the carry: 5 + 3 + 1 = 9.",
+              pt: "Some as centenas mais o que veio: 5 + 3 + 1 = 9.",
+              es: "Suma las centenas más el acarreo: 5 + 3 + 1 = 9.",
+            },
+          },
+          { text: { en: "587 + 368 = 955.", pt: "587 + 368 = 955.", es: "587 + 368 = 955." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 24 },
+      generate: generateThreeDigitDoubleCarry,
     },
   ],
 };

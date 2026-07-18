@@ -93,18 +93,19 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
       setSolvedCount(newSolved);
       const justFinishedPage = newSolved % problemsPerPage === 0;
       const isLastProblem = newSolved === totalCount;
-      const delay = justFinishedPage && !isLastProblem ? 1500 : 450;
-      if (justFinishedPage && !isLastProblem) {
-        setPageBreak(newSolved / problemsPerPage);
-      }
+      const pageJustCompleted = justFinishedPage && !isLastProblem ? newSolved / problemsPerPage : null;
 
       window.setTimeout(() => {
         setQueue((q) => q.slice(1));
         setInput("");
         setFeedback(null);
-        setPageBreak(null);
-        lockRef.current = false;
-      }, delay);
+        if (pageJustCompleted !== null) {
+          // hold here — lockRef stays true until the person taps continue
+          setPageBreak(pageJustCompleted);
+        } else {
+          lockRef.current = false;
+        }
+      }, 450);
     } else {
       record.mistakeCount += 1;
       setFeedback("incorrect");
@@ -120,11 +121,24 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
     }
   }
 
+  function handleContinuePage() {
+    setPageBreak(null);
+    lockRef.current = false;
+  }
+
   const submitRef = useRef(handleSubmit);
   submitRef.current = handleSubmit;
+  const continueRef = useRef(handleContinuePage);
+  continueRef.current = handleContinuePage;
+  const pageBreakRef = useRef(pageBreak);
+  pageBreakRef.current = pageBreak;
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
+      if (pageBreakRef.current !== null) {
+        if (e.key === "Enter" || e.key === " ") continueRef.current();
+        return;
+      }
       if (e.key >= "0" && e.key <= "9") {
         setInput((v) => (v.length < 6 ? v + e.key : v));
       } else if (e.key === "Backspace") {
@@ -160,6 +174,9 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
           <div className={styles.pageBreakCard}>
             <div className={styles.pageBreakEmoji}>📖</div>
             <div className={styles.pageBreakText}>{t.pageComplete(pageBreak, pagesToMaster)}</div>
+            <button type="button" className={styles.pageBreakCta} onClick={handleContinuePage}>
+              {t.continue}
+            </button>
           </div>
         ) : (
           <>
