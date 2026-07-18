@@ -7,6 +7,7 @@ import { GroupDiagram } from "../components/GroupDiagram";
 import { NumberLineDiagram } from "../components/NumberLineDiagram";
 import { FractionDiagram } from "../components/FractionDiagram";
 import { VariableBoxDiagram } from "../components/VariableBoxDiagram";
+import { BalanceScaleDiagram } from "../components/BalanceScaleDiagram";
 import { useLocale } from "../i18n/LocaleContext";
 import { UI_STRINGS } from "../i18n/ui";
 import styles from "./DrillScreen.module.css";
@@ -251,10 +252,13 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
                   {current.diagram.kind === "variableBox" && (
                     <VariableBoxDiagram xValue={current.diagram.xValue} units={current.diagram.units} />
                   )}
+                  {current.diagram.kind === "balanceScale" && (
+                    <BalanceScaleDiagram leftUnits={current.diagram.leftUnits} rightUnits={current.diagram.rightUnits} />
+                  )}
                 </div>
               )}
               <div className={styles.equalsRow}>
-                <span className={styles.equalsSign}>=</span>
+                <span className={styles.equalsSign}>{current.isEquation ? "x =" : "="}</span>
                 {isFraction ? (
                   <div className={styles.fractionAnswer}>
                     <button

@@ -928,8 +928,8 @@ export function generateCombiningLikeTerms(count: number): Problem[] {
   return withoutImmediateRepeats(count, () => {
     const sign1 = Math.random() < 0.5 ? 1 : -1;
     const sign2 = Math.random() < 0.5 ? 1 : -1;
-    const c1 = sign1 * randomInt(1, 9);
-    const c2 = sign2 * randomInt(1, 9);
+    const c1 = sign1 * randomInt(2, 9);
+    const c2 = sign2 * randomInt(2, 9);
     const operator = c2 >= 0 ? "+" : "−";
     const magnitude = Math.abs(c2);
     return {
@@ -977,6 +977,220 @@ export function generateMultiStepExpression(count: number): Problem[] {
       answer,
       operands: [a, b, c, xVal],
       allowNegative: true,
+    };
+  });
+}
+
+/** Reads a balanced scale — x plus leftUnits on one pan, rightUnits on the other —
+ * and figures out what x must be to keep it level. */
+export function generateBalanceScaleReading(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const leftUnits = randomInt(1, 8);
+    const rightUnits = randomInt(leftUnits + 1, 9);
+    return {
+      id: nextId(),
+      prompt: "",
+      answer: rightUnits - leftUnits,
+      operands: [leftUnits, rightUnits],
+      diagram: { kind: "balanceScale" as const, leftUnits, rightUnits },
+    };
+  });
+}
+
+/** One-step equations: "x + a = b" or "x - a = b" — undo with the opposite operation. */
+export function generateOneStepAddSub(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const useAddition = Math.random() < 0.5;
+    if (useAddition) {
+      const a = randomInt(1, 9);
+      const xVal = randomInt(1, 9);
+      const b = xVal + a;
+      return { id: nextId(), prompt: `x + ${a} = ${b}`, answer: xVal, operands: [a, b], isEquation: true };
+    }
+    const xVal = randomInt(2, 9);
+    const a = randomInt(1, xVal - 1);
+    const b = xVal - a;
+    return { id: nextId(), prompt: `x - ${a} = ${b}`, answer: xVal, operands: [a, b], isEquation: true };
+  });
+}
+
+/** One-step equations: "ax = b" or "x ÷ a = b" — undo with the opposite operation. */
+export function generateOneStepMulDiv(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const useMultiplication = Math.random() < 0.5;
+    const a = randomInt(2, 9);
+    if (useMultiplication) {
+      const xVal = randomInt(2, 9);
+      const b = a * xVal;
+      return { id: nextId(), prompt: `${a}x = ${b}`, answer: xVal, operands: [a, b], isEquation: true };
+    }
+    const quotient = randomInt(2, 9);
+    const xVal = a * quotient;
+    return {
+      id: nextId(),
+      prompt: `x ÷ ${a} = ${quotient}`,
+      answer: xVal,
+      operands: [a, quotient],
+      isEquation: true,
+    };
+  });
+}
+
+/** Two-step equations: "ax + b = c" or "ax - b = c" — undo +/- first, then ×/÷. */
+export function generateTwoStepEquation(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const useSubtraction = Math.random() < 0.5;
+    const a = randomInt(2, 9);
+    const xVal = randomInt(1, 9);
+    if (useSubtraction) {
+      const b = randomInt(1, a * xVal - 1);
+      const c = a * xVal - b;
+      return {
+        id: nextId(),
+        prompt: `${a}x - ${b} = ${c}`,
+        answer: xVal,
+        operands: [a, b, c],
+        isEquation: true,
+      };
+    }
+    const b = randomInt(0, 9);
+    const c = a * xVal + b;
+    return { id: nextId(), prompt: `${a}x + ${b} = ${c}`, answer: xVal, operands: [a, b, c], isEquation: true };
+  });
+}
+
+/** Two-step equations whose solution lands below zero — same technique, negative answer. */
+export function generateEquationNegativeSolution(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 9);
+    const xVal = randomInt(-9, -1);
+    const b = randomInt(0, 9);
+    const c = a * xVal + b;
+    return {
+      id: nextId(),
+      prompt: `${a}x + ${b} = ${c}`,
+      answer: xVal,
+      operands: [a, b, c],
+      allowNegative: true,
+      isEquation: true,
+    };
+  });
+}
+
+/** Variables on both sides: "ax + b = cx + d" — gather the x-terms first. */
+export function generateVariableBothSides(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(3, 6);
+    let c = randomInt(2, 6);
+    while (c === a) c = randomInt(2, 6);
+    const b = randomInt(0, 6);
+    const xVal = randomInt(-6, 6);
+    const d = (a - c) * xVal + b;
+    const dOperator = d >= 0 ? "+" : "−";
+    return {
+      id: nextId(),
+      prompt: `${a}x + ${b} = ${c}x ${dOperator} ${Math.abs(d)}`,
+      answer: xVal,
+      operands: [a, b, c, d],
+      allowNegative: true,
+      isEquation: true,
+    };
+  });
+}
+
+/** Equations with distribution: "a(x + b) = c" or "a(x - b) = c" — distribute first. */
+export function generateEquationWithDistribution(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 9);
+    const b = randomInt(1, 9);
+    const xVal = randomInt(-9, 9);
+    const useSubtraction = Math.random() < 0.5;
+    const inner = useSubtraction ? xVal - b : xVal + b;
+    const c = a * inner;
+    return {
+      id: nextId(),
+      prompt: `${a}(x ${useSubtraction ? "−" : "+"} ${b}) = ${c}`,
+      answer: xVal,
+      operands: [a, b, c],
+      allowNegative: true,
+      isEquation: true,
+    };
+  });
+}
+
+/** Combine the x-terms first: "ax + bx + c = d" or "ax - bx + c = d". */
+export function generateCombineLikeTermsFirst(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const useSubtraction = Math.random() < 0.5;
+    const xVal = randomInt(-9, 9);
+    const constant = randomInt(0, 9);
+    if (useSubtraction) {
+      const c1 = randomInt(3, 9);
+      const c2 = randomInt(2, c1 - 1);
+      const d = (c1 - c2) * xVal + constant;
+      return {
+        id: nextId(),
+        prompt: `${c1}x - ${c2}x + ${constant} = ${d}`,
+        answer: xVal,
+        operands: [c1, c2, constant, d],
+        allowNegative: true,
+      isEquation: true,
+      };
+    }
+    const c1 = randomInt(2, 6);
+    const c2 = randomInt(2, 6);
+    const d = (c1 + c2) * xVal + constant;
+    return {
+      id: nextId(),
+      prompt: `${c1}x + ${c2}x + ${constant} = ${d}`,
+      answer: xVal,
+      operands: [c1, c2, constant, d],
+      allowNegative: true,
+      isEquation: true,
+    };
+  });
+}
+
+/** Distribute, then gather x-terms from both sides: "a(x + b) = cx + d". */
+export function generateDistributionBothSides(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 6);
+    let c = randomInt(2, 6);
+    while (c === a) c = randomInt(2, 6);
+    const b = randomInt(1, 6);
+    const xVal = randomInt(-6, 6);
+    const d = (a - c) * xVal + a * b;
+    const dOperator = d >= 0 ? "+" : "−";
+    return {
+      id: nextId(),
+      prompt: `${a}(x + ${b}) = ${c}x ${dOperator} ${Math.abs(d)}`,
+      answer: xVal,
+      operands: [a, b, c, d],
+      allowNegative: true,
+      isEquation: true,
+    };
+  });
+}
+
+/** Multi-step: distribute, subtract a constant, gather x-terms from both sides —
+ * the capstone, synthesizing every earlier Equations stripe. */
+export function generateMultiStepEquation(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 6);
+    const b = randomInt(1, 6);
+    const e = randomInt(1, 9);
+    let c = randomInt(2, 6);
+    while (c === a) c = randomInt(2, 6);
+    const xVal = randomInt(-6, 6);
+    const d = (a - c) * xVal + a * b - e;
+    const dOperator = d >= 0 ? "+" : "−";
+    return {
+      id: nextId(),
+      prompt: `${a}(x + ${b}) - ${e} = ${c}x ${dOperator} ${Math.abs(d)}`,
+      answer: xVal,
+      operands: [a, b, e, c, d],
+      allowNegative: true,
+      isEquation: true,
     };
   });
 }

@@ -69,6 +69,16 @@ import {
   generateCombiningLikeTerms,
   generateDistributiveProperty,
   generateMultiStepExpression,
+  generateBalanceScaleReading,
+  generateOneStepAddSub,
+  generateOneStepMulDiv,
+  generateTwoStepEquation,
+  generateEquationNegativeSolution,
+  generateVariableBothSides,
+  generateEquationWithDistribution,
+  generateCombineLikeTermsFirst,
+  generateDistributionBothSides,
+  generateMultiStepEquation,
 } from "../engine/problemGenerator";
 import type { Belt, LocalizedText } from "../types";
 
@@ -1842,6 +1852,11 @@ const algebraDegree = {
   name: { en: "Algebra", pt: "Álgebra", es: "Álgebra" } as LocalizedText,
 };
 
+const equationsDegree = {
+  index: 4,
+  name: { en: "Equations", pt: "Equações", es: "Ecuaciones" } as LocalizedText,
+};
+
 const blackBelt: Belt = {
   id: "black",
   name: { en: "Black Belt", pt: "Faixa Preta", es: "Cinturón Negro" },
@@ -3091,6 +3106,465 @@ const blackBelt: Belt = {
       },
       mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 20 },
       generate: generateMultiStepExpression,
+    },
+    {
+      id: "black-31",
+      beltId: "black",
+      index: 1,
+      degree: equationsDegree,
+      title: {
+        en: "What an equation means",
+        pt: "O que significa uma equação",
+        es: "Qué significa una ecuación",
+      },
+      summary: {
+        en: "An equation is a balance — both sides must stay equal.",
+        pt: "Uma equação é uma balança — os dois lados têm que ficar iguais.",
+        es: "Una ecuación es una balanza — los dos lados deben quedar iguales.",
+      },
+      lesson: {
+        intro: {
+          en: "The scale is level because both sides weigh the same. Figure out what x must be to keep it balanced.",
+          pt: "A balança está nivelada porque os dois lados pesam o mesmo. Descubra quanto x precisa valer para manter o equilíbrio.",
+          es: "La balanza está nivelada porque los dos lados pesan lo mismo. Descubre cuánto debe valer x para mantener el equilibrio.",
+        },
+        example: { id: "ex-black-31", prompt: "", answer: 4, operands: [2, 6] },
+        diagram: { kind: "balanceScale", leftUnits: 2, rightUnits: 6 },
+        steps: [
+          {
+            text: {
+              en: "The left side has x plus {{2}} units. The right side has 6 units.",
+              pt: "O lado esquerdo tem x mais {{2}} unidades. O lado direito tem 6 unidades.",
+              es: "El lado izquierdo tiene x más {{2}} unidades. El lado derecho tiene 6 unidades.",
+            },
+          },
+          {
+            text: {
+              en: "For the scale to balance, x must make up the difference: 6 - 2 = {{4}}.",
+              pt: "Para a balança ficar equilibrada, x precisa cobrir a diferença: 6 - 2 = {{4}}.",
+              es: "Para que la balanza quede equilibrada, x debe cubrir la diferencia: 6 - 2 = {{4}}.",
+            },
+          },
+          {
+            text: {
+              en: "x = 4, since 4 + 2 = 6.",
+              pt: "x = 4, pois 4 + 2 = 6.",
+              es: "x = 4, porque 4 + 2 = 6.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 10 },
+      generate: generateBalanceScaleReading,
+    },
+    {
+      id: "black-32",
+      beltId: "black",
+      index: 2,
+      degree: equationsDegree,
+      title: {
+        en: "One-step equations: addition and subtraction",
+        pt: "Equações de um passo: soma e subtração",
+        es: "Ecuaciones de un paso: suma y resta",
+      },
+      summary: {
+        en: "Undo the operation — subtract what's added, add what's subtracted.",
+        pt: "Desfaça a operação — subtraia o que foi somado, some o que foi subtraído.",
+        es: "Deshaz la operación — resta lo que se sumó, suma lo que se restó.",
+      },
+      lesson: {
+        intro: {
+          en: "Whatever was done to x, do the opposite to both sides to get x alone.",
+          pt: "O que foi feito com x, faça o oposto nos dois lados para deixar x sozinho.",
+          es: "Lo que se le hizo a x, haz lo opuesto en ambos lados para dejar a x solo.",
+        },
+        example: { id: "ex-black-32", prompt: "x + 5 = 12", answer: 7, operands: [5, 12], isEquation: true },
+        steps: [
+          {
+            text: {
+              en: "x has 5 added to it. Do the opposite: subtract 5 from both sides.",
+              pt: "x tem 5 somado a ele. Faça o oposto: subtraia 5 dos dois lados.",
+              es: "A x se le suma 5. Haz lo opuesto: resta 5 de ambos lados.",
+            },
+          },
+          {
+            text: { en: "12 - 5 = {{7}}.", pt: "12 - 5 = {{7}}.", es: "12 - 5 = {{7}}." },
+          },
+          { text: { en: "x = 7.", pt: "x = 7.", es: "x = 7." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateOneStepAddSub,
+    },
+    {
+      id: "black-33",
+      beltId: "black",
+      index: 3,
+      degree: equationsDegree,
+      title: {
+        en: "One-step equations: multiplication and division",
+        pt: "Equações de um passo: multiplicação e divisão",
+        es: "Ecuaciones de un paso: multiplicación y división",
+      },
+      summary: {
+        en: "Undo multiplication with division, and division with multiplication.",
+        pt: "Desfaça a multiplicação com divisão, e a divisão com multiplicação.",
+        es: "Deshaz la multiplicación con división, y la división con multiplicación.",
+      },
+      lesson: {
+        intro: {
+          en: "x is being multiplied by 4 — divide both sides by 4 to undo it.",
+          pt: "x está sendo multiplicado por 4 — divida os dois lados por 4 para desfazer isso.",
+          es: "x está siendo multiplicado por 4 — divide ambos lados entre 4 para deshacerlo.",
+        },
+        example: { id: "ex-black-33", prompt: "4x = 20", answer: 5, operands: [4, 20], isEquation: true },
+        steps: [
+          {
+            text: {
+              en: "x is multiplied by 4. Do the opposite: divide both sides by 4.",
+              pt: "x é multiplicado por 4. Faça o oposto: divida os dois lados por 4.",
+              es: "x está multiplicado por 4. Haz lo opuesto: divide ambos lados entre 4.",
+            },
+          },
+          {
+            text: { en: "20 ÷ 4 = {{5}}.", pt: "20 ÷ 4 = {{5}}.", es: "20 ÷ 4 = {{5}}." },
+          },
+          { text: { en: "x = 5.", pt: "x = 5.", es: "x = 5." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateOneStepMulDiv,
+    },
+    {
+      id: "black-34",
+      beltId: "black",
+      index: 4,
+      degree: equationsDegree,
+      title: {
+        en: "Two-step equations",
+        pt: "Equações de dois passos",
+        es: "Ecuaciones de dos pasos",
+      },
+      summary: {
+        en: "Undo addition or subtraction first, then multiplication or division.",
+        pt: "Desfaça a soma ou subtração primeiro, depois a multiplicação ou divisão.",
+        es: "Deshaz la suma o resta primero, luego la multiplicación o división.",
+      },
+      lesson: {
+        intro: {
+          en: "Work backwards through the order of operations: undo the +/- part first, then the ×/÷ part.",
+          pt: "Trabalhe de trás para frente pela ordem das operações: desfaça a parte de +/- primeiro, depois a de ×/÷.",
+          es: "Trabaja hacia atrás en el orden de las operaciones: deshaz la parte de +/- primero, luego la de ×/÷.",
+        },
+        example: { id: "ex-black-34", prompt: "3x + 4 = 19", answer: 5, operands: [3, 4, 19], isEquation: true },
+        steps: [
+          {
+            text: {
+              en: "Undo the +4 first: subtract 4 from both sides. 19 - 4 = {{15}}.",
+              pt: "Desfaça o +4 primeiro: subtraia 4 dos dois lados. 19 - 4 = {{15}}.",
+              es: "Deshaz el +4 primero: resta 4 de ambos lados. 19 - 4 = {{15}}.",
+            },
+          },
+          {
+            text: {
+              en: "Now undo the ×3: divide both sides by 3. 15 ÷ 3 = 5.",
+              pt: "Agora desfaça o ×3: divida os dois lados por 3. 15 ÷ 3 = 5.",
+              es: "Ahora deshaz el ×3: divide ambos lados entre 3. 15 ÷ 3 = 5.",
+            },
+          },
+          { text: { en: "x = 5.", pt: "x = 5.", es: "x = 5." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 16 },
+      generate: generateTwoStepEquation,
+    },
+    {
+      id: "black-35",
+      beltId: "black",
+      index: 5,
+      degree: equationsDegree,
+      title: {
+        en: "Equations with negative solutions",
+        pt: "Equações com soluções negativas",
+        es: "Ecuaciones con soluciones negativas",
+      },
+      summary: {
+        en: "Sometimes x has to be negative to balance the scale.",
+        pt: "Às vezes x precisa ser negativo para equilibrar a balança.",
+        es: "A veces x tiene que ser negativo para equilibrar la balanza.",
+      },
+      lesson: {
+        intro: {
+          en: "Solve the same way as before — the answer just happens to land below zero this time.",
+          pt: "Resolva do mesmo jeito de antes — a resposta só acaba ficando abaixo de zero dessa vez.",
+          es: "Resuelve de la misma manera que antes — la respuesta solo termina quedando debajo de cero esta vez.",
+        },
+        example: { id: "ex-black-35", prompt: "2x + 9 = 3", answer: -3, operands: [2, 9, 3], isEquation: true },
+        steps: [
+          {
+            text: {
+              en: "Undo the +9 first: 3 - 9 = {{-6}}.",
+              pt: "Desfaça o +9 primeiro: 3 - 9 = {{-6}}.",
+              es: "Deshaz el +9 primero: 3 - 9 = {{-6}}.",
+            },
+          },
+          {
+            text: {
+              en: "Now undo the ×2: -6 ÷ 2 = -3.",
+              pt: "Agora desfaça o ×2: -6 ÷ 2 = -3.",
+              es: "Ahora deshaz el ×2: -6 ÷ 2 = -3.",
+            },
+          },
+          { text: { en: "x = -3.", pt: "x = -3.", es: "x = -3." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 16 },
+      generate: generateEquationNegativeSolution,
+    },
+    {
+      id: "black-36",
+      beltId: "black",
+      index: 6,
+      degree: equationsDegree,
+      title: {
+        en: "Variables on both sides",
+        pt: "Variável nos dois lados",
+        es: "Variable en ambos lados",
+      },
+      summary: {
+        en: "Gather the x terms on one side before you solve.",
+        pt: "Reúna os termos com x em um lado antes de resolver.",
+        es: "Reúne los términos con x en un lado antes de resolver.",
+      },
+      lesson: {
+        intro: {
+          en: "When x shows up on both sides, subtract the smaller x-term from both sides first — then it's a normal two-step equation.",
+          pt: "Quando x aparece nos dois lados, subtraia o termo com x menor dos dois lados primeiro — depois é uma equação normal de dois passos.",
+          es: "Cuando x aparece en ambos lados, resta el término con x menor de ambos lados primero — después es una ecuación normal de dos pasos.",
+        },
+        example: { id: "ex-black-36", prompt: "5x + 2 = 2x + 11", answer: 3, operands: [5, 2, 2, 11], isEquation: true },
+        steps: [
+          {
+            text: {
+              en: "Subtract 2x from both sides: 5x - 2x = 3x, and 2x - 2x = 0.",
+              pt: "Subtraia 2x dos dois lados: 5x - 2x = 3x, e 2x - 2x = 0.",
+              es: "Resta 2x de ambos lados: 5x - 2x = 3x, y 2x - 2x = 0.",
+            },
+          },
+          {
+            text: {
+              en: "Now it's 3x + 2 = 11. Undo the +2: 11 - 2 = {{9}}.",
+              pt: "Agora é 3x + 2 = 11. Desfaça o +2: 11 - 2 = {{9}}.",
+              es: "Ahora es 3x + 2 = 11. Deshaz el +2: 11 - 2 = {{9}}.",
+            },
+          },
+          {
+            text: {
+              en: "Undo the ×3: 9 ÷ 3 = 3. x = 3.",
+              pt: "Desfaça o ×3: 9 ÷ 3 = 3. x = 3.",
+              es: "Deshaz el ×3: 9 ÷ 3 = 3. x = 3.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 18 },
+      generate: generateVariableBothSides,
+    },
+    {
+      id: "black-37",
+      beltId: "black",
+      index: 7,
+      degree: equationsDegree,
+      title: {
+        en: "Equations with distribution",
+        pt: "Equações com distributiva",
+        es: "Ecuaciones con distributiva",
+      },
+      summary: {
+        en: "Distribute first, then solve like normal.",
+        pt: "Distribua primeiro, depois resolva normalmente.",
+        es: "Distribuye primero, luego resuelve normalmente.",
+      },
+      lesson: {
+        intro: {
+          en: "Multiply through the parentheses first — same distributive property from Algebra — then it's a regular two-step equation.",
+          pt: "Multiplique pelos parênteses primeiro — a mesma propriedade distributiva da Álgebra — depois é uma equação normal de dois passos.",
+          es: "Multiplica por el paréntesis primero — la misma propiedad distributiva de Álgebra — luego es una ecuación normal de dos pasos.",
+        },
+        example: { id: "ex-black-37", prompt: "3(x + 2) = 21", answer: 5, operands: [3, 2, 21], isEquation: true },
+        steps: [
+          {
+            text: {
+              en: "Distribute the 3: 3x + 6 = 21.",
+              pt: "Distribua o 3: 3x + 6 = 21.",
+              es: "Distribuye el 3: 3x + 6 = 21.",
+            },
+          },
+          {
+            text: {
+              en: "Undo the +6: 21 - 6 = {{15}}.",
+              pt: "Desfaça o +6: 21 - 6 = {{15}}.",
+              es: "Deshaz el +6: 21 - 6 = {{15}}.",
+            },
+          },
+          {
+            text: {
+              en: "Undo the ×3: 15 ÷ 3 = 5. x = 5.",
+              pt: "Desfaça o ×3: 15 ÷ 3 = 5. x = 5.",
+              es: "Deshaz el ×3: 15 ÷ 3 = 5. x = 5.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 18 },
+      generate: generateEquationWithDistribution,
+    },
+    {
+      id: "black-38",
+      beltId: "black",
+      index: 8,
+      degree: equationsDegree,
+      title: {
+        en: "Combining like terms first",
+        pt: "Combinando termos semelhantes primeiro",
+        es: "Combinando términos semejantes primero",
+      },
+      summary: {
+        en: "Simplify each side before you start undoing operations.",
+        pt: "Simplifique cada lado antes de começar a desfazer as operações.",
+        es: "Simplifica cada lado antes de empezar a deshacer las operaciones.",
+      },
+      lesson: {
+        intro: {
+          en: "If a side has more than one x-term, combine them into a single term first — same trick as Algebra's combining like terms.",
+          pt: "Se um lado tem mais de um termo com x, combine-os em um único termo primeiro — o mesmo truque de combinar termos semelhantes da Álgebra.",
+          es: "Si un lado tiene más de un término con x, combínalos en un solo término primero — el mismo truco de combinar términos semejantes de Álgebra.",
+        },
+        example: { id: "ex-black-38", prompt: "4x + 2x - 3 = 15", answer: 3, operands: [4, 2, 3, 15], isEquation: true },
+        steps: [
+          {
+            text: {
+              en: "Combine the x-terms: 4x + 2x = {{6}}x.",
+              pt: "Combine os termos com x: 4x + 2x = {{6}}x.",
+              es: "Combina los términos con x: 4x + 2x = {{6}}x.",
+            },
+          },
+          {
+            text: {
+              en: "Now it's 6x - 3 = 15. Undo the -3: 15 + 3 = 18.",
+              pt: "Agora é 6x - 3 = 15. Desfaça o -3: 15 + 3 = 18.",
+              es: "Ahora es 6x - 3 = 15. Deshaz el -3: 15 + 3 = 18.",
+            },
+          },
+          {
+            text: {
+              en: "Undo the ×6: 18 ÷ 6 = 3. x = 3.",
+              pt: "Desfaça o ×6: 18 ÷ 6 = 3. x = 3.",
+              es: "Deshaz el ×6: 18 ÷ 6 = 3. x = 3.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 16 },
+      generate: generateCombineLikeTermsFirst,
+    },
+    {
+      id: "black-39",
+      beltId: "black",
+      index: 9,
+      degree: equationsDegree,
+      title: {
+        en: "Distribution with variables on both sides",
+        pt: "Distributiva com variável nos dois lados",
+        es: "Distributiva con variable en ambos lados",
+      },
+      summary: {
+        en: "Distribute first, then gather the x terms.",
+        pt: "Distribua primeiro, depois reúna os termos com x.",
+        es: "Distribuye primero, luego reúne los términos con x.",
+      },
+      lesson: {
+        intro: {
+          en: "Distribute the parentheses first, then treat it like a variables-on-both-sides equation.",
+          pt: "Distribua os parênteses primeiro, depois trate como uma equação com variável nos dois lados.",
+          es: "Distribuye el paréntesis primero, luego trátala como una ecuación con variable en ambos lados.",
+        },
+        example: { id: "ex-black-39", prompt: "3(x + 2) = 4x + 4", answer: 2, operands: [3, 2, 4, 4], isEquation: true },
+        steps: [
+          {
+            text: {
+              en: "Distribute the 3: 3x + 6 = 4x + 4.",
+              pt: "Distribua o 3: 3x + 6 = 4x + 4.",
+              es: "Distribuye el 3: 3x + 6 = 4x + 4.",
+            },
+          },
+          {
+            text: {
+              en: "Subtract 3x from both sides: 6 = x + 4.",
+              pt: "Subtraia 3x dos dois lados: 6 = x + 4.",
+              es: "Resta 3x de ambos lados: 6 = x + 4.",
+            },
+          },
+          {
+            text: {
+              en: "Undo the +4: 6 - 4 = {{2}}. x = 2.",
+              pt: "Desfaça o +4: 6 - 4 = {{2}}. x = 2.",
+              es: "Deshaz el +4: 6 - 4 = {{2}}. x = 2.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 20 },
+      generate: generateDistributionBothSides,
+    },
+    {
+      id: "black-40",
+      beltId: "black",
+      index: 10,
+      degree: equationsDegree,
+      title: {
+        en: "Multi-step equations",
+        pt: "Equações de múltiplas etapas",
+        es: "Ecuaciones de varios pasos",
+      },
+      summary: {
+        en: "Distribute, combine, then solve — every Equations skill in one problem.",
+        pt: "Distribua, combine, depois resolva — todas as habilidades de Equações em um problema.",
+        es: "Distribuye, combina, luego resuelve — todas las habilidades de Ecuaciones en un problema.",
+      },
+      lesson: {
+        intro: {
+          en: "This pulls together everything from this degree: distribute the parentheses, simplify each side, gather x terms on one side, then undo the remaining steps.",
+          pt: "Isso reúne tudo desta faixa: distribua os parênteses, simplifique cada lado, reúna os termos com x em um lado, depois desfaça os passos restantes.",
+          es: "Esto reúne todo de este cinturón: distribuye el paréntesis, simplifica cada lado, reúne los términos con x en un lado, luego deshaz los pasos restantes.",
+        },
+        example: { id: "ex-black-40", prompt: "2(x + 3) - 4 = 3x - 3", answer: 5, operands: [2, 3, 4, 3, 3], isEquation: true },
+        steps: [
+          {
+            text: {
+              en: "Distribute the 2: 2x + 6 - 4 = 3x - 3.",
+              pt: "Distribua o 2: 2x + 6 - 4 = 3x - 3.",
+              es: "Distribuye el 2: 2x + 6 - 4 = 3x - 3.",
+            },
+          },
+          {
+            text: {
+              en: "Simplify the left side: 2x + 2 = 3x - 3.",
+              pt: "Simplifique o lado esquerdo: 2x + 2 = 3x - 3.",
+              es: "Simplifica el lado izquierdo: 2x + 2 = 3x - 3.",
+            },
+          },
+          {
+            text: {
+              en: "Subtract 2x from both sides: 2 = x - 3. Undo the -3: 2 + 3 = {{5}}. x = 5.",
+              pt: "Subtraia 2x dos dois lados: 2 = x - 3. Desfaça o -3: 2 + 3 = {{5}}. x = 5.",
+              es: "Resta 2x de ambos lados: 2 = x - 3. Deshaz el -3: 2 + 3 = {{5}}. x = 5.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 24 },
+      generate: generateMultiStepEquation,
     },
   ],
 };
