@@ -27,7 +27,18 @@ export function getAllStripesFlat(belts: Belt[]): Stripe[] {
     .flatMap((belt) => belt.stripes);
 }
 
+/**
+ * Review mode: visiting the site with ?unlock=all in the URL bypasses the
+ * mastery gate so every stripe with content can be browsed directly — for
+ * content review while building, not part of the real player experience.
+ */
+function isReviewModeActive(): boolean {
+  if (typeof window === "undefined") return false;
+  return new URLSearchParams(window.location.search).get("unlock") === "all";
+}
+
 export function isStripeUnlocked(stripe: Stripe, belts: Belt[], progress: ProgressState): boolean {
+  if (isReviewModeActive()) return true;
   const flat = getAllStripesFlat(belts);
   const idx = flat.findIndex((s) => s.id === stripe.id);
   if (idx <= 0) return true;
