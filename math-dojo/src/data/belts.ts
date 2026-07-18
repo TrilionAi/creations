@@ -3646,7 +3646,7 @@ const blackBelt: Belt = {
           pt: "f(x) é só uma versão rotulada da máquina de antes — troque cada x pelo número dado e resolva normalmente.",
           es: "f(x) es solo una versión etiquetada de la máquina de antes — cambia cada x por el número dado y resuelve normalmente.",
         },
-        example: { id: "ex-black-42", prompt: "f(x) = 3x + 2, find f(4)", answer: 14, operands: [3, 2, 4] },
+        example: { id: "ex-black-42", prompt: "f(x) = 3x + 2; f(4)", answer: 14, operands: [3, 2, 4] },
         steps: [
           {
             text: {
@@ -3695,7 +3695,7 @@ const blackBelt: Belt = {
           pt: "Substitua o valor negativo do mesmo jeito — só preste atenção nos sinais enquanto multiplica e soma.",
           es: "Sustituye el valor negativo de la misma manera — solo presta atención a los signos mientras multiplicas y sumas.",
         },
-        example: { id: "ex-black-43", prompt: "f(x) = 2x + 5, find f(-4)", answer: -3, operands: [2, 5, -4] },
+        example: { id: "ex-black-43", prompt: "f(x) = 2x + 5; f(-4)", answer: -3, operands: [2, 5, -4] },
         steps: [
           {
             text: {
@@ -3803,7 +3803,7 @@ const blackBelt: Belt = {
         },
         example: {
           id: "ex-black-45",
-          prompt: "Point A: (1, 2), Point B: (3, 5)",
+          prompt: "(1, 2), (3, 5)",
           answer: 3,
           secondaryAnswer: 2,
           secondaryFormat: "fraction",
@@ -3857,7 +3857,7 @@ const blackBelt: Belt = {
           pt: "Uma reta cruza o eixo y exatamente onde x = 0. Para f(x) = ax + b, isso é sempre só b — sem precisar calcular depois que você vê o padrão.",
           es: "Una recta cruza el eje y exactamente donde x = 0. Para f(x) = ax + b, eso siempre es solo b — sin necesidad de calcular una vez que ves el patrón.",
         },
-        example: { id: "ex-black-46", prompt: "f(x) = 3x + 7, find the y-intercept", answer: 7, operands: [3, 7] },
+        example: { id: "ex-black-46", prompt: "f(x) = 3x + 7; f(0)", answer: 7, operands: [3, 7] },
         steps: [
           {
             text: {
@@ -3955,7 +3955,7 @@ const blackBelt: Belt = {
           pt: "Em f(x) = x², tanto uma entrada positiva quanto a negativa correspondente dão a mesma saída, já que elevar ao quadrado remove o sinal. Marcando várias entradas, forma-se uma curva em U chamada parábola.",
           es: "En f(x) = x², tanto una entrada positiva como su negativa correspondiente dan la misma salida, ya que elevar al cuadrado quita el signo. Marcando varias entradas, se traza una curva en forma de U llamada parábola.",
         },
-        example: { id: "ex-black-48", prompt: "f(x) = x², find f(3)", answer: 9, operands: [3] },
+        example: { id: "ex-black-48", prompt: "f(x) = x²; f(3)", answer: 9, operands: [3] },
         diagram: {
           kind: "parabola",
           points: [
@@ -4014,7 +4014,7 @@ const blackBelt: Belt = {
           pt: "Uma quadrática completa tem três partes — um termo ao quadrado, um termo com x, e uma constante. Substitua e siga a ordem das operações como em qualquer expressão.",
           es: "Una cuadrática completa tiene tres partes — un término al cuadrado, un término con x, y una constante. Sustituye y sigue el orden de las operaciones como en cualquier expresión.",
         },
-        example: { id: "ex-black-49", prompt: "f(x) = x² + 3x - 4, find f(2)", answer: 6, operands: [3, -4, 2] },
+        example: { id: "ex-black-49", prompt: "f(x) = x² + 3x - 4; f(2)", answer: 6, operands: [3, -4, 2] },
         steps: [
           {
             text: {
@@ -4065,7 +4065,7 @@ const blackBelt: Belt = {
         },
         example: {
           id: "ex-black-50",
-          prompt: "f(x) = 2x + 1 and g(x) = x² - 3. Find f(3) + g(3).",
+          prompt: "f(x) = 2x + 1, g(x) = x² - 3; f(3) + g(3)",
           answer: 13,
           operands: [2, 1, -3, 3],
         },
