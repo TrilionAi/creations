@@ -39,8 +39,18 @@ import {
   generateTwoDigitDivisorExact,
   generateThreeDigitByTwoDigitExact,
   generateThreeDigitByTwoDigitWithRemainder,
+  generateIdentifyFraction,
+  generateEquivalentFraction,
+  generateSimplifyFraction,
+  generateFractionOfNumber,
+  generateAddFractionsSameDenominator,
+  generateSubtractFractionsSameDenominator,
+  generateAddFractionsDifferentDenominators,
+  generateMultiplyFractions,
+  generateDivideFractions,
+  generateMixedToImproper,
 } from "../engine/problemGenerator";
-import type { Belt } from "../types";
+import type { Belt, LocalizedText } from "../types";
 
 const whiteBelt: Belt = {
   id: "white",
@@ -1425,7 +1435,7 @@ const brownBelt: Belt = {
           pt: "Ache o maior múltiplo do divisor que ainda cabe, depois veja o que sobra.",
           es: "Encuentra el múltiplo más grande del divisor que todavía cabe, luego mira qué sobra.",
         },
-        example: { id: "ex-brown-2", prompt: "23 ÷ 5", answer: 4, remainder: 3, operands: [23, 5] },
+        example: { id: "ex-brown-2", prompt: "23 ÷ 5", answer: 4, secondaryAnswer: 3, secondaryFormat: "remainder", operands: [23, 5] },
         steps: [
           {
             text: {
@@ -1531,7 +1541,7 @@ const brownBelt: Belt = {
           pt: "Divida a dezena primeiro. O que sobrar se junta à unidade — depois divida esse número combinado.",
           es: "Divide la decena primero. Lo que sobre se junta a la unidad — luego divide ese número combinado.",
         },
-        example: { id: "ex-brown-5", prompt: "47 ÷ 3", answer: 15, remainder: 2, operands: [47, 3] },
+        example: { id: "ex-brown-5", prompt: "47 ÷ 3", answer: 15, secondaryAnswer: 2, secondaryFormat: "remainder", operands: [47, 3] },
         steps: [
           {
             text: {
@@ -1625,7 +1635,7 @@ const brownBelt: Belt = {
           pt: "Trabalhe da esquerda para a direita. Depois de cada divisão, subtraia para achar o que sobra, depois desça o próximo dígito.",
           es: "Trabaja de izquierda a derecha. Después de cada división, resta para ver qué sobra, luego baja el siguiente dígito.",
         },
-        example: { id: "ex-brown-7", prompt: "137 ÷ 4", answer: 34, remainder: 1, operands: [137, 4] },
+        example: { id: "ex-brown-7", prompt: "137 ÷ 4", answer: 34, secondaryAnswer: 1, secondaryFormat: "remainder", operands: [137, 4] },
         steps: [
           {
             text: {
@@ -1765,7 +1775,7 @@ const brownBelt: Belt = {
           pt: "Mesmo processo de antes — estime, multiplique, subtraia, desça — mas dessa vez não vai dividir certinho, então termine com o que sobrar.",
           es: "Mismo proceso de antes — estima, multiplica, resta, baja — pero esta vez no dividirá exacto, así que termina con lo que sobre.",
         },
-        example: { id: "ex-brown-10", prompt: "287 ÷ 23", answer: 12, remainder: 11, operands: [287, 23] },
+        example: { id: "ex-brown-10", prompt: "287 ÷ 23", answer: 12, secondaryAnswer: 11, secondaryFormat: "remainder", operands: [287, 23] },
         steps: [
           {
             text: {
@@ -1797,6 +1807,11 @@ const brownBelt: Belt = {
   ],
 };
 
+const fractionsDegree = {
+  index: 1,
+  name: { en: "Fractions", pt: "Frações", es: "Fracciones" } as LocalizedText,
+};
+
 const blackBelt: Belt = {
   id: "black",
   name: { en: "Black Belt", pt: "Faixa Preta", es: "Cinturón Negro" },
@@ -1812,8 +1827,401 @@ const blackBelt: Belt = {
     pt: "Seis graus, um para cada pilar da matemática pré-universitária.",
     es: "Seis grados, uno por cada pilar de la matemática preuniversitaria.",
   },
-  stripes: [],
-  locked: true,
+  stripes: [
+    {
+      id: "black-1",
+      beltId: "black",
+      index: 1,
+      degree: fractionsDegree,
+      title: { en: "What a fraction means", pt: "O que significa uma fração", es: "Qué significa una fracción" },
+      summary: {
+        en: "A fraction is parts of a whole — see it, then name it.",
+        pt: "Uma fração é partes de um todo — veja, depois nomeie.",
+        es: "Una fracción es partes de un todo — mira, y luego nómbrala.",
+      },
+      lesson: {
+        intro: {
+          en: "The bottom number is how many equal parts the whole is split into. The top number is how many of those parts you have.",
+          pt: "O número de baixo é em quantas partes iguais o todo foi dividido. O número de cima é quantas dessas partes você tem.",
+          es: "El número de abajo es en cuántas partes iguales se dividió el todo. El número de arriba es cuántas de esas partes tienes.",
+        },
+        example: {
+          id: "ex-black-1",
+          prompt: "",
+          answer: 3,
+          secondaryAnswer: 8,
+          secondaryFormat: "fraction",
+          operands: [3, 8],
+        },
+        diagram: { kind: "fraction", total: 8, shaded: 3 },
+        steps: [
+          {
+            text: {
+              en: "The bar is split into 8 equal parts — that's the bottom number.",
+              pt: "A barra está dividida em 8 partes iguais — esse é o número de baixo.",
+              es: "La barra está dividida en 8 partes iguales — ese es el número de abajo.",
+            },
+          },
+          {
+            text: {
+              en: "3 of those parts are shaded — that's the top number.",
+              pt: "3 dessas partes estão pintadas — esse é o número de cima.",
+              es: "3 de esas partes están sombreadas — ese es el número de arriba.",
+            },
+          },
+          {
+            text: {
+              en: "Written as a fraction: 3/8.",
+              pt: "Escrito como fração: 3/8.",
+              es: "Escrito como fracción: 3/8.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 10 },
+      generate: generateIdentifyFraction,
+    },
+    {
+      id: "black-2",
+      beltId: "black",
+      index: 2,
+      degree: fractionsDegree,
+      title: { en: "Equivalent fractions", pt: "Frações equivalentes", es: "Fracciones equivalentes" },
+      summary: {
+        en: "The same amount, written with different numbers.",
+        pt: "A mesma quantidade, escrita com números diferentes.",
+        es: "La misma cantidad, escrita con números diferentes.",
+      },
+      lesson: {
+        intro: {
+          en: "Multiply the top and bottom by the same number and the fraction's value doesn't change.",
+          pt: "Multiplique o de cima e o de baixo pelo mesmo número e o valor da fração não muda.",
+          es: "Multiplica el de arriba y el de abajo por el mismo número y el valor de la fracción no cambia.",
+        },
+        example: { id: "ex-black-2", prompt: "1/2 = ?/6", answer: 3, operands: [1, 2, 6] },
+        steps: [
+          {
+            text: {
+              en: "To turn halves into sixths, multiply the bottom by 3 (2 × 3 = 6).",
+              pt: "Para transformar meios em sextos, multiplique o de baixo por 3 (2 × 3 = 6).",
+              es: "Para convertir medios en sextos, multiplica el de abajo por 3 (2 × 3 = 6).",
+            },
+          },
+          {
+            text: {
+              en: "Do the same to the top: 1 × 3 = 3.",
+              pt: "Faça o mesmo com o de cima: 1 × 3 = 3.",
+              es: "Haz lo mismo con el de arriba: 1 × 3 = 3.",
+            },
+          },
+          { text: { en: "1/2 = 3/6.", pt: "1/2 = 3/6.", es: "1/2 = 3/6." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 8 },
+      generate: generateEquivalentFraction,
+    },
+    {
+      id: "black-3",
+      beltId: "black",
+      index: 3,
+      degree: fractionsDegree,
+      title: { en: "Simplifying fractions", pt: "Simplificar frações", es: "Simplificar fracciones" },
+      summary: {
+        en: "Shrink a fraction to its smallest matching numbers.",
+        pt: "Reduza uma fração para os menores números equivalentes.",
+        es: "Reduce una fracción a los números equivalentes más pequeños.",
+      },
+      lesson: {
+        intro: {
+          en: "Find a number that divides evenly into both the top and bottom, then divide both by it.",
+          pt: "Ache um número que divide certinho o de cima e o de baixo, depois divida os dois por ele.",
+          es: "Encuentra un número que divida exacto al de arriba y al de abajo, luego divide ambos entre él.",
+        },
+        example: { id: "ex-black-3", prompt: "8/12", answer: 2, secondaryAnswer: 3, secondaryFormat: "fraction", operands: [8, 12] },
+        steps: [
+          {
+            text: {
+              en: "4 divides evenly into both 8 and 12.",
+              pt: "O 4 divide certinho o 8 e o 12.",
+              es: "El 4 divide exacto al 8 y al 12.",
+            },
+          },
+          {
+            text: {
+              en: "Divide both by 4: 8 ÷ 4 = 2, and 12 ÷ 4 = 3.",
+              pt: "Divida os dois por 4: 8 ÷ 4 = 2, e 12 ÷ 4 = 3.",
+              es: "Divide ambos entre 4: 8 ÷ 4 = 2, y 12 ÷ 4 = 3.",
+            },
+          },
+          { text: { en: "8/12 = 2/3.", pt: "8/12 = 2/3.", es: "8/12 = 2/3." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateSimplifyFraction,
+    },
+    {
+      id: "black-4",
+      beltId: "black",
+      index: 4,
+      degree: fractionsDegree,
+      title: { en: "A fraction of a number", pt: "Fração de um número", es: "Fracción de un número" },
+      summary: {
+        en: "Split a whole number into fractional parts.",
+        pt: "Divida um número inteiro em partes fracionárias.",
+        es: "Divide un número entero en partes fraccionarias.",
+      },
+      lesson: {
+        intro: {
+          en: "Divide the number by the bottom, then multiply by the top.",
+          pt: "Divida o número pelo de baixo, depois multiplique pelo de cima.",
+          es: "Divide el número entre el de abajo, luego multiplica por el de arriba.",
+        },
+        example: { id: "ex-black-4", prompt: "3/4 × 20", answer: 15, operands: [3, 4, 20] },
+        steps: [
+          {
+            text: {
+              en: "Divide 20 by the bottom number: 20 ÷ 4 = 5.",
+              pt: "Divida 20 pelo número de baixo: 20 ÷ 4 = 5.",
+              es: "Divide 20 entre el número de abajo: 20 ÷ 4 = 5.",
+            },
+          },
+          {
+            text: {
+              en: "Multiply by the top number: 5 × 3 = 15.",
+              pt: "Multiplique pelo número de cima: 5 × 3 = 15.",
+              es: "Multiplica por el número de arriba: 5 × 3 = 15.",
+            },
+          },
+          { text: { en: "3/4 × 20 = 15.", pt: "3/4 × 20 = 15.", es: "3/4 × 20 = 15." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 10 },
+      generate: generateFractionOfNumber,
+    },
+    {
+      id: "black-5",
+      beltId: "black",
+      index: 5,
+      degree: fractionsDegree,
+      title: {
+        en: "Adding fractions, same denominator",
+        pt: "Somar frações, mesmo denominador",
+        es: "Sumar fracciones, mismo denominador",
+      },
+      summary: {
+        en: "When the bottoms match, just add the tops.",
+        pt: "Quando os de baixo são iguais, só some os de cima.",
+        es: "Cuando los de abajo son iguales, solo suma los de arriba.",
+      },
+      lesson: {
+        intro: {
+          en: "If two fractions have the same bottom number, add the top numbers and keep the bottom the same.",
+          pt: "Se duas frações têm o mesmo número de baixo, some os números de cima e mantenha o de baixo igual.",
+          es: "Si dos fracciones tienen el mismo número de abajo, suma los números de arriba y mantén el de abajo igual.",
+        },
+        example: { id: "ex-black-5", prompt: "2/7 + 3/7", answer: 5, secondaryAnswer: 7, secondaryFormat: "fraction", operands: [2, 3, 7] },
+        steps: [
+          { text: { en: "The bottoms already match: 7.", pt: "Os de baixo já são iguais: 7.", es: "Los de abajo ya son iguales: 7." } },
+          {
+            text: { en: "Add the tops: 2 + 3 = 5.", pt: "Some os de cima: 2 + 3 = 5.", es: "Suma los de arriba: 2 + 3 = 5." },
+          },
+          { text: { en: "2/7 + 3/7 = 5/7.", pt: "2/7 + 3/7 = 5/7.", es: "2/7 + 3/7 = 5/7." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateAddFractionsSameDenominator,
+    },
+    {
+      id: "black-6",
+      beltId: "black",
+      index: 6,
+      degree: fractionsDegree,
+      title: {
+        en: "Subtracting fractions, same denominator",
+        pt: "Subtrair frações, mesmo denominador",
+        es: "Restar fracciones, mismo denominador",
+      },
+      summary: {
+        en: "Same idea, subtract the tops instead.",
+        pt: "Mesma ideia, só que subtraindo os de cima.",
+        es: "Misma idea, pero restando los de arriba.",
+      },
+      lesson: {
+        intro: {
+          en: "If two fractions have the same bottom number, subtract the top numbers and keep the bottom the same.",
+          pt: "Se duas frações têm o mesmo número de baixo, subtraia os números de cima e mantenha o de baixo igual.",
+          es: "Si dos fracciones tienen el mismo número de abajo, resta los números de arriba y mantén el de abajo igual.",
+        },
+        example: { id: "ex-black-6", prompt: "5/8 - 2/8", answer: 3, secondaryAnswer: 8, secondaryFormat: "fraction", operands: [5, 2, 8] },
+        steps: [
+          { text: { en: "The bottoms already match: 8.", pt: "Os de baixo já são iguais: 8.", es: "Los de abajo ya son iguales: 8." } },
+          {
+            text: { en: "Subtract the tops: 5 - 2 = 3.", pt: "Subtraia os de cima: 5 - 2 = 3.", es: "Resta los de arriba: 5 - 2 = 3." },
+          },
+          { text: { en: "5/8 - 2/8 = 3/8.", pt: "5/8 - 2/8 = 3/8.", es: "5/8 - 2/8 = 3/8." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateSubtractFractionsSameDenominator,
+    },
+    {
+      id: "black-7",
+      beltId: "black",
+      index: 7,
+      degree: fractionsDegree,
+      title: {
+        en: "Adding fractions, different denominators",
+        pt: "Somar frações, denominadores diferentes",
+        es: "Sumar fracciones, denominadores diferentes",
+      },
+      summary: {
+        en: "Make the bottoms match first, then add like before.",
+        pt: "Deixe os de baixo iguais primeiro, depois some como antes.",
+        es: "Iguala los de abajo primero, luego suma como antes.",
+      },
+      lesson: {
+        intro: {
+          en: "Turn one fraction into an equivalent one that shares the other's bottom number, then add the tops.",
+          pt: "Transforme uma fração em uma equivalente que tenha o mesmo número de baixo da outra, depois some os de cima.",
+          es: "Convierte una fracción en una equivalente que tenga el mismo número de abajo que la otra, luego suma los de arriba.",
+        },
+        example: { id: "ex-black-7", prompt: "1/2 + 1/4", answer: 3, secondaryAnswer: 4, secondaryFormat: "fraction", operands: [1, 2, 1, 4] },
+        steps: [
+          {
+            text: {
+              en: "4 is double 2, so turn 1/2 into fourths: 1 × 2 = 2, so 1/2 = 2/4.",
+              pt: "4 é o dobro de 2, então transforme 1/2 em quartos: 1 × 2 = 2, então 1/2 = 2/4.",
+              es: "4 es el doble de 2, así que convierte 1/2 en cuartos: 1 × 2 = 2, entonces 1/2 = 2/4.",
+            },
+          },
+          {
+            text: {
+              en: "Now both bottoms are 4: 2/4 + 1/4.",
+              pt: "Agora os dois de baixo são 4: 2/4 + 1/4.",
+              es: "Ahora los dos de abajo son 4: 2/4 + 1/4.",
+            },
+          },
+          {
+            text: { en: "Add the tops: 2 + 1 = 3.", pt: "Some os de cima: 2 + 1 = 3.", es: "Suma los de arriba: 2 + 1 = 3." },
+          },
+          { text: { en: "1/2 + 1/4 = 3/4.", pt: "1/2 + 1/4 = 3/4.", es: "1/2 + 1/4 = 3/4." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 18 },
+      generate: generateAddFractionsDifferentDenominators,
+    },
+    {
+      id: "black-8",
+      beltId: "black",
+      index: 8,
+      degree: fractionsDegree,
+      title: { en: "Multiplying fractions", pt: "Multiplicar frações", es: "Multiplicar fracciones" },
+      summary: {
+        en: "Multiply straight across — top times top, bottom times bottom.",
+        pt: "Multiplique direto — cima vezes cima, baixo vezes baixo.",
+        es: "Multiplica directo — arriba por arriba, abajo por abajo.",
+      },
+      lesson: {
+        intro: {
+          en: "No need to match denominators here — just multiply the top numbers together, then the bottom numbers together.",
+          pt: "Aqui não precisa igualar os denominadores — só multiplique os números de cima entre si, depois os de baixo.",
+          es: "Aquí no hace falta igualar los denominadores — solo multiplica los números de arriba entre sí, luego los de abajo.",
+        },
+        example: { id: "ex-black-8", prompt: "2/3 × 3/4", answer: 6, secondaryAnswer: 12, secondaryFormat: "fraction", operands: [2, 3, 3, 4] },
+        steps: [
+          { text: { en: "Multiply the tops: 2 × 3 = 6.", pt: "Multiplique os de cima: 2 × 3 = 6.", es: "Multiplica los de arriba: 2 × 3 = 6." } },
+          {
+            text: {
+              en: "Multiply the bottoms: 3 × 4 = 12.",
+              pt: "Multiplique os de baixo: 3 × 4 = 12.",
+              es: "Multiplica los de abajo: 3 × 4 = 12.",
+            },
+          },
+          { text: { en: "2/3 × 3/4 = 6/12.", pt: "2/3 × 3/4 = 6/12.", es: "2/3 × 3/4 = 6/12." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 16 },
+      generate: generateMultiplyFractions,
+    },
+    {
+      id: "black-9",
+      beltId: "black",
+      index: 9,
+      degree: fractionsDegree,
+      title: { en: "Dividing fractions", pt: "Dividir frações", es: "Dividir fracciones" },
+      summary: {
+        en: "Flip the second fraction, then multiply.",
+        pt: "Inverta a segunda fração, depois multiplique.",
+        es: "Invierte la segunda fracción, luego multiplica.",
+      },
+      lesson: {
+        intro: {
+          en: "Dividing by a fraction is the same as multiplying by it flipped upside down.",
+          pt: "Dividir por uma fração é o mesmo que multiplicar por ela de cabeça para baixo.",
+          es: "Dividir entre una fracción es lo mismo que multiplicar por ella al revés.",
+        },
+        example: { id: "ex-black-9", prompt: "1/2 ÷ 1/4", answer: 4, secondaryAnswer: 2, secondaryFormat: "fraction", operands: [1, 2, 1, 4] },
+        steps: [
+          { text: { en: "Flip 1/4 upside down: 4/1.", pt: "Inverta 1/4 de cabeça para baixo: 4/1.", es: "Invierte 1/4 al revés: 4/1." } },
+          { text: { en: "Multiply: 1/2 × 4/1.", pt: "Multiplique: 1/2 × 4/1.", es: "Multiplica: 1/2 × 4/1." } },
+          {
+            text: {
+              en: "Tops: 1 × 4 = 4. Bottoms: 2 × 1 = 2.",
+              pt: "De cima: 1 × 4 = 4. De baixo: 2 × 1 = 2.",
+              es: "De arriba: 1 × 4 = 4. De abajo: 2 × 1 = 2.",
+            },
+          },
+          { text: { en: "1/2 ÷ 1/4 = 4/2.", pt: "1/2 ÷ 1/4 = 4/2.", es: "1/2 ÷ 1/4 = 4/2." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 18 },
+      generate: generateDivideFractions,
+    },
+    {
+      id: "black-10",
+      beltId: "black",
+      index: 10,
+      degree: fractionsDegree,
+      title: {
+        en: "Mixed numbers to improper fractions",
+        pt: "Número misto para fração imprópria",
+        es: "Número mixto a fracción impropia",
+      },
+      summary: {
+        en: "Turn a whole-plus-fraction into a single fraction.",
+        pt: "Transforme um inteiro mais fração em uma única fração.",
+        es: "Convierte un entero más fracción en una sola fracción.",
+      },
+      lesson: {
+        intro: {
+          en: "Multiply the whole number by the bottom, add the top, and keep the same bottom.",
+          pt: "Multiplique o número inteiro pelo de baixo, some o de cima, e mantenha o mesmo de baixo.",
+          es: "Multiplica el número entero por el de abajo, suma el de arriba, y mantén el mismo de abajo.",
+        },
+        example: { id: "ex-black-10", prompt: "2 1/3", answer: 7, secondaryAnswer: 3, secondaryFormat: "fraction", operands: [2, 1, 3] },
+        steps: [
+          {
+            text: {
+              en: "Multiply the whole number by the bottom: 2 × 3 = 6.",
+              pt: "Multiplique o número inteiro pelo de baixo: 2 × 3 = 6.",
+              es: "Multiplica el número entero por el de abajo: 2 × 3 = 6.",
+            },
+          },
+          { text: { en: "Add the top: 6 + 1 = 7.", pt: "Some o de cima: 6 + 1 = 7.", es: "Suma el de arriba: 6 + 1 = 7." } },
+          {
+            text: {
+              en: "Keep the same bottom: 3.",
+              pt: "Mantenha o mesmo de baixo: 3.",
+              es: "Mantén el mismo de abajo: 3.",
+            },
+          },
+          { text: { en: "2 1/3 = 7/3.", pt: "2 1/3 = 7/3.", es: "2 1/3 = 7/3." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 16 },
+      generate: generateMixedToImproper,
+    },
+  ],
 };
 
 const coralBelt: Belt = {

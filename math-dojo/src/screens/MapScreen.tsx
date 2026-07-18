@@ -1,4 +1,4 @@
-import type { Belt, ProgressState } from "../types";
+import type { Belt, ProgressState, Stripe, StripeDegree } from "../types";
 import { isStripeUnlocked } from "../engine/progress";
 import { BeltStrip } from "../components/BeltStrip";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
@@ -10,6 +10,26 @@ interface MapScreenProps {
   belts: Belt[];
   progress: ProgressState;
   onSelectStripe: (stripeId: string) => void;
+}
+
+interface StripeGroup {
+  degree: StripeDegree | null;
+  stripes: Stripe[];
+}
+
+/** Groups consecutive stripes sharing the same `degree` (Black Belt's 6 sub-sections).
+ * Belts without degrees just come back as one group with no heading. */
+function groupByDegree(stripes: Stripe[]): StripeGroup[] {
+  const groups: StripeGroup[] = [];
+  for (const stripe of stripes) {
+    const last = groups[groups.length - 1];
+    if (last && last.degree?.index === stripe.degree?.index) {
+      last.stripes.push(stripe);
+    } else {
+      groups.push({ degree: stripe.degree ?? null, stripes: [stripe] });
+    }
+  }
+  return groups;
 }
 
 export function MapScreen({ belts, progress, onSelectStripe }: MapScreenProps) {
@@ -44,26 +64,37 @@ export function MapScreen({ belts, progress, onSelectStripe }: MapScreenProps) {
             {belt.locked ? (
               <span className={styles.comingSoon}>🔒 {t.comingSoon}</span>
             ) : (
-              <div className={styles.stripeRow}>
-                {belt.stripes.map((stripe) => {
-                  const unlocked = isStripeUnlocked(stripe, belts, progress);
-                  const passed = progress.stripeResults[stripe.id]?.passed ?? false;
-                  return (
-                    <button
-                      key={stripe.id}
-                      type="button"
-                      disabled={!unlocked}
-                      onClick={() => onSelectStripe(stripe.id)}
-                      className={[
-                        styles.stripeBtn,
-                        passed ? styles.stripePassed : "",
-                        unlocked && !passed ? styles.stripeCurrent : "",
-                      ].join(" ")}
-                    >
-                      {passed ? "✓" : unlocked ? "" : "🔒"} {stripe.index}. {stripe.title[locale]}
-                    </button>
-                  );
-                })}
+              <div className={styles.stripeGroups}>
+                {groupByDegree(belt.stripes).map((group, gi) => (
+                  <div key={gi} className={styles.stripeGroup}>
+                    {group.degree && (
+                      <div className={styles.degreeHeading}>
+                        {t.degreeLabel} {group.degree.index} · {group.degree.name[locale]}
+                      </div>
+                    )}
+                    <div className={styles.stripeRow}>
+                      {group.stripes.map((stripe) => {
+                        const unlocked = isStripeUnlocked(stripe, belts, progress);
+                        const passed = progress.stripeResults[stripe.id]?.passed ?? false;
+                        return (
+                          <button
+                            key={stripe.id}
+                            type="button"
+                            disabled={!unlocked}
+                            onClick={() => onSelectStripe(stripe.id)}
+                            className={[
+                              styles.stripeBtn,
+                              passed ? styles.stripePassed : "",
+                              unlocked && !passed ? styles.stripeCurrent : "",
+                            ].join(" ")}
+                          >
+                            {passed ? "✓" : unlocked ? "" : "🔒"} {stripe.index}. {stripe.title[locale]}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>

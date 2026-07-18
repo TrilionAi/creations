@@ -3,6 +3,7 @@ import { useLocale } from "../i18n/LocaleContext";
 import { UI_STRINGS } from "../i18n/ui";
 import { GroupDiagram } from "../components/GroupDiagram";
 import { NumberLineDiagram } from "../components/NumberLineDiagram";
+import { FractionDiagram } from "../components/FractionDiagram";
 import styles from "./LessonScreen.module.css";
 
 interface LessonScreenProps {
@@ -48,21 +49,36 @@ export function LessonScreen({ stripe, onBack, onStart }: LessonScreenProps) {
         <p className={styles.intro}>{lesson.intro[locale]}</p>
 
         <div className={styles.exampleProblem}>
-          {lesson.example.prompt} = <span className={styles.exampleAnswer}>{lesson.example.answer}</span>
-          {lesson.example.remainder !== undefined && (
+          {lesson.example.prompt} ={" "}
+          {lesson.example.secondaryFormat === "fraction" ? (
+            <span className={styles.exampleFraction}>
+              <span className={styles.exampleAnswer}>{lesson.example.answer}</span>
+              <span className={styles.exampleFractionBar} />
+              <span className={styles.exampleAnswer}>{lesson.example.secondaryAnswer}</span>
+            </span>
+          ) : (
             <>
-              {" "}
-              {t.remainderLabel} <span className={styles.exampleAnswer}>{lesson.example.remainder}</span>
+              <span className={styles.exampleAnswer}>{lesson.example.answer}</span>
+              {lesson.example.secondaryAnswer !== undefined && (
+                <>
+                  {" "}
+                  {t.remainderLabel} <span className={styles.exampleAnswer}>{lesson.example.secondaryAnswer}</span>
+                </>
+              )}
             </>
           )}
         </div>
 
         {lesson.diagram && (
           <div className={styles.diagramWrap}>
-            {lesson.diagram.kind === "groups" ? (
+            {lesson.diagram.kind === "groups" && (
               <GroupDiagram groups={lesson.diagram.groups} perGroup={lesson.diagram.perGroup} />
-            ) : (
+            )}
+            {lesson.diagram.kind === "numberLine" && (
               <NumberLineDiagram start={lesson.diagram.start} end={lesson.diagram.end} />
+            )}
+            {lesson.diagram.kind === "fraction" && (
+              <FractionDiagram total={lesson.diagram.total} shaded={lesson.diagram.shaded} />
             )}
           </div>
         )}

@@ -46,8 +46,25 @@ function makeQuotient(a: number, b: number, includeRemainder: boolean): Problem 
     prompt: `${a} ÷ ${b}`,
     answer: quotient,
     operands: [a, b],
-    ...(includeRemainder ? { remainder } : {}),
+    ...(includeRemainder ? { secondaryAnswer: remainder, secondaryFormat: "remainder" as const } : {}),
   };
+}
+
+/** A fraction-valued answer (numerator, denominator) — fraction prompts vary too much
+ * for a single template, so the caller builds its own prompt string and operand list. */
+function makeFraction(prompt: string, numerator: number, denominator: number, operands: number[]): Problem {
+  return {
+    id: nextId(),
+    prompt,
+    answer: numerator,
+    operands,
+    secondaryAnswer: denominator,
+    secondaryFormat: "fraction",
+  };
+}
+
+function gcd(a: number, b: number): number {
+  return b === 0 ? a : gcd(b, a % b);
 }
 
 function pairKey(operands: number[]): string {
@@ -529,5 +546,127 @@ export function generateThreeDigitByTwoDigitWithRemainder(count: number): Proble
     const q = randomInt(11, 29);
     const r = randomInt(1, b - 1);
     return makeQuotient(b * q + r, b, true);
+  });
+}
+
+/** Identify a shaded fraction from a picture — no prompt text, the diagram is the problem. */
+export function generateIdentifyFraction(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const total = randomInt(4, 10);
+    const shaded = randomInt(1, total - 1);
+    const problem = makeFraction("", shaded, total, [shaded, total]);
+    return { ...problem, diagram: { kind: "fraction" as const, total, shaded } };
+  });
+}
+
+/** Equivalent fractions — find the missing numerator for a given target denominator. */
+export function generateEquivalentFraction(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const b = randomInt(2, 6);
+    const multiplier = randomInt(2, 4);
+    const d = b * multiplier;
+    const a = randomInt(1, b - 1);
+    return {
+      id: nextId(),
+      prompt: `${a}/${b} = ?/${d}`,
+      answer: a * multiplier,
+      operands: [a, b, d],
+    };
+  });
+}
+
+/** Simplify a fraction to lowest terms. */
+export function generateSimplifyFraction(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    let denom = randomInt(2, 9);
+    let numer = randomInt(1, denom - 1);
+    while (gcd(numer, denom) !== 1) {
+      denom = randomInt(2, 9);
+      numer = randomInt(1, denom - 1);
+    }
+    const k = randomInt(2, 4);
+    const a = numer * k;
+    const b = denom * k;
+    return makeFraction(`${a}/${b}`, numer, denom, [a, b]);
+  });
+}
+
+/** A fraction of a whole number, e.g. "3/4 × 20". */
+export function generateFractionOfNumber(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const d = randomInt(2, 10);
+    const n = randomInt(1, d - 1);
+    const whole = d * randomInt(2, 9);
+    return {
+      id: nextId(),
+      prompt: `${n}/${d} × ${whole}`,
+      answer: (whole / d) * n,
+      operands: [n, d, whole],
+    };
+  });
+}
+
+/** Adding fractions that already share a denominator. */
+export function generateAddFractionsSameDenominator(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const d = randomInt(3, 10);
+    const n1 = randomInt(1, d - 2);
+    const n2 = randomInt(1, d - 1 - n1);
+    return makeFraction(`${n1}/${d} + ${n2}/${d}`, n1 + n2, d, [n1, n2, d]);
+  });
+}
+
+/** Subtracting fractions that already share a denominator. */
+export function generateSubtractFractionsSameDenominator(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const d = randomInt(3, 10);
+    const n1 = randomInt(2, d - 1);
+    const n2 = randomInt(1, n1 - 1);
+    return makeFraction(`${n1}/${d} - ${n2}/${d}`, n1 - n2, d, [n1, n2, d]);
+  });
+}
+
+/** Adding fractions with different denominators — one denominator is a multiple of the other. */
+export function generateAddFractionsDifferentDenominators(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const b1 = randomInt(2, 6);
+    const multiplier = randomInt(2, 3);
+    const b2 = b1 * multiplier;
+    const n1 = randomInt(1, b1 - 1);
+    const n2 = randomInt(1, b2 - 1);
+    const numerator = n1 * multiplier + n2;
+    return makeFraction(`${n1}/${b1} + ${n2}/${b2}`, numerator, b2, [n1, b1, n2, b2]);
+  });
+}
+
+/** Multiplying two fractions — multiply straight across. */
+export function generateMultiplyFractions(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const d1 = randomInt(2, 6);
+    const n1 = randomInt(1, d1 - 1);
+    const d2 = randomInt(2, 6);
+    const n2 = randomInt(1, d2 - 1);
+    return makeFraction(`${n1}/${d1} × ${n2}/${d2}`, n1 * n2, d1 * d2, [n1, d1, n2, d2]);
+  });
+}
+
+/** Dividing by a fraction — flip the second fraction and multiply. */
+export function generateDivideFractions(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const d1 = randomInt(2, 6);
+    const n1 = randomInt(1, d1 - 1);
+    const d2 = randomInt(2, 6);
+    const n2 = randomInt(1, d2 - 1);
+    return makeFraction(`${n1}/${d1} ÷ ${n2}/${d2}`, n1 * d2, d1 * n2, [n1, d1, n2, d2]);
+  });
+}
+
+/** Converting a mixed number to an improper fraction. */
+export function generateMixedToImproper(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const whole = randomInt(1, 5);
+    const d = randomInt(2, 9);
+    const n = randomInt(1, d - 1);
+    return makeFraction(`${whole} ${n}/${d}`, whole * d + n, d, [whole, n, d]);
   });
 }
