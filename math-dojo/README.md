@@ -10,6 +10,7 @@ A belt-ranked math practice game, inspired by the Kumon method's small-step work
 - **Mastery-gated progression**: a stripe is only marked earned once you clear the whole multi-page drill at a minimum accuracy *and* average speed. Miss either bar and you retry with a freshly generated set.
 - **Self-correction loop**: get a problem wrong and it goes to the back of the queue instead of just being marked wrong — you see the right answer immediately and solve it again before moving on, the same way Kumon has students check and fix their own work.
 - **Real breathers between pages**: finishing a page pauses on a "page complete" screen with a button — it waits for you, so stepping away for water or a call doesn't cost you the page.
+- **Color-linked worked examples**: lesson steps that carry a number forward (a carry digit, a borrow, a split-apart piece) highlight that number in the same accent color everywhere it reappears, so the eye can follow it step to step instead of re-deriving where it came from.
 - Progress is saved locally in the browser (`localStorage`) — no account needed.
 - Ships in **English, Portuguese and Spanish** with an in-app switcher (auto-detected from the browser on first visit).
 

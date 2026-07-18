@@ -102,23 +102,23 @@ const whiteBelt: Belt = {
         steps: [
           {
             text: {
-              en: "8 needs 2 more to reach 10.",
-              pt: "O 8 precisa de mais 2 para chegar a 10.",
-              es: "Al 8 le faltan 2 para llegar a 10.",
+              en: "8 needs {{2}} more to reach 10.",
+              pt: "O 8 precisa de mais {{2}} para chegar a 10.",
+              es: "Al 8 le faltan {{2}} para llegar a 10.",
             },
           },
           {
             text: {
-              en: "Split 5 into 2 + 3.",
-              pt: "Separe o 5 em 2 + 3.",
-              es: "Separa el 5 en 2 + 3.",
+              en: "Split 5 into {{2}} + 3.",
+              pt: "Separe o 5 em {{2}} + 3.",
+              es: "Separa el 5 en {{2}} + 3.",
             },
           },
           {
             text: {
-              en: "8 + 2 = 10, then 10 + 3 = 13.",
-              pt: "8 + 2 = 10, depois 10 + 3 = 13.",
-              es: "8 + 2 = 10, luego 10 + 3 = 13.",
+              en: "8 + {{2}} = 10, then 10 + 3 = 13.",
+              pt: "8 + {{2}} = 10, depois 10 + 3 = 13.",
+              es: "8 + {{2}} = 10, luego 10 + 3 = 13.",
             },
           },
           { text: { en: "8 + 5 = 13.", pt: "8 + 5 = 13.", es: "8 + 5 = 13." } },
@@ -231,16 +231,16 @@ const whiteBelt: Belt = {
         steps: [
           {
             text: {
-              en: "Add the units: 8 + 5 = 13. Write the 3, carry the 1.",
-              pt: "Some as unidades: 8 + 5 = 13. Escreva o 3 e leve o 1.",
-              es: "Suma las unidades: 8 + 5 = 13. Escribe el 3 y lleva el 1.",
+              en: "Add the units: 8 + 5 = 13. Write the 3, carry the {{1}}.",
+              pt: "Some as unidades: 8 + 5 = 13. Escreva o 3 e leve o {{1}}.",
+              es: "Suma las unidades: 8 + 5 = 13. Escribe el 3 y lleva el {{1}}.",
             },
           },
           {
             text: {
-              en: "Add the carried 1 to the tens: 3 + 1 = 4.",
-              pt: "Some o 1 que veio à dezena: 3 + 1 = 4.",
-              es: "Suma el 1 que llevaste a la decena: 3 + 1 = 4.",
+              en: "Add the carried {{1}} to the tens: 3 + {{1}} = 4.",
+              pt: "Some o {{1}} que veio à dezena: 3 + {{1}} = 4.",
+              es: "Suma el {{1}} que llevaste a la decena: 3 + {{1}} = 4.",
             },
           },
           { text: { en: "38 + 5 = 43.", pt: "38 + 5 = 43.", es: "38 + 5 = 43." } },
@@ -321,16 +321,16 @@ const whiteBelt: Belt = {
         steps: [
           {
             text: {
-              en: "Add the units column: 7 + 6 = 13. Write the 3, carry the 1.",
-              pt: "Some a coluna das unidades: 7 + 6 = 13. Escreva o 3 e leve o 1.",
-              es: "Suma la columna de las unidades: 7 + 6 = 13. Escribe el 3 y lleva el 1.",
+              en: "Add the units column: 7 + 6 = 13. Write the 3, carry the {{1}}.",
+              pt: "Some a coluna das unidades: 7 + 6 = 13. Escreva o 3 e leve o {{1}}.",
+              es: "Suma la columna de las unidades: 7 + 6 = 13. Escribe el 3 y lleva el {{1}}.",
             },
           },
           {
             text: {
-              en: "Add the tens column: 2 + 4 + 1 (carried) = 7.",
-              pt: "Some a coluna das dezenas: 2 + 4 + 1 (que veio) = 7.",
-              es: "Suma la columna de las decenas: 2 + 4 + 1 (que llevaste) = 7.",
+              en: "Add the tens column: 2 + 4 + {{1}} (carried) = 7.",
+              pt: "Some a coluna das dezenas: 2 + 4 + {{1}} (que veio) = 7.",
+              es: "Suma la columna de las decenas: 2 + 4 + {{1}} (que llevaste) = 7.",
             },
           },
           { text: { en: "27 + 46 = 73.", pt: "27 + 46 = 73.", es: "27 + 46 = 73." } },
@@ -408,16 +408,16 @@ const whiteBelt: Belt = {
         steps: [
           {
             text: {
-              en: "Add the units: 7 + 6 = 13. Write the 3, carry the 1.",
-              pt: "Some as unidades: 7 + 6 = 13. Escreva o 3 e leve o 1.",
-              es: "Suma las unidades: 7 + 6 = 13. Escribe el 3 y lleva el 1.",
+              en: "Add the units: 7 + 6 = 13. Write the 3, carry the {{1}}.",
+              pt: "Some as unidades: 7 + 6 = 13. Escreva o 3 e leve o {{1}}.",
+              es: "Suma las unidades: 7 + 6 = 13. Escribe el 3 y lleva el {{1}}.",
             },
           },
           {
             text: {
-              en: "Add the tens plus the carry: 1 + 5 + 1 = 7.",
-              pt: "Some as dezenas mais o que veio: 1 + 5 + 1 = 7.",
-              es: "Suma las decenas más el acarreo: 1 + 5 + 1 = 7.",
+              en: "Add the tens plus the carry: 1 + 5 + {{1}} = 7.",
+              pt: "Some as dezenas mais o que veio: 1 + 5 + {{1}} = 7.",
+              es: "Suma las decenas más el acarreo: 1 + 5 + {{1}} = 7.",
             },
           },
           {
@@ -457,23 +457,23 @@ const whiteBelt: Belt = {
         steps: [
           {
             text: {
-              en: "Add the units: 7 + 8 = 15. Write the 5, carry the 1.",
-              pt: "Some as unidades: 7 + 8 = 15. Escreva o 5 e leve o 1.",
-              es: "Suma las unidades: 7 + 8 = 15. Escribe el 5 y lleva el 1.",
+              en: "Add the units: 7 + 8 = 15. Write the 5, carry the {{1}}.",
+              pt: "Some as unidades: 7 + 8 = 15. Escreva o 5 e leve o {{1}}.",
+              es: "Suma las unidades: 7 + 8 = 15. Escribe el 5 y lleva el {{1}}.",
             },
           },
           {
             text: {
-              en: "Add the tens plus the carry: 8 + 6 + 1 = 15. Write the 5, carry the 1 again.",
-              pt: "Some as dezenas mais o que veio: 8 + 6 + 1 = 15. Escreva o 5 e leve o 1 de novo.",
-              es: "Suma las decenas más el acarreo: 8 + 6 + 1 = 15. Escribe el 5 y lleva el 1 de nuevo.",
+              en: "Add the tens plus the carry: 8 + 6 + {{1}} = 15. Write the 5, carry the {{1}} again.",
+              pt: "Some as dezenas mais o que veio: 8 + 6 + {{1}} = 15. Escreva o 5 e leve o {{1}} de novo.",
+              es: "Suma las decenas más el acarreo: 8 + 6 + {{1}} = 15. Escribe el 5 y lleva el {{1}} de nuevo.",
             },
           },
           {
             text: {
-              en: "Add the hundreds plus the carry: 5 + 3 + 1 = 9.",
-              pt: "Some as centenas mais o que veio: 5 + 3 + 1 = 9.",
-              es: "Suma las centenas más el acarreo: 5 + 3 + 1 = 9.",
+              en: "Add the hundreds plus the carry: 5 + 3 + {{1}} = 9.",
+              pt: "Some as centenas mais o que veio: 5 + 3 + {{1}} = 9.",
+              es: "Suma las centenas más el acarreo: 5 + 3 + {{1}} = 9.",
             },
           },
           { text: { en: "587 + 368 = 955.", pt: "587 + 368 = 955.", es: "587 + 368 = 955." } },
@@ -549,23 +549,23 @@ const blueBelt: Belt = {
         steps: [
           {
             text: {
-              en: "15 needs to lose 5 to reach 10.",
-              pt: "O 15 precisa perder 5 para chegar a 10.",
-              es: "Al 15 le hace falta perder 5 para llegar a 10.",
+              en: "15 needs to lose {{5}} to reach 10.",
+              pt: "O 15 precisa perder {{5}} para chegar a 10.",
+              es: "Al 15 le hace falta perder {{5}} para llegar a 10.",
             },
           },
           {
             text: {
-              en: "Split 8 into 5 + 3.",
-              pt: "Separe o 8 em 5 + 3.",
-              es: "Separa el 8 en 5 + 3.",
+              en: "Split 8 into {{5}} + 3.",
+              pt: "Separe o 8 em {{5}} + 3.",
+              es: "Separa el 8 en {{5}} + 3.",
             },
           },
           {
             text: {
-              en: "15 - 5 = 10, then 10 - 3 = 7.",
-              pt: "15 - 5 = 10, depois 10 - 3 = 7.",
-              es: "15 - 5 = 10, luego 10 - 3 = 7.",
+              en: "15 - {{5}} = 10, then 10 - 3 = 7.",
+              pt: "15 - {{5}} = 10, depois 10 - 3 = 7.",
+              es: "15 - {{5}} = 10, luego 10 - 3 = 7.",
             },
           },
           { text: { en: "15 - 8 = 7.", pt: "15 - 8 = 7.", es: "15 - 8 = 7." } },
@@ -678,16 +678,16 @@ const blueBelt: Belt = {
         steps: [
           {
             text: {
-              en: "2 is smaller than 7, so borrow a ten: 12 - 7 = 5.",
-              pt: "2 é menor que 7, então empreste uma dezena: 12 - 7 = 5.",
-              es: "2 es menor que 7, así que presta una decena: 12 - 7 = 5.",
+              en: "2 is smaller than 7, so borrow {{1}} ten: 12 - 7 = 5.",
+              pt: "2 é menor que 7, então empreste {{1}} dezena: 12 - 7 = 5.",
+              es: "2 es menor que 7, así que presta {{1}} decena: 12 - 7 = 5.",
             },
           },
           {
             text: {
-              en: "The tens digit loses 1: 4 becomes 3.",
-              pt: "A dezena perde 1: 4 vira 3.",
-              es: "La decena pierde 1: 4 se convierte en 3.",
+              en: "The tens digit loses {{1}}: 4 becomes 3.",
+              pt: "A dezena perde {{1}}: 4 vira 3.",
+              es: "La decena pierde {{1}}: 4 se convierte en 3.",
             },
           },
           { text: { en: "42 - 7 = 35.", pt: "42 - 7 = 35.", es: "42 - 7 = 35." } },
@@ -754,16 +754,16 @@ const blueBelt: Belt = {
         steps: [
           {
             text: {
-              en: "2 is smaller than 7, so borrow: 12 - 7 = 5.",
-              pt: "2 é menor que 7, então empreste: 12 - 7 = 5.",
-              es: "2 es menor que 7, así que presta: 12 - 7 = 5.",
+              en: "2 is smaller than 7, so borrow {{1}} ten: 12 - 7 = 5.",
+              pt: "2 é menor que 7, então empreste {{1}} dezena: 12 - 7 = 5.",
+              es: "2 es menor que 7, así que presta {{1}} decena: 12 - 7 = 5.",
             },
           },
           {
             text: {
-              en: "The tens digit loses 1: 5 - 1 - 2 = 2.",
-              pt: "A dezena perde 1: 5 - 1 - 2 = 2.",
-              es: "La decena pierde 1: 5 - 1 - 2 = 2.",
+              en: "The tens digit loses {{1}}: 5 - {{1}} = 4, then 4 - 2 = 2.",
+              pt: "A dezena perde {{1}}: 5 - {{1}} = 4, depois 4 - 2 = 2.",
+              es: "La decena pierde {{1}}: 5 - {{1}} = 4, luego 4 - 2 = 2.",
             },
           },
           { text: { en: "52 - 27 = 25.", pt: "52 - 27 = 25.", es: "52 - 27 = 25." } },
@@ -841,16 +841,16 @@ const blueBelt: Belt = {
         steps: [
           {
             text: {
-              en: "2 is smaller than 8, so borrow: 12 - 8 = 4.",
-              pt: "2 é menor que 8, então empreste: 12 - 8 = 4.",
-              es: "2 es menor que 8, así que presta: 12 - 8 = 4.",
+              en: "2 is smaller than 8, so borrow {{1}} ten: 12 - 8 = 4.",
+              pt: "2 é menor que 8, então empreste {{1}} dezena: 12 - 8 = 4.",
+              es: "2 es menor que 8, así que presta {{1}} decena: 12 - 8 = 4.",
             },
           },
           {
             text: {
-              en: "The tens digit loses 1: 4 - 1 - 2 = 1.",
-              pt: "A dezena perde 1: 4 - 1 - 2 = 1.",
-              es: "La decena pierde 1: 4 - 1 - 2 = 1.",
+              en: "The tens digit loses {{1}}: 4 - {{1}} = 3, then 3 - 2 = 1.",
+              pt: "A dezena perde {{1}}: 4 - {{1}} = 3, depois 3 - 2 = 1.",
+              es: "La decena pierde {{1}}: 4 - {{1}} = 3, luego 3 - 2 = 1.",
             },
           },
           {
@@ -890,23 +890,23 @@ const blueBelt: Belt = {
         steps: [
           {
             text: {
-              en: "3 is smaller than 7, so borrow: 13 - 7 = 6.",
-              pt: "3 é menor que 7, então empreste: 13 - 7 = 6.",
-              es: "3 es menor que 7, así que presta: 13 - 7 = 6.",
+              en: "3 is smaller than 7, so borrow {{1}} ten: 13 - 7 = 6.",
+              pt: "3 é menor que 7, então empreste {{1}} dezena: 13 - 7 = 6.",
+              es: "3 es menor que 7, así que presta {{1}} decena: 13 - 7 = 6.",
             },
           },
           {
             text: {
-              en: "The tens digit loses 1, becoming 1, which is smaller than 5 — borrow again: 11 - 5 = 6.",
-              pt: "A dezena perde 1, vira 1, que é menor que 5 — empreste de novo: 11 - 5 = 6.",
-              es: "La decena pierde 1, queda en 1, que es menor que 5 — presta de nuevo: 11 - 5 = 6.",
+              en: "The tens digit loses {{1}}, becoming 1, which is smaller than 5 — borrow again: 11 - 5 = 6.",
+              pt: "A dezena perde {{1}}, vira 1, que é menor que 5 — empreste de novo: 11 - 5 = 6.",
+              es: "La decena pierde {{1}}, queda en 1, que es menor que 5 — presta de nuevo: 11 - 5 = 6.",
             },
           },
           {
             text: {
-              en: "The hundreds digit loses 1: 5 - 1 - 3 = 1.",
-              pt: "A centena perde 1: 5 - 1 - 3 = 1.",
-              es: "La centena pierde 1: 5 - 1 - 3 = 1.",
+              en: "The hundreds digit loses {{1}}: 5 - {{1}} = 4, then 4 - 3 = 1.",
+              pt: "A centena perde {{1}}: 5 - {{1}} = 4, depois 4 - 3 = 1.",
+              es: "La centena pierde {{1}}: 5 - {{1}} = 4, luego 4 - 3 = 1.",
             },
           },
           { text: { en: "523 - 357 = 166.", pt: "523 - 357 = 166.", es: "523 - 357 = 166." } },
@@ -1030,16 +1030,16 @@ const purpleBelt: Belt = {
         steps: [
           {
             text: {
-              en: "Break 8 into 5 + 3.",
-              pt: "Separe o 8 em 5 + 3.",
-              es: "Separa el 8 en 5 + 3.",
+              en: "Break 8 into {{5}} + {{3}}.",
+              pt: "Separe o 8 em {{5}} + {{3}}.",
+              es: "Separa el 8 en {{5}} + {{3}}.",
             },
           },
           {
             text: {
-              en: "7 × 5 = 35 and 7 × 3 = 21.",
-              pt: "7 × 5 = 35 e 7 × 3 = 21.",
-              es: "7 × 5 = 35 y 7 × 3 = 21.",
+              en: "7 × {{5}} = 35 and 7 × {{3}} = 21.",
+              pt: "7 × {{5}} = 35 e 7 × {{3}} = 21.",
+              es: "7 × {{5}} = 35 y 7 × {{3}} = 21.",
             },
           },
           { text: { en: "35 + 21 = 56.", pt: "35 + 21 = 56.", es: "35 + 21 = 56." } },
@@ -1073,16 +1073,16 @@ const purpleBelt: Belt = {
         steps: [
           {
             text: {
-              en: "Stuck on ×9? Multiply by 10 first: 6 × 10 = 60.",
-              pt: "Travou no ×9? Multiplique por 10 primeiro: 6 × 10 = 60.",
-              es: "¿Te trabaste en el ×9? Multiplica por 10 primero: 6 × 10 = 60.",
+              en: "Stuck on ×9? Multiply by 10 first: 6 × 10 = {{60}}.",
+              pt: "Travou no ×9? Multiplique por 10 primeiro: 6 × 10 = {{60}}.",
+              es: "¿Te trabaste en el ×9? Multiplica por 10 primero: 6 × 10 = {{60}}.",
             },
           },
           {
             text: {
-              en: "Then subtract the number once: 60 - 6 = 54.",
-              pt: "Depois subtraia o número uma vez: 60 - 6 = 54.",
-              es: "Luego resta el número una vez: 60 - 6 = 54.",
+              en: "Then subtract the number once: {{60}} - 6 = 54.",
+              pt: "Depois subtraia o número uma vez: {{60}} - 6 = 54.",
+              es: "Luego resta el número una vez: {{60}} - 6 = 54.",
             },
           },
           { text: { en: "6 × 9 = 54.", pt: "6 × 9 = 54.", es: "6 × 9 = 54." } },
@@ -1193,16 +1193,16 @@ const purpleBelt: Belt = {
         steps: [
           {
             text: {
-              en: "Multiply the units: 4 × 3 = 12. Write the 2, carry the 1.",
-              pt: "Multiplique a unidade: 4 × 3 = 12. Escreva o 2 e leve o 1.",
-              es: "Multiplica la unidad: 4 × 3 = 12. Escribe el 2 y lleva el 1.",
+              en: "Multiply the units: 4 × 3 = 12. Write the 2, carry the {{1}}.",
+              pt: "Multiplique a unidade: 4 × 3 = 12. Escreva o 2 e leve o {{1}}.",
+              es: "Multiplica la unidad: 4 × 3 = 12. Escribe el 2 y lleva el {{1}}.",
             },
           },
           {
             text: {
-              en: "Multiply the tens: 2 × 3 = 6, plus the carried 1 = 7.",
-              pt: "Multiplique a dezena: 2 × 3 = 6, mais o 1 que veio = 7.",
-              es: "Multiplica la decena: 2 × 3 = 6, más el 1 que llevaste = 7.",
+              en: "Multiply the tens: 2 × 3 = 6, plus the carried {{1}} = 7.",
+              pt: "Multiplique a dezena: 2 × 3 = 6, mais o {{1}} que veio = 7.",
+              es: "Multiplica la decena: 2 × 3 = 6, más el {{1}} que llevaste = 7.",
             },
           },
           { text: { en: "24 × 3 = 72.", pt: "24 × 3 = 72.", es: "24 × 3 = 72." } },
@@ -1229,9 +1229,15 @@ const purpleBelt: Belt = {
         },
         example: { id: "ex-purple-8", prompt: "23 × 12", answer: 276, operands: [23, 12] },
         steps: [
-          { text: { en: "Break 12 into 10 + 2.", pt: "Separe o 12 em 10 + 2.", es: "Separa el 12 en 10 + 2." } },
-          { text: { en: "23 × 10 = 230.", pt: "23 × 10 = 230.", es: "23 × 10 = 230." } },
-          { text: { en: "23 × 2 = 46.", pt: "23 × 2 = 46.", es: "23 × 2 = 46." } },
+          {
+            text: {
+              en: "Break 12 into {{10}} + {{2}}.",
+              pt: "Separe o 12 em {{10}} + {{2}}.",
+              es: "Separa el 12 en {{10}} + {{2}}.",
+            },
+          },
+          { text: { en: "23 × {{10}} = 230.", pt: "23 × {{10}} = 230.", es: "23 × {{10}} = 230." } },
+          { text: { en: "23 × {{2}} = 46.", pt: "23 × {{2}} = 46.", es: "23 × {{2}} = 46." } },
           { text: { en: "230 + 46 = 276.", pt: "230 + 46 = 276.", es: "230 + 46 = 276." } },
         ],
       },
@@ -1258,16 +1264,16 @@ const purpleBelt: Belt = {
         steps: [
           {
             text: {
-              en: "Multiply the units: 3 × 4 = 12. Write the 2, carry the 1.",
-              pt: "Multiplique a unidade: 3 × 4 = 12. Escreva o 2 e leve o 1.",
-              es: "Multiplica la unidad: 3 × 4 = 12. Escribe el 2 y lleva el 1.",
+              en: "Multiply the units: 3 × 4 = 12. Write the 2, carry the {{1}}.",
+              pt: "Multiplique a unidade: 3 × 4 = 12. Escreva o 2 e leve o {{1}}.",
+              es: "Multiplica la unidad: 3 × 4 = 12. Escribe el 2 y lleva el {{1}}.",
             },
           },
           {
             text: {
-              en: "Multiply the tens: 1 × 4 = 4, plus the carried 1 = 5.",
-              pt: "Multiplique a dezena: 1 × 4 = 4, mais o 1 que veio = 5.",
-              es: "Multiplica la decena: 1 × 4 = 4, más el 1 que llevaste = 5.",
+              en: "Multiply the tens: 1 × 4 = 4, plus the carried {{1}} = 5.",
+              pt: "Multiplique a dezena: 1 × 4 = 4, mais o {{1}} que veio = 5.",
+              es: "Multiplica la decena: 1 × 4 = 4, más el {{1}} que llevaste = 5.",
             },
           },
           {
@@ -1301,9 +1307,15 @@ const purpleBelt: Belt = {
         },
         example: { id: "ex-purple-10", prompt: "213 × 24", answer: 5112, operands: [213, 24] },
         steps: [
-          { text: { en: "Break 24 into 20 + 4.", pt: "Separe o 24 em 20 + 4.", es: "Separa el 24 en 20 + 4." } },
-          { text: { en: "213 × 20 = 4260.", pt: "213 × 20 = 4260.", es: "213 × 20 = 4260." } },
-          { text: { en: "213 × 4 = 852.", pt: "213 × 4 = 852.", es: "213 × 4 = 852." } },
+          {
+            text: {
+              en: "Break 24 into {{20}} + {{4}}.",
+              pt: "Separe o 24 em {{20}} + {{4}}.",
+              es: "Separa el 24 en {{20}} + {{4}}.",
+            },
+          },
+          { text: { en: "213 × {{20}} = 4260.", pt: "213 × {{20}} = 4260.", es: "213 × {{20}} = 4260." } },
+          { text: { en: "213 × {{4}} = 852.", pt: "213 × {{4}} = 852.", es: "213 × {{4}} = 852." } },
           { text: { en: "4260 + 852 = 5112.", pt: "4260 + 852 = 5112.", es: "4260 + 852 = 5112." } },
         ],
       },
