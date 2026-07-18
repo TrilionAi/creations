@@ -10,16 +10,22 @@ export type SecondaryAnswerFormat = "remainder" | "fraction" | "decimal";
  * number line (addition/subtraction, and reused as-is for negative integers since
  * it already renders any start/end), a bar split into equal parts with some shaded
  * (fractions/decimals), a labeled "variable box" beside unit squares (algebra —
- * concretely shows what a variable holds), or a level balance scale with x on one
- * pan (equations — shows that solving means keeping both sides equal). Used both
- * on lesson worked examples and, optionally, on individual drill problems where
- * reading a picture *is* the skill. */
+ * concretely shows what a variable holds), a level balance scale with x on one
+ * pan (equations — shows that solving means keeping both sides equal), an
+ * input/rule/output "function machine" (functions — shows a function as a
+ * mapping), a rise-over-run staircase (functions — shows what slope means), or
+ * a handful of plotted points forming a U (functions — the shape of a parabola).
+ * Used both on lesson worked examples and, optionally, on individual drill
+ * problems where reading a picture *is* the skill. */
 export type Diagram =
   | { kind: "groups"; groups: number; perGroup: number }
   | { kind: "numberLine"; start: number; end: number }
   | { kind: "fraction"; total: number; shaded: number }
   | { kind: "variableBox"; xValue: number; units: number }
-  | { kind: "balanceScale"; leftUnits: number; rightUnits: number };
+  | { kind: "balanceScale"; leftUnits: number; rightUnits: number }
+  | { kind: "functionMachine"; input: number; rule: string; output: number }
+  | { kind: "slopeStaircase"; rise: number; run: number }
+  | { kind: "parabola"; points: { x: number; y: number }[] };
 
 export interface Problem {
   id: string;

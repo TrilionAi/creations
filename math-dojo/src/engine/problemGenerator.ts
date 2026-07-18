@@ -1194,3 +1194,186 @@ export function generateMultiStepEquation(count: number): Problem[] {
     };
   });
 }
+
+const FUNCTION_MACHINE_RULES = [
+  { label: "× 2", apply: (x: number) => x * 2 },
+  { label: "× 3", apply: (x: number) => x * 3 },
+  { label: "+ 4", apply: (x: number) => x + 4 },
+  { label: "+ 7", apply: (x: number) => x + 7 },
+];
+
+/** Reads a function machine — an input, a rule, and the revealed output. */
+export function generateFunctionMachineReading(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const rule = FUNCTION_MACHINE_RULES[randomInt(0, FUNCTION_MACHINE_RULES.length - 1)];
+    const input = randomInt(2, 9);
+    const output = rule.apply(input);
+    return {
+      id: nextId(),
+      prompt: "",
+      answer: output,
+      operands: [input, output],
+      diagram: { kind: "functionMachine" as const, input, rule: rule.label, output },
+    };
+  });
+}
+
+/** Evaluate a linear function f(x) = ax + b for a positive input. */
+export function generateEvaluateFunctionPositive(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 9);
+    const b = randomInt(0, 9);
+    const xVal = randomInt(1, 9);
+    return {
+      id: nextId(),
+      prompt: `f(x) = ${a}x + ${b}, find f(${xVal})`,
+      answer: a * xVal + b,
+      operands: [a, b, xVal],
+    };
+  });
+}
+
+/** Evaluate a linear function f(x) = ax + b for a negative input. */
+export function generateEvaluateFunctionNegative(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 9);
+    const b = randomInt(0, 9);
+    const xVal = randomInt(-9, -1);
+    return {
+      id: nextId(),
+      prompt: `f(x) = ${a}x + ${b}, find f(${xVal})`,
+      answer: a * xVal + b,
+      operands: [a, b, xVal],
+      allowNegative: true,
+    };
+  });
+}
+
+/** Reads a rise-over-run staircase and reports the slope as a reduced fraction. */
+export function generateSlopeStaircaseReading(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    let run = randomInt(2, 9);
+    let rise = randomInt(1, 9);
+    while (gcd(rise, run) !== 1) {
+      run = randomInt(2, 9);
+      rise = randomInt(1, 9);
+    }
+    return {
+      id: nextId(),
+      prompt: "",
+      answer: rise,
+      operands: [rise, run],
+      secondaryAnswer: run,
+      secondaryFormat: "fraction",
+      diagram: { kind: "slopeStaircase" as const, rise, run },
+    };
+  });
+}
+
+/** Calculates slope from two labeled points — always a positive, already-reduced slope. */
+export function generateSlopeFromTwoPoints(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    let run = randomInt(2, 9);
+    let rise = randomInt(1, 9);
+    while (gcd(rise, run) !== 1) {
+      run = randomInt(2, 9);
+      rise = randomInt(1, 9);
+    }
+    const x1 = randomInt(-5, 5);
+    const y1 = randomInt(-5, 5);
+    const x2 = x1 + run;
+    const y2 = y1 + rise;
+    return {
+      id: nextId(),
+      prompt: `Point A: (${x1}, ${y1}), Point B: (${x2}, ${y2})`,
+      answer: rise,
+      operands: [x1, y1, x2, y2],
+      secondaryAnswer: run,
+      secondaryFormat: "fraction",
+    };
+  });
+}
+
+/** The y-intercept of f(x) = ax + b is just b — read it directly. */
+export function generateFindYIntercept(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 9);
+    const b = randomInt(1, 9);
+    return {
+      id: nextId(),
+      prompt: `f(x) = ${a}x + ${b}, find the y-intercept`,
+      answer: b,
+      operands: [a, b],
+    };
+  });
+}
+
+/** Find the zero (x-intercept) of a linear function — solving ax + b = 0. */
+export function generateFindXIntercept(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 9);
+    let xVal = randomInt(-9, 9);
+    while (xVal === 0) xVal = randomInt(-9, 9);
+    const b = -a * xVal;
+    return {
+      id: nextId(),
+      prompt: `${a}x ${b >= 0 ? "+" : "-"} ${Math.abs(b)} = 0`,
+      answer: xVal,
+      operands: [a, b],
+      allowNegative: true,
+      isEquation: true,
+    };
+  });
+}
+
+/** Evaluate a simple quadratic f(x) = x² + c for a small input. */
+export function generateEvaluateBasicQuadratic(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const c = randomInt(-9, 9);
+    const xVal = randomInt(-6, 6);
+    return {
+      id: nextId(),
+      prompt: `f(x) = x² ${c >= 0 ? "+" : "-"} ${Math.abs(c)}, find f(${xVal})`,
+      answer: xVal * xVal + c,
+      operands: [c, xVal],
+      allowNegative: true,
+    };
+  });
+}
+
+/** Evaluate a full quadratic f(x) = x² + bx + c for a small input. */
+export function generateEvaluateFullQuadratic(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const b = (Math.random() < 0.5 ? 1 : -1) * randomInt(2, 9);
+    const c = randomInt(-9, 9);
+    const xVal = randomInt(-6, 6);
+    return {
+      id: nextId(),
+      prompt: `f(x) = x² ${b >= 0 ? "+" : "-"} ${Math.abs(b)}x ${c >= 0 ? "+" : "-"} ${Math.abs(c)}, find f(${xVal})`,
+      answer: xVal * xVal + b * xVal + c,
+      operands: [b, c, xVal],
+      allowNegative: true,
+    };
+  });
+}
+
+/** Capstone: evaluate a linear function and a quadratic function at the same
+ * input, then add the results — synthesizes every earlier Functions stripe. */
+export function generateCombineFunctions(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 9);
+    const bLin = randomInt(-9, 9);
+    const bQuad = (Math.random() < 0.5 ? 1 : -1) * randomInt(2, 9);
+    const cQuad = randomInt(-9, 9);
+    const xVal = randomInt(-6, 6);
+    const fVal = a * xVal + bLin;
+    const gVal = xVal * xVal + bQuad * xVal + cQuad;
+    return {
+      id: nextId(),
+      prompt: `f(x) = ${a}x ${bLin >= 0 ? "+" : "-"} ${Math.abs(bLin)} and g(x) = x² ${bQuad >= 0 ? "+" : "-"} ${Math.abs(bQuad)}x ${cQuad >= 0 ? "+" : "-"} ${Math.abs(cQuad)}. Find f(${xVal}) + g(${xVal}).`,
+      answer: fVal + gVal,
+      operands: [a, bLin, bQuad, cQuad, xVal],
+      allowNegative: true,
+    };
+  });
+}

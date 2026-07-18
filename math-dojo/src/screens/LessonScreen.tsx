@@ -6,6 +6,9 @@ import { NumberLineDiagram } from "../components/NumberLineDiagram";
 import { FractionDiagram } from "../components/FractionDiagram";
 import { VariableBoxDiagram } from "../components/VariableBoxDiagram";
 import { BalanceScaleDiagram } from "../components/BalanceScaleDiagram";
+import { FunctionMachineDiagram } from "../components/FunctionMachineDiagram";
+import { SlopeStaircaseDiagram } from "../components/SlopeStaircaseDiagram";
+import { ParabolaDiagram } from "../components/ParabolaDiagram";
 import styles from "./LessonScreen.module.css";
 
 interface LessonScreenProps {
@@ -106,6 +109,17 @@ export function LessonScreen({ stripe, onBack, onStart }: LessonScreenProps) {
             {lesson.diagram.kind === "balanceScale" && (
               <BalanceScaleDiagram leftUnits={lesson.diagram.leftUnits} rightUnits={lesson.diagram.rightUnits} />
             )}
+            {lesson.diagram.kind === "functionMachine" && (
+              <FunctionMachineDiagram
+                input={lesson.diagram.input}
+                rule={lesson.diagram.rule}
+                output={lesson.diagram.output}
+              />
+            )}
+            {lesson.diagram.kind === "slopeStaircase" && (
+              <SlopeStaircaseDiagram rise={lesson.diagram.rise} run={lesson.diagram.run} />
+            )}
+            {lesson.diagram.kind === "parabola" && <ParabolaDiagram points={lesson.diagram.points} />}
           </div>
         )}
 
