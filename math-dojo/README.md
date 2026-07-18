@@ -15,20 +15,12 @@ A belt-ranked math practice game, inspired by the Kumon method's small-step work
 
 ## Status
 
-MVP slice: the full game engine (lesson → multi-page timed drill → mastery scoring → belt map) is built and working end-to-end for **White Belt (Addition)**, all 10 stripes:
+The engine (lesson → multi-page timed drill → mastery scoring → belt map) is built once and reused for every belt. Content so far:
 
-1. Adding within 10
-2. Adding within 20 (crossing ten)
-3. Adding three numbers
-4. Two-digit + one-digit, no carrying
-5. Two-digit + one-digit, with carrying
-6. Two-digit + two-digit, no carrying
-7. Two-digit + two-digit, with carrying
-8. Three-digit + three-digit, no carrying
-9. Three-digit + three-digit, one carry
-10. Three-digit + three-digit, double carry
+- **White Belt (Addition)** — all 10 stripes: within 10, within 20, three addends, 2-digit+1-digit (no/with carry), 2-digit+2-digit (no/with carry), 3-digit+3-digit (no/single/double carry).
+- **Blue Belt (Subtraction)** — all 10 stripes, same progression mirrored for subtraction: within 10, within 20 (bridging back through ten), three-number chains, 2-digit−1-digit (no/with borrow), 2-digit−2-digit (no/with borrow), 3-digit−3-digit (no/single/double borrow).
 
-Blue/Purple/Brown/Black/Coral belts are on the map as "coming soon" — same engine, new content to be filled in belt by belt.
+Purple/Brown/Black/Coral belts are on the map as "coming soon" — same engine, new content to be filled in belt by belt.
 
 Live at **https://trilionai.github.io/creations/**.
 
