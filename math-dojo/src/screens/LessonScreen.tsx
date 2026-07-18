@@ -4,6 +4,7 @@ import { UI_STRINGS } from "../i18n/ui";
 import { GroupDiagram } from "../components/GroupDiagram";
 import { NumberLineDiagram } from "../components/NumberLineDiagram";
 import { FractionDiagram } from "../components/FractionDiagram";
+import { VariableBoxDiagram } from "../components/VariableBoxDiagram";
 import styles from "./LessonScreen.module.css";
 
 interface LessonScreenProps {
@@ -85,6 +86,9 @@ export function LessonScreen({ stripe, onBack, onStart }: LessonScreenProps) {
             )}
             {lesson.diagram.kind === "fraction" && (
               <FractionDiagram total={lesson.diagram.total} shaded={lesson.diagram.shaded} />
+            )}
+            {lesson.diagram.kind === "variableBox" && (
+              <VariableBoxDiagram xValue={lesson.diagram.xValue} units={lesson.diagram.units} />
             )}
           </div>
         )}

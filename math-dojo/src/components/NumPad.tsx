@@ -5,9 +5,21 @@ interface NumPadProps {
   onBackspace: () => void;
   onSubmit: () => void;
   submitDisabled: boolean;
+  /** Shows a "±" toggle row below the pad — only for problems whose answer can be negative. */
+  showSign?: boolean;
+  isNegative?: boolean;
+  onToggleSign?: () => void;
 }
 
-export function NumPad({ onDigit, onBackspace, onSubmit, submitDisabled }: NumPadProps) {
+export function NumPad({
+  onDigit,
+  onBackspace,
+  onSubmit,
+  submitDisabled,
+  showSign,
+  isNegative,
+  onToggleSign,
+}: NumPadProps) {
   return (
     <div className={styles.pad}>
       {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map((d) => (
@@ -29,6 +41,15 @@ export function NumPad({ onDigit, onBackspace, onSubmit, submitDisabled }: NumPa
       >
         ✓
       </button>
+      {showSign && (
+        <button
+          type="button"
+          className={[styles.key, styles.signKey, isNegative ? styles.signKeyActive : ""].join(" ")}
+          onClick={onToggleSign}
+        >
+          ± negative
+        </button>
+      )}
     </div>
   );
 }

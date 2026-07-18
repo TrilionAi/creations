@@ -79,6 +79,14 @@ function gcd(a: number, b: number): number {
   return b === 0 ? a : gcd(b, a % b);
 }
 
+/** Renders a signed integer inside a chain like "a + b" — the leading term shows its
+ * natural sign, a later term wraps a negative value in parentheses ("4 + (-7)") so a
+ * run-on "+ -7" or "- -7" never appears in a prompt. */
+function formatSignedTerm(n: number, leading: boolean): string {
+  if (leading) return `${n}`;
+  return n < 0 ? `(${n})` : `${n}`;
+}
+
 function pairKey(operands: number[]): string {
   return [...operands].sort((x, y) => x - y).join(",");
 }
@@ -792,6 +800,183 @@ export function generateRoundDecimal(count: number): Problem[] {
       prompt: `${whole}.${tenths}`,
       answer,
       operands: [whole, tenths],
+    };
+  });
+}
+
+/** Reads a "variable box" picture — a box labeled x (revealed value) plus loose unit
+ * squares — the total is what the picture represents, added together. */
+export function generateVariableBoxReading(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const xValue = randomInt(1, 9);
+    const units = randomInt(1, 9);
+    return {
+      id: nextId(),
+      prompt: "",
+      answer: xValue + units,
+      operands: [xValue, units],
+      diagram: { kind: "variableBox" as const, xValue, units },
+    };
+  });
+}
+
+/** Evaluate a linear expression "ax + b" by substituting a given value for x. */
+export function generateEvaluateExpression(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 9);
+    const b = randomInt(0, 9);
+    const xVal = randomInt(1, 9);
+    return {
+      id: nextId(),
+      prompt: `${a}x + ${b}, x = ${xVal}`,
+      answer: a * xVal + b,
+      operands: [a, b, xVal],
+    };
+  });
+}
+
+/** Order of operations — multiply before add, and parentheses before anything outside them. */
+export function generateOrderOfOperations(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const template = randomInt(0, 2);
+    const a = randomInt(2, 9);
+    const b = randomInt(2, 9);
+    const c = randomInt(2, 9);
+    if (template === 0) {
+      return { id: nextId(), prompt: `${a} + ${b} × ${c}`, answer: a + b * c, operands: [a, b, c] };
+    }
+    if (template === 1) {
+      return { id: nextId(), prompt: `(${a} + ${b}) × ${c}`, answer: (a + b) * c, operands: [a, b, c] };
+    }
+    const product = a * b;
+    const cBounded = randomInt(1, product);
+    return {
+      id: nextId(),
+      prompt: `${a} × ${b} − ${cBounded}`,
+      answer: product - cBounded,
+      operands: [a, b, cBounded],
+    };
+  });
+}
+
+/** Reads a negative position on the number line — always hops left past zero. */
+export function generateNegativeNumberLine(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const start = randomInt(0, 4);
+    const distance = randomInt(start + 1, start + 7);
+    const end = start - distance;
+    return {
+      id: nextId(),
+      prompt: "",
+      answer: end,
+      operands: [start, distance],
+      diagram: { kind: "numberLine" as const, start, end },
+      allowNegative: true,
+    };
+  });
+}
+
+/** Adding two integers with the same sign — both positive or both negative. */
+export function generateAddIntegersSameSign(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const sign = Math.random() < 0.5 ? 1 : -1;
+    const a = sign * randomInt(1, 9);
+    const b = sign * randomInt(1, 9);
+    return {
+      id: nextId(),
+      prompt: `${formatSignedTerm(a, true)} + ${formatSignedTerm(b, false)}`,
+      answer: a + b,
+      operands: [a, b],
+      allowNegative: true,
+    };
+  });
+}
+
+/** Adding two integers with opposite signs. */
+export function generateAddIntegersDifferentSigns(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const signA = Math.random() < 0.5 ? 1 : -1;
+    const a = signA * randomInt(1, 9);
+    const b = -signA * randomInt(1, 9);
+    return {
+      id: nextId(),
+      prompt: `${formatSignedTerm(a, true)} + ${formatSignedTerm(b, false)}`,
+      answer: a + b,
+      operands: [a, b],
+      allowNegative: true,
+    };
+  });
+}
+
+/** Subtracting one integer from another — either can be negative. */
+export function generateSubtractIntegers(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(-9, 9);
+    const b = randomInt(-9, 9);
+    return {
+      id: nextId(),
+      prompt: `${formatSignedTerm(a, true)} - ${formatSignedTerm(b, false)}`,
+      answer: a - b,
+      operands: [a, b],
+      allowNegative: true,
+    };
+  });
+}
+
+/** Combining two "like terms" (same variable) into a single coefficient. */
+export function generateCombiningLikeTerms(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const sign1 = Math.random() < 0.5 ? 1 : -1;
+    const sign2 = Math.random() < 0.5 ? 1 : -1;
+    const c1 = sign1 * randomInt(1, 9);
+    const c2 = sign2 * randomInt(1, 9);
+    const operator = c2 >= 0 ? "+" : "−";
+    const magnitude = Math.abs(c2);
+    return {
+      id: nextId(),
+      prompt: `${c1}x ${operator} ${magnitude}x`,
+      answer: c1 + c2,
+      operands: [c1, c2],
+      allowNegative: true,
+    };
+  });
+}
+
+/** The distributive property, tested via evaluation: a(x ± b), with x given. */
+export function generateDistributiveProperty(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 9);
+    const xVal = randomInt(2, 9);
+    const useSubtraction = Math.random() < 0.5;
+    const b = useSubtraction ? randomInt(1, xVal - 1) : randomInt(1, 9);
+    const inner = useSubtraction ? xVal - b : xVal + b;
+    return {
+      id: nextId(),
+      prompt: `${a}(x ${useSubtraction ? "−" : "+"} ${b}), x = ${xVal}`,
+      answer: a * inner,
+      operands: [a, b, xVal],
+    };
+  });
+}
+
+/** Multi-step: distribute, then add or subtract a constant, for a given x that can
+ * itself be negative — the capstone, synthesizing every earlier Algebra stripe. */
+export function generateMultiStepExpression(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 9);
+    const b = randomInt(1, 9);
+    const c = randomInt(1, 20);
+    const innerOp = Math.random() < 0.5 ? "+" : "−";
+    const outerOp = Math.random() < 0.5 ? "+" : "−";
+    const xVal = randomInt(-9, 9);
+    const inner = innerOp === "+" ? xVal + b : xVal - b;
+    const answer = outerOp === "+" ? a * inner + c : a * inner - c;
+    return {
+      id: nextId(),
+      prompt: `${a}(x ${innerOp} ${b}) ${outerOp} ${c}, x = ${xVal}`,
+      answer,
+      operands: [a, b, c, xVal],
+      allowNegative: true,
     };
   });
 }

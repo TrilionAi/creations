@@ -7,13 +7,16 @@ export type LocalizedText = Record<Locale, string>;
 export type SecondaryAnswerFormat = "remainder" | "fraction" | "decimal";
 
 /** A visual: dots clustered into groups (multiplication/division), a hop-by-hop
- * number line (addition/subtraction), or a bar split into equal parts with some
- * shaded (fractions). Used both on lesson worked examples and, optionally, on
- * individual drill problems where reading a picture *is* the skill being drilled. */
+ * number line (addition/subtraction, and reused as-is for negative integers since
+ * it already renders any start/end), a bar split into equal parts with some shaded
+ * (fractions/decimals), or a labeled "variable box" beside unit squares (algebra —
+ * concretely shows what a variable holds). Used both on lesson worked examples and,
+ * optionally, on individual drill problems where reading a picture *is* the skill. */
 export type Diagram =
   | { kind: "groups"; groups: number; perGroup: number }
   | { kind: "numberLine"; start: number; end: number }
-  | { kind: "fraction"; total: number; shaded: number };
+  | { kind: "fraction"; total: number; shaded: number }
+  | { kind: "variableBox"; xValue: number; units: number };
 
 export interface Problem {
   id: string;
@@ -28,6 +31,9 @@ export interface Problem {
   secondaryFormat?: SecondaryAnswerFormat;
   /** Present when the drill itself is "read this picture" — e.g. identifying a shaded fraction. */
   diagram?: Diagram;
+  /** True when this problem's answer can be negative — shows the NumPad's sign toggle.
+   * Absent (falsy) everywhere outside Algebra's integer-arithmetic stripes. */
+  allowNegative?: boolean;
 }
 
 export interface LessonStep {
