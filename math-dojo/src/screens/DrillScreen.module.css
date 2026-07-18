@@ -81,6 +81,27 @@
   white-space: nowrap;
 }
 
+.pageBreakCard {
+  width: 100%;
+  background: var(--color-secondary-soft);
+  border: 2px solid var(--color-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-8) var(--sp-5);
+  text-align: center;
+  animation: pop-in var(--dur-slow) var(--ease-bounce);
+}
+
+.pageBreakEmoji {
+  font-size: 3rem;
+  margin-bottom: var(--sp-3);
+}
+
+.pageBreakText {
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  color: var(--color-secondary);
+}
+
 .equalsRow {
   display: flex;
   align-items: center;

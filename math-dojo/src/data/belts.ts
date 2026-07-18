@@ -53,7 +53,7 @@ const whiteBelt: Belt = {
           { text: { en: "6 + 3 = 9.", pt: "6 + 3 = 9.", es: "6 + 3 = 9." } },
         ],
       },
-      mastery: { setSize: 10, passAccuracy: 0.8, targetTimeSec: 6 },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 6 },
       generate: generateAddWithin10,
     },
     {
@@ -98,7 +98,7 @@ const whiteBelt: Belt = {
           { text: { en: "8 + 5 = 13.", pt: "8 + 5 = 13.", es: "8 + 5 = 13." } },
         ],
       },
-      mastery: { setSize: 10, passAccuracy: 0.8, targetTimeSec: 8 },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 8 },
       generate: generateAddWithin20,
     },
     {
@@ -146,7 +146,7 @@ const whiteBelt: Belt = {
           },
         ],
       },
-      mastery: { setSize: 10, passAccuracy: 0.8, targetTimeSec: 12 },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 12 },
       generate: generateTwoDigitNoCarry,
     },
     {
@@ -188,7 +188,7 @@ const whiteBelt: Belt = {
           { text: { en: "27 + 46 = 73.", pt: "27 + 46 = 73.", es: "27 + 46 = 73." } },
         ],
       },
-      mastery: { setSize: 10, passAccuracy: 0.8, targetTimeSec: 15 },
+      mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 15 },
       generate: generateTwoDigitWithCarry,
     },
   ],

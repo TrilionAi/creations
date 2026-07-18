@@ -6,7 +6,9 @@ interface UiStrings {
   stripeLabel: string;
   backToMap: string;
   startPractice: string;
-  lessonMeta: (setSize: number, pct: number, sec: number) => string;
+  lessonMeta: (pagesToMaster: number, problemsPerPage: number, pct: number, sec: number) => string;
+  pageLabel: (page: number, totalPages: number) => string;
+  pageComplete: (page: number, totalPages: number) => string;
   correctAnswerReveal: (answer: number) => string;
   exitDrillAria: string;
   resultsPassHeadline: string;
@@ -26,8 +28,10 @@ const en: UiStrings = {
   stripeLabel: "Stripe",
   backToMap: "Back to map",
   startPractice: "I've got it — start practice",
-  lessonMeta: (setSize, pct, sec) =>
-    `${setSize} problems · pass with ${pct}%+ accuracy, averaging under ${sec}s each`,
+  lessonMeta: (pagesToMaster, problemsPerPage, pct, sec) =>
+    `${pagesToMaster} pages of ${problemsPerPage} problems · pass with ${pct}%+ accuracy, averaging under ${sec}s each`,
+  pageLabel: (page, totalPages) => `Page ${page}/${totalPages}`,
+  pageComplete: (page, totalPages) => `Page ${page} of ${totalPages} done!`,
   correctAnswerReveal: (answer) => `Correct answer: ${answer} — try it again`,
   exitDrillAria: "Exit drill",
   resultsPassHeadline: "Stripe earned!",
@@ -47,8 +51,10 @@ const pt: UiStrings = {
   stripeLabel: "Grau",
   backToMap: "Voltar ao mapa",
   startPractice: "Entendi — começar a praticar",
-  lessonMeta: (setSize, pct, sec) =>
-    `${setSize} problemas · passe com ${pct}%+ de acerto, média abaixo de ${sec}s cada`,
+  lessonMeta: (pagesToMaster, problemsPerPage, pct, sec) =>
+    `${pagesToMaster} páginas de ${problemsPerPage} contas · passe com ${pct}%+ de acerto, média abaixo de ${sec}s cada`,
+  pageLabel: (page, totalPages) => `Página ${page}/${totalPages}`,
+  pageComplete: (page, totalPages) => `Página ${page} de ${totalPages} concluída!`,
   correctAnswerReveal: (answer) => `Resposta certa: ${answer} — tente de novo`,
   exitDrillAria: "Sair do treino",
   resultsPassHeadline: "Grau conquistado!",
@@ -68,8 +74,10 @@ const es: UiStrings = {
   stripeLabel: "Grado",
   backToMap: "Volver al mapa",
   startPractice: "Entendido — empezar a practicar",
-  lessonMeta: (setSize, pct, sec) =>
-    `${setSize} problemas · aprueba con ${pct}%+ de precisión, promediando menos de ${sec}s cada uno`,
+  lessonMeta: (pagesToMaster, problemsPerPage, pct, sec) =>
+    `${pagesToMaster} páginas de ${problemsPerPage} problemas · aprueba con ${pct}%+ de precisión, promediando menos de ${sec}s cada uno`,
+  pageLabel: (page, totalPages) => `Página ${page}/${totalPages}`,
+  pageComplete: (page, totalPages) => `¡Página ${page} de ${totalPages} lista!`,
   correctAnswerReveal: (answer) => `Respuesta correcta: ${answer} — inténtalo de nuevo`,
   exitDrillAria: "Salir del ejercicio",
   resultsPassHeadline: "¡Grado conseguido!",
