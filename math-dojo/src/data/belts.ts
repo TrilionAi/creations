@@ -59,6 +59,16 @@ import {
   generateMultiplyDecimalBy10Or100,
   generateDivideWholeBy10,
   generateRoundDecimal,
+  generateVariableBoxReading,
+  generateEvaluateExpression,
+  generateOrderOfOperations,
+  generateNegativeNumberLine,
+  generateAddIntegersSameSign,
+  generateAddIntegersDifferentSigns,
+  generateSubtractIntegers,
+  generateCombiningLikeTerms,
+  generateDistributiveProperty,
+  generateMultiStepExpression,
 } from "../engine/problemGenerator";
 import type { Belt, LocalizedText } from "../types";
 
@@ -1827,6 +1837,11 @@ const decimalsDegree = {
   name: { en: "Decimals", pt: "Decimais", es: "Decimales" } as LocalizedText,
 };
 
+const algebraDegree = {
+  index: 3,
+  name: { en: "Algebra", pt: "Álgebra", es: "Álgebra" } as LocalizedText,
+};
+
 const blackBelt: Belt = {
   id: "black",
   name: { en: "Black Belt", pt: "Faixa Preta", es: "Cinturón Negro" },
@@ -2620,6 +2635,462 @@ const blackBelt: Belt = {
       },
       mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 10 },
       generate: generateRoundDecimal,
+    },
+    {
+      id: "black-21",
+      beltId: "black",
+      index: 1,
+      degree: algebraDegree,
+      title: {
+        en: "What a variable means",
+        pt: "O que significa uma variável",
+        es: "Qué significa una variable",
+      },
+      summary: {
+        en: "A variable is just a box that holds a number.",
+        pt: "Uma variável é só uma caixa que guarda um número.",
+        es: "Una variable es solo una caja que guarda un número.",
+      },
+      lesson: {
+        intro: {
+          en: "A letter like x stands for a number — sometimes it's a mystery, but here it's already revealed. Read the picture and add up what it's worth.",
+          pt: "Uma letra como x representa um número — às vezes é um mistério, mas aqui já foi revelado. Leia a figura e some o que ela vale.",
+          es: "Una letra como x representa un número — a veces es un misterio, pero aquí ya fue revelado. Lee la imagen y suma lo que vale.",
+        },
+        example: { id: "ex-black-21", prompt: "", answer: 5, operands: [3, 2] },
+        diagram: { kind: "variableBox", xValue: 3, units: 2 },
+        steps: [
+          {
+            text: {
+              en: "The box is labeled x, and it's revealed to hold {{3}}.",
+              pt: "A caixa está rotulada x, e foi revelado que ela guarda {{3}}.",
+              es: "La caja está etiquetada x, y se reveló que guarda {{3}}.",
+            },
+          },
+          {
+            text: {
+              en: "Add the loose units: {{3}} + 2 = 5.",
+              pt: "Some as unidades soltas: {{3}} + 2 = 5.",
+              es: "Suma las unidades sueltas: {{3}} + 2 = 5.",
+            },
+          },
+          { text: { en: "x + 2 = 5, when x = 3.", pt: "x + 2 = 5, quando x = 3.", es: "x + 2 = 5, cuando x = 3." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 10 },
+      generate: generateVariableBoxReading,
+    },
+    {
+      id: "black-22",
+      beltId: "black",
+      index: 2,
+      degree: algebraDegree,
+      title: {
+        en: "Evaluating expressions",
+        pt: "Avaliando expressões",
+        es: "Evaluando expresiones",
+      },
+      summary: {
+        en: "Swap the letter for its number, then do the math.",
+        pt: "Troque a letra pelo número, depois faça a conta.",
+        es: "Cambia la letra por su número, luego haz la cuenta.",
+      },
+      lesson: {
+        intro: {
+          en: "Once you know what x equals, replace every x in the expression with that number and solve like normal.",
+          pt: "Depois de saber quanto vale x, troque cada x na expressão por esse número e resolva normalmente.",
+          es: "Una vez que sabes cuánto vale x, cambia cada x en la expresión por ese número y resuelve normalmente.",
+        },
+        example: { id: "ex-black-22", prompt: "3x + 2, x = 4", answer: 14, operands: [3, 2, 4] },
+        steps: [
+          {
+            text: {
+              en: "Swap x for its value: 3 × {{4}}.",
+              pt: "Troque x pelo valor: 3 × {{4}}.",
+              es: "Cambia x por su valor: 3 × {{4}}.",
+            },
+          },
+          {
+            text: {
+              en: "Multiply: 3 × 4 = {{12}}.",
+              pt: "Multiplique: 3 × 4 = {{12}}.",
+              es: "Multiplica: 3 × 4 = {{12}}.",
+            },
+          },
+          {
+            text: {
+              en: "Add the rest: 12 + 2 = 14.",
+              pt: "Some o resto: 12 + 2 = 14.",
+              es: "Suma el resto: 12 + 2 = 14.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateEvaluateExpression,
+    },
+    {
+      id: "black-23",
+      beltId: "black",
+      index: 3,
+      degree: algebraDegree,
+      title: {
+        en: "Order of operations",
+        pt: "Ordem das operações",
+        es: "Orden de las operaciones",
+      },
+      summary: {
+        en: "Multiply and divide before you add or subtract.",
+        pt: "Multiplique e divida antes de somar ou subtrair.",
+        es: "Multiplica y divide antes de sumar o restar.",
+      },
+      lesson: {
+        intro: {
+          en: "Math reads left to right, but multiplication and division always happen before addition and subtraction — and anything inside parentheses happens first of all.",
+          pt: "A matemática se lê da esquerda para a direita, mas multiplicação e divisão sempre acontecem antes de soma e subtração — e o que está dentro de parênteses acontece primeiro de tudo.",
+          es: "La matemática se lee de izquierda a derecha, pero la multiplicación y la división siempre ocurren antes de la suma y la resta — y lo que está dentro de paréntesis ocurre primero que nada.",
+        },
+        example: { id: "ex-black-23", prompt: "4 + 3 × 2", answer: 10, operands: [4, 3, 2] },
+        steps: [
+          {
+            text: {
+              en: "Multiply first: 3 × 2 = {{6}}.",
+              pt: "Multiplique primeiro: 3 × 2 = {{6}}.",
+              es: "Multiplica primero: 3 × 2 = {{6}}.",
+            },
+          },
+          {
+            text: {
+              en: "Then add: 4 + 6 = 10.",
+              pt: "Depois some: 4 + 6 = 10.",
+              es: "Luego suma: 4 + 6 = 10.",
+            },
+          },
+          {
+            text: {
+              en: "4 + 3 × 2 = 10, not 14 — multiplication always goes first.",
+              pt: "4 + 3 × 2 = 10, não 14 — multiplicação sempre vem primeiro.",
+              es: "4 + 3 × 2 = 10, no 14 — la multiplicación siempre va primero.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 14 },
+      generate: generateOrderOfOperations,
+    },
+    {
+      id: "black-24",
+      beltId: "black",
+      index: 4,
+      degree: algebraDegree,
+      title: {
+        en: "Negative numbers on the number line",
+        pt: "Números negativos na reta numérica",
+        es: "Números negativos en la recta numérica",
+      },
+      summary: {
+        en: "Numbers can go below zero too.",
+        pt: "Os números também podem ficar abaixo de zero.",
+        es: "Los números también pueden estar debajo de cero.",
+      },
+      lesson: {
+        intro: {
+          en: "Every hop left past zero keeps counting down — zero isn't the end of the line. A minus sign just means 'the opposite direction.'",
+          pt: "Cada salto para a esquerda depois do zero continua contando — zero não é o fim da reta. Um sinal de menos só significa 'a direção oposta.'",
+          es: "Cada salto a la izquierda después de cero sigue contando — el cero no es el final de la recta. Un signo menos solo significa 'la dirección opuesta.'",
+        },
+        example: { id: "ex-black-24", prompt: "", answer: -3, operands: [2, 5] },
+        diagram: { kind: "numberLine", start: 2, end: -3 },
+        steps: [
+          {
+            text: {
+              en: "Start at {{2}} and hop left 5 times, past zero.",
+              pt: "Comece em {{2}} e dê 5 saltos para a esquerda, passando do zero.",
+              es: "Empieza en {{2}} y da 5 saltos a la izquierda, pasando por cero.",
+            },
+          },
+          {
+            text: {
+              en: "Each hop past zero keeps counting down: 0, -1, -2, -3.",
+              pt: "Cada salto depois do zero continua contando: 0, -1, -2, -3.",
+              es: "Cada salto después de cero sigue contando: 0, -1, -2, -3.",
+            },
+          },
+          { text: { en: "You land on -3.", pt: "Você cai em -3.", es: "Caes en -3." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 10 },
+      generate: generateNegativeNumberLine,
+    },
+    {
+      id: "black-25",
+      beltId: "black",
+      index: 5,
+      degree: algebraDegree,
+      title: {
+        en: "Adding integers, same sign",
+        pt: "Somando números inteiros, mesmo sinal",
+        es: "Sumando números enteros, mismo signo",
+      },
+      summary: {
+        en: "Same sign? Add the sizes and keep the sign.",
+        pt: "Mesmo sinal? Some os tamanhos e mantenha o sinal.",
+        es: "¿Mismo signo? Suma los tamaños y mantén el signo.",
+      },
+      lesson: {
+        intro: {
+          en: "When both numbers have the same sign, add their sizes like normal, then give the answer that same sign.",
+          pt: "Quando os dois números têm o mesmo sinal, some os tamanhos normalmente, depois dê à resposta esse mesmo sinal.",
+          es: "Cuando los dos números tienen el mismo signo, suma los tamaños normalmente, luego dale a la respuesta ese mismo signo.",
+        },
+        example: { id: "ex-black-25", prompt: "-4 + (-7)", answer: -11, operands: [-4, -7] },
+        steps: [
+          {
+            text: {
+              en: "Both numbers are negative — same sign.",
+              pt: "Os dois números são negativos — mesmo sinal.",
+              es: "Los dos números son negativos — mismo signo.",
+            },
+          },
+          {
+            text: {
+              en: "Add their sizes: 4 + 7 = {{11}}.",
+              pt: "Some os tamanhos: 4 + 7 = {{11}}.",
+              es: "Suma los tamaños: 4 + 7 = {{11}}.",
+            },
+          },
+          {
+            text: {
+              en: "Keep the negative sign: -4 + (-7) = -11.",
+              pt: "Mantenha o sinal negativo: -4 + (-7) = -11.",
+              es: "Mantén el signo negativo: -4 + (-7) = -11.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateAddIntegersSameSign,
+    },
+    {
+      id: "black-26",
+      beltId: "black",
+      index: 6,
+      degree: algebraDegree,
+      title: {
+        en: "Adding integers, different signs",
+        pt: "Somando números inteiros, sinais diferentes",
+        es: "Sumando números enteros, signos diferentes",
+      },
+      summary: {
+        en: "Different signs? Subtract the sizes, keep the bigger one's sign.",
+        pt: "Sinais diferentes? Subtraia os tamanhos, mantenha o sinal do maior.",
+        es: "¿Signos diferentes? Resta los tamaños, mantén el signo del mayor.",
+      },
+      lesson: {
+        intro: {
+          en: "When the signs are different, the numbers partly cancel out — find the difference in their sizes, then give the answer the sign of whichever number was bigger.",
+          pt: "Quando os sinais são diferentes, os números se cancelam em parte — ache a diferença entre os tamanhos, depois dê à resposta o sinal do número que era maior.",
+          es: "Cuando los signos son diferentes, los números se cancelan en parte — halla la diferencia entre los tamaños, luego dale a la respuesta el signo del número que era mayor.",
+        },
+        example: { id: "ex-black-26", prompt: "-8 + 3", answer: -5, operands: [-8, 3] },
+        steps: [
+          {
+            text: {
+              en: "Different signs — find the difference in size: 8 - 3 = {{5}}.",
+              pt: "Sinais diferentes — ache a diferença de tamanho: 8 - 3 = {{5}}.",
+              es: "Signos diferentes — halla la diferencia de tamaño: 8 - 3 = {{5}}.",
+            },
+          },
+          {
+            text: {
+              en: "The 8 is bigger and it's negative, so the answer stays negative.",
+              pt: "O 8 é maior e é negativo, então a resposta continua negativa.",
+              es: "El 8 es mayor y es negativo, así que la respuesta sigue siendo negativa.",
+            },
+          },
+          { text: { en: "-8 + 3 = -5.", pt: "-8 + 3 = -5.", es: "-8 + 3 = -5." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 14 },
+      generate: generateAddIntegersDifferentSigns,
+    },
+    {
+      id: "black-27",
+      beltId: "black",
+      index: 7,
+      degree: algebraDegree,
+      title: {
+        en: "Subtracting integers",
+        pt: "Subtraindo números inteiros",
+        es: "Restando números enteros",
+      },
+      summary: {
+        en: "Subtracting is the same as adding the opposite.",
+        pt: "Subtrair é o mesmo que somar o oposto.",
+        es: "Restar es lo mismo que sumar el opuesto.",
+      },
+      lesson: {
+        intro: {
+          en: "Every subtraction can be rewritten as adding a negative — flip the sign of the second number, then add using the rules you already know.",
+          pt: "Toda subtração pode ser reescrita como somar um negativo — inverta o sinal do segundo número, depois some usando as regras que você já conhece.",
+          es: "Toda resta se puede reescribir como sumar un negativo — invierte el signo del segundo número, luego suma usando las reglas que ya conoces.",
+        },
+        example: { id: "ex-black-27", prompt: "4 - 9", answer: -5, operands: [4, 9] },
+        steps: [
+          {
+            text: {
+              en: "Turn subtraction into adding the opposite: 4 - 9 becomes 4 + ({{-9}}).",
+              pt: "Transforme a subtração em soma do oposto: 4 - 9 vira 4 + ({{-9}}).",
+              es: "Convierte la resta en sumar el opuesto: 4 - 9 se convierte en 4 + ({{-9}}).",
+            },
+          },
+          {
+            text: {
+              en: "Now add like before: 4 + (-9) = -5.",
+              pt: "Agora some como antes: 4 + (-9) = -5.",
+              es: "Ahora suma como antes: 4 + (-9) = -5.",
+            },
+          },
+          { text: { en: "4 - 9 = -5.", pt: "4 - 9 = -5.", es: "4 - 9 = -5." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 16 },
+      generate: generateSubtractIntegers,
+    },
+    {
+      id: "black-28",
+      beltId: "black",
+      index: 8,
+      degree: algebraDegree,
+      title: {
+        en: "Combining like terms",
+        pt: "Combinando termos semelhantes",
+        es: "Combinando términos semejantes",
+      },
+      summary: {
+        en: "Same variable? Just add or subtract the coefficients.",
+        pt: "Mesma variável? Só some ou subtraia os coeficientes.",
+        es: "¿Misma variable? Solo suma o resta los coeficientes.",
+      },
+      lesson: {
+        intro: {
+          en: "Terms with the exact same variable are 'like terms' — the x just comes along for the ride while you add or subtract the numbers in front of it.",
+          pt: "Termos com exatamente a mesma variável são 'termos semelhantes' — o x só acompanha enquanto você soma ou subtrai os números na frente dele.",
+          es: "Los términos con exactamente la misma variable son 'términos semejantes' — la x solo acompaña mientras sumas o restas los números al frente.",
+        },
+        example: { id: "ex-black-28", prompt: "5x + 3x", answer: 8, operands: [5, 3] },
+        steps: [
+          {
+            text: {
+              en: "Both terms have x, so they're 'like terms.'",
+              pt: "Os dois termos têm x, então são 'termos semelhantes.'",
+              es: "Los dos términos tienen x, así que son 'términos semejantes.'",
+            },
+          },
+          {
+            text: {
+              en: "Add the coefficients: 5 + 3 = {{8}}.",
+              pt: "Some os coeficientes: 5 + 3 = {{8}}.",
+              es: "Suma los coeficientes: 5 + 3 = {{8}}.",
+            },
+          },
+          { text: { en: "5x + 3x = 8x.", pt: "5x + 3x = 8x.", es: "5x + 3x = 8x." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 10 },
+      generate: generateCombiningLikeTerms,
+    },
+    {
+      id: "black-29",
+      beltId: "black",
+      index: 9,
+      degree: algebraDegree,
+      title: {
+        en: "The distributive property",
+        pt: "A propriedade distributiva",
+        es: "La propiedad distributiva",
+      },
+      summary: {
+        en: "Multiply the outside number by everything inside the parentheses.",
+        pt: "Multiplique o número de fora por tudo que está dentro dos parênteses.",
+        es: "Multiplica el número de afuera por todo lo que está dentro del paréntesis.",
+      },
+      lesson: {
+        intro: {
+          en: "This is the same trick as splitting 23 × 4 into 20 × 4 + 3 × 4 back in Purple Belt — just with a variable standing in for part of the sum now.",
+          pt: "É o mesmo truque de dividir 23 × 4 em 20 × 4 + 3 × 4 lá da Faixa Roxa — só que agora uma variável ocupa o lugar de parte da soma.",
+          es: "Es el mismo truco de dividir 23 × 4 en 20 × 4 + 3 × 4 del Cinturón Morado — solo que ahora una variable ocupa parte de la suma.",
+        },
+        example: { id: "ex-black-29", prompt: "3(x + 4), x = 2", answer: 18, operands: [3, 4, 2] },
+        steps: [
+          {
+            text: {
+              en: "Multiply 3 by each part inside: 3 × x and 3 × 4.",
+              pt: "Multiplique 3 por cada parte de dentro: 3 × x e 3 × 4.",
+              es: "Multiplica 3 por cada parte de adentro: 3 × x y 3 × 4.",
+            },
+          },
+          {
+            text: {
+              en: "Substitute x = 2 first: 3 × (2 + 4) = 3 × {{6}}.",
+              pt: "Substitua x = 2 primeiro: 3 × (2 + 4) = 3 × {{6}}.",
+              es: "Sustituye x = 2 primero: 3 × (2 + 4) = 3 × {{6}}.",
+            },
+          },
+          { text: { en: "3 × 6 = 18.", pt: "3 × 6 = 18.", es: "3 × 6 = 18." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 16 },
+      generate: generateDistributiveProperty,
+    },
+    {
+      id: "black-30",
+      beltId: "black",
+      index: 10,
+      degree: algebraDegree,
+      title: {
+        en: "Multi-step expressions",
+        pt: "Expressões de várias etapas",
+        es: "Expresiones de varios pasos",
+      },
+      summary: {
+        en: "Distribute, then finish the rest — every Algebra skill in one problem.",
+        pt: "Distribua, depois termine o resto — todas as habilidades de Álgebra em um problema.",
+        es: "Distribuye, luego termina el resto — todas las habilidades de Álgebra en un problema.",
+      },
+      lesson: {
+        intro: {
+          en: "A phrase like 'four times the sum of a number and 3, minus 5' becomes 4(x + 3) - 5. Once it's written as an expression, evaluating it uses everything from this belt: substitution, order of operations, negative numbers, and distributing.",
+          pt: "Uma frase como 'quatro vezes a soma de um número e 3, menos 5' vira 4(x + 3) - 5. Depois de escrita como expressão, avaliá-la usa tudo desta faixa: substituição, ordem das operações, números negativos e distributiva.",
+          es: "Una frase como 'cuatro veces la suma de un número y 3, menos 5' se convierte en 4(x + 3) - 5. Una vez escrita como expresión, evaluarla usa todo de este cinturón: sustitución, orden de operaciones, números negativos y distributiva.",
+        },
+        example: { id: "ex-black-30", prompt: "4(x + 3) - 5, x = -2", answer: -1, operands: [4, 3, 5, -2] },
+        steps: [
+          {
+            text: {
+              en: "Substitute x = -2 inside the parentheses: 4(-2 + 3) - 5.",
+              pt: "Substitua x = -2 dentro dos parênteses: 4(-2 + 3) - 5.",
+              es: "Sustituye x = -2 dentro del paréntesis: 4(-2 + 3) - 5.",
+            },
+          },
+          {
+            text: {
+              en: "Add inside first: -2 + 3 = {{1}}.",
+              pt: "Some dentro primeiro: -2 + 3 = {{1}}.",
+              es: "Suma adentro primero: -2 + 3 = {{1}}.",
+            },
+          },
+          {
+            text: {
+              en: "Distribute: 4 × 1 = 4, then finish: 4 - 5 = -1.",
+              pt: "Distribua: 4 × 1 = 4, depois termine: 4 - 5 = -1.",
+              es: "Distribuye: 4 × 1 = 4, luego termina: 4 - 5 = -1.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 20 },
+      generate: generateMultiStepExpression,
     },
   ],
 };

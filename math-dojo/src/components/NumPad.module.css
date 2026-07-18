@@ -38,3 +38,17 @@
 .submit:disabled {
   opacity: 0.4;
 }
+
+.signKey {
+  grid-column: 1 / -1;
+  min-height: 48px;
+  font-size: var(--fs-base);
+  letter-spacing: 0.02em;
+  color: var(--color-ink-soft);
+}
+
+.signKeyActive {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}

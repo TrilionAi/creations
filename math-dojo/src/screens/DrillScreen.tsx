@@ -6,6 +6,7 @@ import { ProgressBar } from "../components/ProgressBar";
 import { GroupDiagram } from "../components/GroupDiagram";
 import { NumberLineDiagram } from "../components/NumberLineDiagram";
 import { FractionDiagram } from "../components/FractionDiagram";
+import { VariableBoxDiagram } from "../components/VariableBoxDiagram";
 import { useLocale } from "../i18n/LocaleContext";
 import { UI_STRINGS } from "../i18n/ui";
 import styles from "./DrillScreen.module.css";
@@ -27,6 +28,7 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
   const [queue, setQueue] = useState<Problem[]>(() => stripe.generate(totalCount));
   const [input, setInput] = useState("");
   const [secondaryInput, setSecondaryInput] = useState("");
+  const [isNegative, setIsNegative] = useState(false);
   const [activeField, setActiveField] = useState<ActiveField>("primary");
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [solvedCount, setSolvedCount] = useState(0);
@@ -74,6 +76,7 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
 
   const hasSecondary = current?.secondaryAnswer !== undefined;
   const isFraction = current?.secondaryFormat === "fraction";
+  const allowsNegative = current?.allowNegative === true;
 
   function handleDigit(digit: string) {
     if (feedback || lockRef.current) return;
@@ -93,11 +96,16 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
     }
   }
 
+  function handleToggleSign() {
+    if (feedback || lockRef.current) return;
+    setIsNegative((v) => !v);
+  }
+
   function handleSubmit() {
     if (!current || lockRef.current) return;
     if (input === "" || (hasSecondary && secondaryInput === "")) return;
     lockRef.current = true;
-    const numeric = Number(input);
+    const numeric = Number((isNegative ? "-" : "") + input);
     const record = attemptsRef.current.get(current.id)!;
     const isCorrect = hasSecondary
       ? numeric === current.answer && Number(secondaryInput) === current.secondaryAnswer
@@ -119,6 +127,7 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
         setQueue((q) => q.slice(1));
         setInput("");
         setSecondaryInput("");
+        setIsNegative(false);
         setActiveField("primary");
         setFeedback(null);
         if (pageJustCompleted !== null) {
@@ -138,6 +147,7 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
         });
         setInput("");
         setSecondaryInput("");
+        setIsNegative(false);
         setActiveField("primary");
         setFeedback(null);
         lockRef.current = false;
@@ -162,6 +172,10 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
   backspaceRef.current = handleBackspace;
   const hasSecondaryRef = useRef(hasSecondary);
   hasSecondaryRef.current = hasSecondary;
+  const toggleSignRef = useRef(handleToggleSign);
+  toggleSignRef.current = handleToggleSign;
+  const allowsNegativeRef = useRef(allowsNegative);
+  allowsNegativeRef.current = allowsNegative;
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -173,6 +187,8 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
         digitRef.current(e.key);
       } else if (e.key === "Backspace") {
         backspaceRef.current();
+      } else if (e.key === "-" && allowsNegativeRef.current) {
+        toggleSignRef.current();
       } else if (e.key === "Tab" && hasSecondaryRef.current) {
         e.preventDefault();
         setActiveField((f) => (f === "primary" ? "secondary" : "primary"));
@@ -232,6 +248,9 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
                   {current.diagram.kind === "fraction" && (
                     <FractionDiagram total={current.diagram.total} shaded={current.diagram.shaded} />
                   )}
+                  {current.diagram.kind === "variableBox" && (
+                    <VariableBoxDiagram xValue={current.diagram.xValue} units={current.diagram.units} />
+                  )}
                 </div>
               )}
               <div className={styles.equalsRow}>
@@ -275,7 +294,7 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
                         hasSecondary && activeField === "primary" ? styles.answerBoxActive : "",
                       ].join(" ")}
                     >
-                      {input || "?"}
+                      {input ? (isNegative ? `-${input}` : input) : "?"}
                     </button>
                     {hasSecondary && (
                       <>
@@ -317,6 +336,9 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
                 onBackspace={handleBackspace}
                 onSubmit={handleSubmit}
                 submitDisabled={input === "" || (hasSecondary && secondaryInput === "") || feedback !== null}
+                showSign={allowsNegative}
+                isNegative={isNegative}
+                onToggleSign={handleToggleSign}
               />
             </div>
           </>
