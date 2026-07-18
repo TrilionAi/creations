@@ -5,6 +5,7 @@ import { GroupDiagram } from "../components/GroupDiagram";
 import { NumberLineDiagram } from "../components/NumberLineDiagram";
 import { FractionDiagram } from "../components/FractionDiagram";
 import { VariableBoxDiagram } from "../components/VariableBoxDiagram";
+import { BalanceScaleDiagram } from "../components/BalanceScaleDiagram";
 import styles from "./LessonScreen.module.css";
 
 interface LessonScreenProps {
@@ -50,26 +51,38 @@ export function LessonScreen({ stripe, onBack, onStart }: LessonScreenProps) {
         <p className={styles.intro}>{lesson.intro[locale]}</p>
 
         <div className={styles.exampleProblem}>
-          {lesson.example.prompt} ={" "}
-          {lesson.example.secondaryFormat === "fraction" ? (
-            <span className={styles.exampleFraction}>
-              <span className={styles.exampleAnswer}>{lesson.example.answer}</span>
-              <span className={styles.exampleFractionBar} />
-              <span className={styles.exampleAnswer}>{lesson.example.secondaryAnswer}</span>
-            </span>
-          ) : lesson.example.secondaryFormat === "decimal" ? (
-            <>
-              <span className={styles.exampleAnswer}>{lesson.example.answer}</span>
-              <span className={styles.exampleAnswer}>.</span>
-              <span className={styles.exampleAnswer}>{lesson.example.secondaryAnswer}</span>
-            </>
+          {lesson.example.isEquation ? (
+            <div className={styles.exampleEquation}>
+              <div>{lesson.example.prompt}</div>
+              <div>
+                x = <span className={styles.exampleAnswer}>{lesson.example.answer}</span>
+              </div>
+            </div>
           ) : (
             <>
-              <span className={styles.exampleAnswer}>{lesson.example.answer}</span>
-              {lesson.example.secondaryAnswer !== undefined && (
+              {lesson.example.prompt} ={" "}
+              {lesson.example.secondaryFormat === "fraction" ? (
+                <span className={styles.exampleFraction}>
+                  <span className={styles.exampleAnswer}>{lesson.example.answer}</span>
+                  <span className={styles.exampleFractionBar} />
+                  <span className={styles.exampleAnswer}>{lesson.example.secondaryAnswer}</span>
+                </span>
+              ) : lesson.example.secondaryFormat === "decimal" ? (
                 <>
-                  {" "}
-                  {t.remainderLabel} <span className={styles.exampleAnswer}>{lesson.example.secondaryAnswer}</span>
+                  <span className={styles.exampleAnswer}>{lesson.example.answer}</span>
+                  <span className={styles.exampleAnswer}>.</span>
+                  <span className={styles.exampleAnswer}>{lesson.example.secondaryAnswer}</span>
+                </>
+              ) : (
+                <>
+                  <span className={styles.exampleAnswer}>{lesson.example.answer}</span>
+                  {lesson.example.secondaryAnswer !== undefined && (
+                    <>
+                      {" "}
+                      {t.remainderLabel}{" "}
+                      <span className={styles.exampleAnswer}>{lesson.example.secondaryAnswer}</span>
+                    </>
+                  )}
                 </>
               )}
             </>
@@ -89,6 +102,9 @@ export function LessonScreen({ stripe, onBack, onStart }: LessonScreenProps) {
             )}
             {lesson.diagram.kind === "variableBox" && (
               <VariableBoxDiagram xValue={lesson.diagram.xValue} units={lesson.diagram.units} />
+            )}
+            {lesson.diagram.kind === "balanceScale" && (
+              <BalanceScaleDiagram leftUnits={lesson.diagram.leftUnits} rightUnits={lesson.diagram.rightUnits} />
             )}
           </div>
         )}

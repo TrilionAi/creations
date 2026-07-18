@@ -9,14 +9,17 @@ export type SecondaryAnswerFormat = "remainder" | "fraction" | "decimal";
 /** A visual: dots clustered into groups (multiplication/division), a hop-by-hop
  * number line (addition/subtraction, and reused as-is for negative integers since
  * it already renders any start/end), a bar split into equal parts with some shaded
- * (fractions/decimals), or a labeled "variable box" beside unit squares (algebra —
- * concretely shows what a variable holds). Used both on lesson worked examples and,
- * optionally, on individual drill problems where reading a picture *is* the skill. */
+ * (fractions/decimals), a labeled "variable box" beside unit squares (algebra —
+ * concretely shows what a variable holds), or a level balance scale with x on one
+ * pan (equations — shows that solving means keeping both sides equal). Used both
+ * on lesson worked examples and, optionally, on individual drill problems where
+ * reading a picture *is* the skill. */
 export type Diagram =
   | { kind: "groups"; groups: number; perGroup: number }
   | { kind: "numberLine"; start: number; end: number }
   | { kind: "fraction"; total: number; shaded: number }
-  | { kind: "variableBox"; xValue: number; units: number };
+  | { kind: "variableBox"; xValue: number; units: number }
+  | { kind: "balanceScale"; leftUnits: number; rightUnits: number };
 
 export interface Problem {
   id: string;
@@ -34,6 +37,11 @@ export interface Problem {
   /** True when this problem's answer can be negative — shows the NumPad's sign toggle.
    * Absent (falsy) everywhere outside Algebra's integer-arithmetic stripes. */
   allowNegative?: boolean;
+  /** True when `prompt` is itself a complete equation to solve for x (e.g. "2x + 4 = 0"),
+   * not an expression to evaluate. Changes how the worked example and drill answer row
+   * are labeled — never concatenate "prompt = answer", since the prompt already contains
+   * an "=" and a second one would misleadingly chain a third, false equality. */
+  isEquation?: boolean;
 }
 
 export interface LessonStep {
