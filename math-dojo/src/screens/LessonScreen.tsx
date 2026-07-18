@@ -56,6 +56,12 @@ export function LessonScreen({ stripe, onBack, onStart }: LessonScreenProps) {
               <span className={styles.exampleFractionBar} />
               <span className={styles.exampleAnswer}>{lesson.example.secondaryAnswer}</span>
             </span>
+          ) : lesson.example.secondaryFormat === "decimal" ? (
+            <>
+              <span className={styles.exampleAnswer}>{lesson.example.answer}</span>
+              <span className={styles.exampleAnswer}>.</span>
+              <span className={styles.exampleAnswer}>{lesson.example.secondaryAnswer}</span>
+            </>
           ) : (
             <>
               <span className={styles.exampleAnswer}>{lesson.example.answer}</span>

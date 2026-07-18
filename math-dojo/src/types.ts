@@ -4,7 +4,7 @@ export type Locale = "en" | "pt" | "es";
 
 export type LocalizedText = Record<Locale, string>;
 
-export type SecondaryAnswerFormat = "remainder" | "fraction";
+export type SecondaryAnswerFormat = "remainder" | "fraction" | "decimal";
 
 /** A visual: dots clustered into groups (multiplication/division), a hop-by-hop
  * number line (addition/subtraction), or a bar split into equal parts with some
@@ -20,9 +20,11 @@ export interface Problem {
   prompt: string;
   answer: number;
   operands: number[];
-  /** Present only for two-part answers — division's leftover, or a fraction's denominator. */
+  /** Present only for two-part answers — division's leftover, a fraction's denominator,
+   * or a decimal's single tenths digit. */
   secondaryAnswer?: number;
-  /** How to display/label the two-part answer: "12 R 3" side-by-side, or a stacked fraction bar. */
+  /** How to display/label the two-part answer: "12 R 3" side-by-side, a stacked
+   * fraction bar, or "3.5" with a "." separator (decimal — tenths digit only). */
   secondaryFormat?: SecondaryAnswerFormat;
   /** Present when the drill itself is "read this picture" — e.g. identifying a shaded fraction. */
   diagram?: Diagram;

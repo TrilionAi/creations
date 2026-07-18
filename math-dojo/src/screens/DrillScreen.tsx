@@ -279,7 +279,9 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
                     </button>
                     {hasSecondary && (
                       <>
-                        <span className={styles.remainderLabel}>{t.remainderLabel}</span>
+                        <span className={styles.remainderLabel}>
+                          {current.secondaryFormat === "decimal" ? "." : t.remainderLabel}
+                        </span>
                         <button
                           type="button"
                           onClick={() => setActiveField("secondary")}
@@ -299,9 +301,11 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
               {feedback === "incorrect" && (
                 <div className={styles.revealCorrect}>
                   {hasSecondary
-                    ? isFraction
+                    ? current.secondaryFormat === "fraction"
                       ? t.correctAnswerRevealFraction(current.answer, current.secondaryAnswer!)
-                      : t.correctAnswerRevealWithRemainder(current.answer, current.secondaryAnswer!)
+                      : current.secondaryFormat === "decimal"
+                        ? t.correctAnswerRevealDecimal(current.answer, current.secondaryAnswer!)
+                        : t.correctAnswerRevealWithRemainder(current.answer, current.secondaryAnswer!)
                     : t.correctAnswerReveal(current.answer)}
                 </div>
               )}

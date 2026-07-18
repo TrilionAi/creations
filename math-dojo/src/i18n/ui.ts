@@ -13,6 +13,7 @@ interface UiStrings {
   correctAnswerReveal: (answer: number) => string;
   correctAnswerRevealWithRemainder: (quotient: number, remainder: number) => string;
   correctAnswerRevealFraction: (numerator: number, denominator: number) => string;
+  correctAnswerRevealDecimal: (whole: number, tenths: number) => string;
   remainderLabel: string;
   exitDrillAria: string;
   resultsPassHeadline: string;
@@ -40,6 +41,7 @@ const en: UiStrings = {
   correctAnswerReveal: (answer) => `Correct answer: ${answer} — try it again`,
   correctAnswerRevealWithRemainder: (q, r) => `Correct answer: ${q} R ${r} — try it again`,
   correctAnswerRevealFraction: (n, d) => `Correct answer: ${n}/${d} — try it again`,
+  correctAnswerRevealDecimal: (w, t) => `Correct answer: ${w}.${t} — try it again`,
   remainderLabel: "R",
   exitDrillAria: "Exit drill",
   resultsPassHeadline: "Stripe earned!",
@@ -67,6 +69,7 @@ const pt: UiStrings = {
   correctAnswerReveal: (answer) => `Resposta certa: ${answer} — tente de novo`,
   correctAnswerRevealWithRemainder: (q, r) => `Resposta certa: ${q} R ${r} — tente de novo`,
   correctAnswerRevealFraction: (n, d) => `Resposta certa: ${n}/${d} — tente de novo`,
+  correctAnswerRevealDecimal: (w, t) => `Resposta certa: ${w}.${t} — tente de novo`,
   remainderLabel: "R",
   exitDrillAria: "Sair do treino",
   resultsPassHeadline: "Grau conquistado!",
@@ -94,6 +97,7 @@ const es: UiStrings = {
   correctAnswerReveal: (answer) => `Respuesta correcta: ${answer} — inténtalo de nuevo`,
   correctAnswerRevealWithRemainder: (q, r) => `Respuesta correcta: ${q} R ${r} — inténtalo de nuevo`,
   correctAnswerRevealFraction: (n, d) => `Respuesta correcta: ${n}/${d} — inténtalo de nuevo`,
+  correctAnswerRevealDecimal: (w, t) => `Respuesta correcta: ${w}.${t} — inténtalo de nuevo`,
   remainderLabel: "R",
   exitDrillAria: "Salir del ejercicio",
   resultsPassHeadline: "¡Grado conseguido!",
