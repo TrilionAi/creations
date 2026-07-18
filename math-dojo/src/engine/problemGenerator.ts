@@ -1226,7 +1226,7 @@ export function generateEvaluateFunctionPositive(count: number): Problem[] {
     const xVal = randomInt(1, 9);
     return {
       id: nextId(),
-      prompt: `f(x) = ${a}x + ${b}, find f(${xVal})`,
+      prompt: `f(x) = ${a}x + ${b}; f(${xVal})`,
       answer: a * xVal + b,
       operands: [a, b, xVal],
     };
@@ -1241,7 +1241,7 @@ export function generateEvaluateFunctionNegative(count: number): Problem[] {
     const xVal = randomInt(-9, -1);
     return {
       id: nextId(),
-      prompt: `f(x) = ${a}x + ${b}, find f(${xVal})`,
+      prompt: `f(x) = ${a}x + ${b}; f(${xVal})`,
       answer: a * xVal + b,
       operands: [a, b, xVal],
       allowNegative: true,
@@ -1285,7 +1285,7 @@ export function generateSlopeFromTwoPoints(count: number): Problem[] {
     const y2 = y1 + rise;
     return {
       id: nextId(),
-      prompt: `Point A: (${x1}, ${y1}), Point B: (${x2}, ${y2})`,
+      prompt: `(${x1}, ${y1}), (${x2}, ${y2})`,
       answer: rise,
       operands: [x1, y1, x2, y2],
       secondaryAnswer: run,
@@ -1294,14 +1294,14 @@ export function generateSlopeFromTwoPoints(count: number): Problem[] {
   });
 }
 
-/** The y-intercept of f(x) = ax + b is just b — read it directly. */
+/** The y-intercept of f(x) = ax + b is just b — evaluating f(0) always reveals it. */
 export function generateFindYIntercept(count: number): Problem[] {
   return withoutImmediateRepeats(count, () => {
     const a = randomInt(2, 9);
     const b = randomInt(1, 9);
     return {
       id: nextId(),
-      prompt: `f(x) = ${a}x + ${b}, find the y-intercept`,
+      prompt: `f(x) = ${a}x + ${b}; f(0)`,
       answer: b,
       operands: [a, b],
     };
@@ -1333,7 +1333,7 @@ export function generateEvaluateBasicQuadratic(count: number): Problem[] {
     const xVal = randomInt(-6, 6);
     return {
       id: nextId(),
-      prompt: `f(x) = x² ${c >= 0 ? "+" : "-"} ${Math.abs(c)}, find f(${xVal})`,
+      prompt: `f(x) = x² ${c >= 0 ? "+" : "-"} ${Math.abs(c)}; f(${xVal})`,
       answer: xVal * xVal + c,
       operands: [c, xVal],
       allowNegative: true,
@@ -1349,7 +1349,7 @@ export function generateEvaluateFullQuadratic(count: number): Problem[] {
     const xVal = randomInt(-6, 6);
     return {
       id: nextId(),
-      prompt: `f(x) = x² ${b >= 0 ? "+" : "-"} ${Math.abs(b)}x ${c >= 0 ? "+" : "-"} ${Math.abs(c)}, find f(${xVal})`,
+      prompt: `f(x) = x² ${b >= 0 ? "+" : "-"} ${Math.abs(b)}x ${c >= 0 ? "+" : "-"} ${Math.abs(c)}; f(${xVal})`,
       answer: xVal * xVal + b * xVal + c,
       operands: [b, c, xVal],
       allowNegative: true,
@@ -1370,7 +1370,7 @@ export function generateCombineFunctions(count: number): Problem[] {
     const gVal = xVal * xVal + bQuad * xVal + cQuad;
     return {
       id: nextId(),
-      prompt: `f(x) = ${a}x ${bLin >= 0 ? "+" : "-"} ${Math.abs(bLin)} and g(x) = x² ${bQuad >= 0 ? "+" : "-"} ${Math.abs(bQuad)}x ${cQuad >= 0 ? "+" : "-"} ${Math.abs(cQuad)}. Find f(${xVal}) + g(${xVal}).`,
+      prompt: `f(x) = ${a}x ${bLin >= 0 ? "+" : "-"} ${Math.abs(bLin)}, g(x) = x² ${bQuad >= 0 ? "+" : "-"} ${Math.abs(bQuad)}x ${cQuad >= 0 ? "+" : "-"} ${Math.abs(cQuad)}; f(${xVal}) + g(${xVal})`,
       answer: fVal + gVal,
       operands: [a, bLin, bQuad, cQuad, xVal],
       allowNegative: true,
