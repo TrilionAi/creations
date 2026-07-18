@@ -22,6 +22,8 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
   const totalCount = problemsPerPage * pagesToMaster;
   const [queue, setQueue] = useState<Problem[]>(() => stripe.generate(totalCount));
   const [input, setInput] = useState("");
+  const [remainderInput, setRemainderInput] = useState("");
+  const [activeField, setActiveField] = useState<"quotient" | "remainder">("quotient");
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [solvedCount, setSolvedCount] = useState(0);
   const [pageBreak, setPageBreak] = useState<number | null>(null);
@@ -66,22 +68,35 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queue.length]);
 
+  const hasRemainder = current?.remainder !== undefined;
+
   function handleDigit(digit: string) {
     if (feedback || lockRef.current) return;
-    setInput((v) => (v.length < 6 ? v + digit : v));
+    if (hasRemainder && activeField === "remainder") {
+      setRemainderInput((v) => (v.length < 6 ? v + digit : v));
+    } else {
+      setInput((v) => (v.length < 6 ? v + digit : v));
+    }
   }
 
   function handleBackspace() {
     if (feedback || lockRef.current) return;
-    setInput((v) => v.slice(0, -1));
+    if (hasRemainder && activeField === "remainder") {
+      setRemainderInput((v) => v.slice(0, -1));
+    } else {
+      setInput((v) => v.slice(0, -1));
+    }
   }
 
   function handleSubmit() {
-    if (!current || lockRef.current || input === "") return;
+    if (!current || lockRef.current) return;
+    if (input === "" || (hasRemainder && remainderInput === "")) return;
     lockRef.current = true;
     const numeric = Number(input);
     const record = attemptsRef.current.get(current.id)!;
-    const isCorrect = numeric === current.answer;
+    const isCorrect = hasRemainder
+      ? numeric === current.answer && Number(remainderInput) === current.remainder
+      : numeric === current.answer;
 
     if (isCorrect) {
       if (record.mistakeCount === 0) record.firstTryCorrect = true;
@@ -98,6 +113,8 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
       window.setTimeout(() => {
         setQueue((q) => q.slice(1));
         setInput("");
+        setRemainderInput("");
+        setActiveField("quotient");
         setFeedback(null);
         if (pageJustCompleted !== null) {
           // hold here — lockRef stays true until the person taps continue
@@ -115,6 +132,8 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
           return [...rest, first];
         });
         setInput("");
+        setRemainderInput("");
+        setActiveField("quotient");
         setFeedback(null);
         lockRef.current = false;
       }, 1000);
@@ -132,6 +151,12 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
   continueRef.current = handleContinuePage;
   const pageBreakRef = useRef(pageBreak);
   pageBreakRef.current = pageBreak;
+  const digitRef = useRef(handleDigit);
+  digitRef.current = handleDigit;
+  const backspaceRef = useRef(handleBackspace);
+  backspaceRef.current = handleBackspace;
+  const hasRemainderRef = useRef(hasRemainder);
+  hasRemainderRef.current = hasRemainder;
 
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -140,9 +165,12 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
         return;
       }
       if (e.key >= "0" && e.key <= "9") {
-        setInput((v) => (v.length < 6 ? v + e.key : v));
+        digitRef.current(e.key);
       } else if (e.key === "Backspace") {
-        setInput((v) => v.slice(0, -1));
+        backspaceRef.current();
+      } else if (e.key === "Tab" && hasRemainderRef.current) {
+        e.preventDefault();
+        setActiveField((f) => (f === "quotient" ? "remainder" : "quotient"));
       } else if (e.key === "Enter") {
         submitRef.current();
       }
@@ -190,12 +218,40 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
               <div className={styles.prompt}>{current.prompt}</div>
               <div className={styles.equalsRow}>
                 <span className={styles.equalsSign}>=</span>
-                <span className={[styles.answerBox, input === "" ? styles.answerBoxEmpty : ""].join(" ")}>
+                <button
+                  type="button"
+                  onClick={() => setActiveField("quotient")}
+                  className={[
+                    styles.answerBox,
+                    input === "" ? styles.answerBoxEmpty : "",
+                    hasRemainder && activeField === "quotient" ? styles.answerBoxActive : "",
+                  ].join(" ")}
+                >
                   {input || "?"}
-                </span>
+                </button>
+                {hasRemainder && (
+                  <>
+                    <span className={styles.remainderLabel}>{t.remainderLabel}</span>
+                    <button
+                      type="button"
+                      onClick={() => setActiveField("remainder")}
+                      className={[
+                        styles.answerBox,
+                        remainderInput === "" ? styles.answerBoxEmpty : "",
+                        activeField === "remainder" ? styles.answerBoxActive : "",
+                      ].join(" ")}
+                    >
+                      {remainderInput || "?"}
+                    </button>
+                  </>
+                )}
               </div>
               {feedback === "incorrect" && (
-                <div className={styles.revealCorrect}>{t.correctAnswerReveal(current.answer)}</div>
+                <div className={styles.revealCorrect}>
+                  {hasRemainder
+                    ? t.correctAnswerRevealWithRemainder(current.answer, current.remainder!)
+                    : t.correctAnswerReveal(current.answer)}
+                </div>
               )}
             </div>
 
@@ -204,7 +260,7 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
                 onDigit={handleDigit}
                 onBackspace={handleBackspace}
                 onSubmit={handleSubmit}
-                submitDisabled={input === "" || feedback !== null}
+                submitDisabled={input === "" || (hasRemainder && remainderInput === "") || feedback !== null}
               />
             </div>
           </>

@@ -38,6 +38,18 @@ function makeProduct(operands: number[]): Problem {
   };
 }
 
+function makeQuotient(a: number, b: number, includeRemainder: boolean): Problem {
+  const quotient = Math.floor(a / b);
+  const remainder = a - quotient * b;
+  return {
+    id: nextId(),
+    prompt: `${a} ÷ ${b}`,
+    answer: quotient,
+    operands: [a, b],
+    ...(includeRemainder ? { remainder } : {}),
+  };
+}
+
 function pairKey(operands: number[]): string {
   return [...operands].sort((x, y) => x - y).join(",");
 }
@@ -411,5 +423,111 @@ export function generateThreeDigitByTwoDigit(count: number): Problem[] {
     const a = randomInt(100, 999);
     const b = randomInt(11, 99);
     return makeProduct([a, b]);
+  });
+}
+
+/** Exact division — the inverse of a times table fact, no remainder. */
+export function generateExactDivision(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const b = randomInt(2, 9);
+    const q = randomInt(2, 9);
+    return makeQuotient(b * q, b, false);
+  });
+}
+
+/** Division that always leaves something over. */
+export function generateDivisionWithRemainder(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const b = randomInt(2, 9);
+    const q = randomInt(2, 9);
+    const r = randomInt(1, b - 1);
+    return makeQuotient(b * q + r, b, true);
+  });
+}
+
+/** Dividing a clean multiple of 10 or 100 by 10 or 100. */
+export function generateDivideBy10And100(count: number): Problem[] {
+  const divisors = [10, 100];
+  return withoutImmediateRepeats(count, () => {
+    const divisor = divisors[randomInt(0, divisors.length - 1)];
+    const base = randomInt(2, 99);
+    return makeQuotient(base * divisor, divisor, false);
+  });
+}
+
+/** Two-digit ÷ one-digit, tens and units digits each divide cleanly. */
+export function generateTwoDigitByOneDigitExact(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const b = randomInt(2, 9);
+    const maxDigit = Math.floor(9 / b);
+    const tensQ = randomInt(1, maxDigit);
+    const unitsQ = randomInt(0, maxDigit);
+    const a = tensQ * b * 10 + unitsQ * b;
+    return makeQuotient(a, b, false);
+  });
+}
+
+/** Two-digit ÷ one-digit, with a remainder left over. */
+export function generateTwoDigitByOneDigitWithRemainder(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const b = randomInt(2, 9);
+    const r = randomInt(1, b - 1);
+    const maxQ = Math.floor((99 - r) / b);
+    const minQ = Math.max(2, Math.ceil((10 - r) / b));
+    const q = randomInt(Math.min(minQ, maxQ), maxQ);
+    return makeQuotient(b * q + r, b, true);
+  });
+}
+
+/** Three-digit ÷ one-digit, hundreds/tens/units digits each divide cleanly. */
+export function generateThreeDigitByOneDigitExact(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const b = randomInt(2, 9);
+    const maxDigit = Math.floor(9 / b);
+    const hundredsQ = randomInt(1, maxDigit);
+    const tensQ = randomInt(0, maxDigit);
+    const unitsQ = randomInt(0, maxDigit);
+    const a = hundredsQ * b * 100 + tensQ * b * 10 + unitsQ * b;
+    return makeQuotient(a, b, false);
+  });
+}
+
+/** Three-digit ÷ one-digit, with a remainder left over. */
+export function generateThreeDigitByOneDigitWithRemainder(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const b = randomInt(2, 9);
+    const r = randomInt(1, b - 1);
+    const maxQ = Math.floor((999 - r) / b);
+    const minQ = Math.max(12, Math.ceil((100 - r) / b));
+    const q = randomInt(Math.min(minQ, maxQ), maxQ);
+    return makeQuotient(b * q + r, b, true);
+  });
+}
+
+/** Introduces two-digit divisors — dividend divides exactly. */
+export function generateTwoDigitDivisorExact(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const b = randomInt(11, 29);
+    const q = randomInt(2, 9);
+    return makeQuotient(b * q, b, false);
+  });
+}
+
+/** Three-digit ÷ two-digit, full long-division sizing, no remainder. */
+export function generateThreeDigitByTwoDigitExact(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const b = randomInt(11, 29);
+    const q = randomInt(11, 29);
+    return makeQuotient(b * q, b, false);
+  });
+}
+
+/** Three-digit ÷ two-digit, with a remainder left over — the capstone. */
+export function generateThreeDigitByTwoDigitWithRemainder(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const b = randomInt(11, 29);
+    const q = randomInt(11, 29);
+    const r = randomInt(1, b - 1);
+    return makeQuotient(b * q + r, b, true);
   });
 }

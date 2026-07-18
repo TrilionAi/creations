@@ -21,8 +21,9 @@ The engine (lesson → multi-page timed drill → mastery scoring → belt map) 
 - **White Belt (Addition)** — all 10 stripes: within 10, within 20, three addends, 2-digit+1-digit (no/with carry), 2-digit+2-digit (no/with carry), 3-digit+3-digit (no/single/double carry).
 - **Blue Belt (Subtraction)** — all 10 stripes, same progression mirrored for subtraction: within 10, within 20 (bridging back through ten), three-number chains, 2-digit−1-digit (no/with borrow), 2-digit−2-digit (no/with borrow), 3-digit−3-digit (no/single/double borrow).
 - **Purple Belt (Multiplication)** — all 10 stripes: the friendly ×2/×5/×10 tables, ×3/×4, the hard ×6/×7/×8/×9 facts, all single-digit tables mixed, ×10/×100 place-value shifts, 2-digit×1-digit (no/with carry), 2-digit×2-digit, 3-digit×1-digit, 3-digit×2-digit.
+- **Brown Belt (Division)** — all 10 stripes: exact division (the inverse of a times-table fact), division with a remainder, ÷10/÷100, 2-digit÷1-digit (no/with remainder), 3-digit÷1-digit (no/with remainder), an intro to two-digit divisors, and 3-digit÷2-digit full long division (no/with remainder) as the capstone. Remainder problems use a two-part answer — a quotient box and a separate "R" box — instead of squeezing both into one number.
 
-Brown/Black/Coral belts are on the map as "coming soon" — same engine, new content to be filled in belt by belt.
+Black/Coral belts are on the map as "coming soon" — same engine, new content to be filled in belt by belt.
 
 Add `?unlock=all` to the URL to browse every stripe's lesson directly from the map without playing through the real progression — useful for reviewing content, not part of the normal player experience.
 

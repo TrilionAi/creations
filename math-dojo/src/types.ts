@@ -9,6 +9,8 @@ export interface Problem {
   prompt: string;
   answer: number;
   operands: number[];
+  /** Present only for "divide with remainder" problems — answer is the quotient, this is the leftover. */
+  remainder?: number;
 }
 
 export interface LessonStep {
