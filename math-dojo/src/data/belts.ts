@@ -71,6 +71,7 @@ const whiteBelt: Belt = {
           es: "Cuando los dos números son pequeños, cuenta a partir del mayor.",
         },
         example: { id: "ex-white-1", prompt: "6 + 3", answer: 9, operands: [6, 3] },
+        diagram: { kind: "numberLine", start: 6, end: 9 },
         steps: [
           {
             text: {
@@ -524,6 +525,7 @@ const blueBelt: Belt = {
           es: "Cuenta hacia atrás desde el número mayor.",
         },
         example: { id: "ex-blue-1", prompt: "9 - 3", answer: 6, operands: [9, 3] },
+        diagram: { kind: "numberLine", start: 9, end: 6 },
         steps: [
           { text: { en: "Start at 9.", pt: "Comece no 9.", es: "Empieza en el 9." } },
           {
@@ -944,6 +946,52 @@ const purpleBelt: Belt = {
       id: "purple-1",
       beltId: "purple",
       index: 1,
+      title: { en: "What multiplication means", pt: "O que significa multiplicar", es: "Qué significa multiplicar" },
+      summary: {
+        en: "Equal groups added together — see it, then say it as a multiplication.",
+        pt: "Grupos iguais somados juntos — veja, depois diga como uma multiplicação.",
+        es: "Grupos iguales sumados juntos — mira, y luego dilo como una multiplicación.",
+      },
+      lesson: {
+        intro: {
+          en: "Multiplication means adding equal groups together. Picture the groups below, then add them all up.",
+          pt: "Multiplicação significa somar grupos iguais. Veja os grupos abaixo, depois some tudo.",
+          es: "La multiplicación significa sumar grupos iguales. Mira los grupos abajo, luego suma todo.",
+        },
+        example: { id: "ex-purple-1", prompt: "4 × 3", answer: 12, operands: [4, 3] },
+        diagram: { kind: "groups", groups: 3, perGroup: 4 },
+        steps: [
+          {
+            text: {
+              en: "Picture 3 equal groups of 4, like above.",
+              pt: "Veja 3 grupos iguais de 4, como acima.",
+              es: "Mira 3 grupos iguales de 4, como arriba.",
+            },
+          },
+          {
+            text: {
+              en: "Add the groups together: 4 + 4 + 4 = 12.",
+              pt: "Some os grupos: 4 + 4 + 4 = 12.",
+              es: "Suma los grupos: 4 + 4 + 4 = 12.",
+            },
+          },
+          {
+            text: {
+              en: "That's what 4 × 3 means: 3 groups of 4.",
+              pt: "É isso que 4 × 3 significa: 3 grupos de 4.",
+              es: "Eso es lo que significa 4 × 3: 3 grupos de 4.",
+            },
+          },
+          { text: { en: "4 × 3 = 12.", pt: "4 × 3 = 12.", es: "4 × 3 = 12." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 6 },
+      generate: generateTables3and4,
+    },
+    {
+      id: "purple-2",
+      beltId: "purple",
+      index: 2,
       title: {
         en: "The friendly tables: ×2, ×5, ×10",
         pt: "As tabuadas fáceis: ×2, ×5, ×10",
@@ -960,7 +1008,7 @@ const purpleBelt: Belt = {
           pt: "×10 só adiciona um zero. ×5 é sempre a metade disso. ×2 é sempre o dobro do próprio número.",
           es: "×10 solo agrega un cero. ×5 es siempre la mitad de eso. ×2 es siempre el doble del propio número.",
         },
-        example: { id: "ex-purple-1", prompt: "8 × 10", answer: 80, operands: [8, 10] },
+        example: { id: "ex-purple-2", prompt: "8 × 10", answer: 80, operands: [8, 10] },
         steps: [
           {
             text: {
@@ -987,38 +1035,6 @@ const purpleBelt: Belt = {
       },
       mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 5 },
       generate: generateFriendlyTables,
-    },
-    {
-      id: "purple-2",
-      beltId: "purple",
-      index: 2,
-      title: { en: "Times tables 3 and 4", pt: "Tabuada do 3 e do 4", es: "Tablas del 3 y del 4" },
-      summary: {
-        en: "Skip-count to build up the answer.",
-        pt: "Conte de pouco em pouco para chegar na resposta.",
-        es: "Cuenta salteado para llegar a la respuesta.",
-      },
-      lesson: {
-        intro: {
-          en: "Multiplying means adding the same number again and again. Skip-count to find the answer.",
-          pt: "Multiplicar é somar o mesmo número várias vezes. Conte pulando para achar a resposta.",
-          es: "Multiplicar es sumar el mismo número varias veces. Cuenta salteado para encontrar la respuesta.",
-        },
-        example: { id: "ex-purple-2", prompt: "4 × 3", answer: 12, operands: [4, 3] },
-        steps: [
-          {
-            text: {
-              en: "4 × 3 means three groups of 4.",
-              pt: "4 × 3 significa três grupos de 4.",
-              es: "4 × 3 significa tres grupos de 4.",
-            },
-          },
-          { text: { en: "4 + 4 + 4 = 12.", pt: "4 + 4 + 4 = 12.", es: "4 + 4 + 4 = 12." } },
-          { text: { en: "4 × 3 = 12.", pt: "4 × 3 = 12.", es: "4 × 3 = 12." } },
-        ],
-      },
-      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 6 },
-      generate: generateTables3and4,
     },
     {
       id: "purple-3",
@@ -1353,24 +1369,38 @@ const brownBelt: Belt = {
       index: 1,
       title: { en: "Exact division", pt: "Divisão exata", es: "División exacta" },
       summary: {
-        en: "Division undoes multiplication — find the missing factor.",
-        pt: "A divisão desfaz a multiplicação — ache o fator que falta.",
-        es: "La división deshace la multiplicación — encuentra el factor que falta.",
+        en: "Split a number into equal groups — it's multiplication in reverse.",
+        pt: "Separe um número em grupos iguais — é a multiplicação ao contrário.",
+        es: "Separa un número en grupos iguales — es la multiplicación al revés.",
       },
       lesson: {
         intro: {
-          en: "Think of division as the reverse of a times table fact: what number times the divisor gives this?",
-          pt: "Pense na divisão como o contrário da tabuada: que número multiplicado pelo divisor dá esse valor?",
-          es: "Piensa en la división como lo contrario de una tabla de multiplicar: ¿qué número multiplicado por el divisor da este valor?",
+          en: "Division splits a number into equal groups. Picture it below, then notice it matches a multiplication fact you already know.",
+          pt: "A divisão separa um número em grupos iguais. Veja abaixo, e repare que combina com uma conta de multiplicação que você já sabe.",
+          es: "La división separa un número en grupos iguales. Míralo abajo, y fíjate que coincide con una multiplicación que ya sabes.",
         },
         example: { id: "ex-brown-1", prompt: "42 ÷ 6", answer: 7, operands: [42, 6] },
+        diagram: { kind: "groups", groups: 6, perGroup: 7 },
         steps: [
-          { text: { en: "Think: 6 × ? = 42.", pt: "Pense: 6 × ? = 42.", es: "Piensa: 6 × ? = 42." } },
           {
             text: {
-              en: "You already know 6 × 7 = 42 from the tables.",
-              pt: "Você já sabe que 6 × 7 = 42 pela tabuada.",
-              es: "Ya sabes que 6 × 7 = 42 por las tablas.",
+              en: "Picture 42 things split into 6 equal groups, like above.",
+              pt: "Imagine 42 coisas separadas em 6 grupos iguais, como acima.",
+              es: "Imagina 42 cosas separadas en 6 grupos iguales, como arriba.",
+            },
+          },
+          {
+            text: {
+              en: "Count how many end up in each group: 7.",
+              pt: "Conte quantos ficam em cada grupo: 7.",
+              es: "Cuenta cuántos quedan en cada grupo: 7.",
+            },
+          },
+          {
+            text: {
+              en: "That matches a multiplication fact you already know: 6 × 7 = 42 — division is just multiplication in reverse.",
+              pt: "Isso combina com uma multiplicação que você já sabe: 6 × 7 = 42 — a divisão é só a multiplicação ao contrário.",
+              es: "Eso coincide con una multiplicación que ya sabes: 6 × 7 = 42 — la división es solo la multiplicación al revés.",
             },
           },
           { text: { en: "42 ÷ 6 = 7.", pt: "42 ÷ 6 = 7.", es: "42 ÷ 6 = 7." } },

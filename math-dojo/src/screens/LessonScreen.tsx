@@ -1,6 +1,8 @@
 import type { Stripe } from "../types";
 import { useLocale } from "../i18n/LocaleContext";
 import { UI_STRINGS } from "../i18n/ui";
+import { GroupDiagram } from "../components/GroupDiagram";
+import { NumberLineDiagram } from "../components/NumberLineDiagram";
 import styles from "./LessonScreen.module.css";
 
 interface LessonScreenProps {
@@ -54,6 +56,16 @@ export function LessonScreen({ stripe, onBack, onStart }: LessonScreenProps) {
             </>
           )}
         </div>
+
+        {lesson.diagram && (
+          <div className={styles.diagramWrap}>
+            {lesson.diagram.kind === "groups" ? (
+              <GroupDiagram groups={lesson.diagram.groups} perGroup={lesson.diagram.perGroup} />
+            ) : (
+              <NumberLineDiagram start={lesson.diagram.start} end={lesson.diagram.end} />
+            )}
+          </div>
+        )}
 
         <ol className={styles.steps}>
           {lesson.steps.map((step, i) => (
