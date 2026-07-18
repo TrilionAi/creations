@@ -1377,3 +1377,216 @@ export function generateCombineFunctions(count: number): Problem[] {
     };
   });
 }
+
+const SUPERSCRIPT_DIGITS: Record<string, string> = {
+  "0": "⁰",
+  "1": "¹",
+  "2": "²",
+  "3": "³",
+  "4": "⁴",
+  "5": "⁵",
+  "6": "⁶",
+  "7": "⁷",
+  "8": "⁸",
+  "9": "⁹",
+};
+
+/** Renders a positive integer as unicode superscript digits, for exponent notation. */
+function superscript(n: number): string {
+  return String(n)
+    .split("")
+    .map((d) => SUPERSCRIPT_DIGITS[d])
+    .join("");
+}
+
+/** Reads the area model for (x + a)(x + b) and combines the two middle terms'
+ * coefficients — the same insight that makes factoring work in reverse. */
+export function generateFactorAreaReading(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 9);
+    const b = randomInt(2, 9);
+    return {
+      id: nextId(),
+      prompt: "",
+      answer: a + b,
+      operands: [a, b],
+      diagram: { kind: "factorArea" as const, a, b },
+    };
+  });
+}
+
+/** Factor x² - bx + c into (x - p)(x - q) — find the pair p, q (both positive). */
+export function generateFactorTrinomialPair(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const p = randomInt(2, 9);
+    let q = randomInt(2, 9);
+    while (q === p) q = randomInt(2, 9);
+    const [small, large] = p < q ? [p, q] : [q, p];
+    const b = small + large;
+    const c = small * large;
+    return {
+      id: nextId(),
+      prompt: `x² - ${b}x + ${c}`,
+      answer: small,
+      operands: [b, c],
+      secondaryAnswer: large,
+      secondaryFormat: "pair",
+    };
+  });
+}
+
+/** Solve x² - bx + c = 0 by factoring — both roots are positive. */
+export function generateSolveQuadraticByFactoring(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const p = randomInt(2, 9);
+    let q = randomInt(2, 9);
+    while (q === p) q = randomInt(2, 9);
+    const [small, large] = p < q ? [p, q] : [q, p];
+    const b = small + large;
+    const c = small * large;
+    return {
+      id: nextId(),
+      prompt: `x² - ${b}x + ${c} = 0`,
+      answer: small,
+      operands: [b, c],
+      secondaryAnswer: large,
+      secondaryFormat: "pair",
+      isEquation: true,
+    };
+  });
+}
+
+/** Solve x² - bx + c = 0 with the quadratic formula — same shape, alternate technique. */
+export function generateQuadraticFormula(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const p = randomInt(2, 9);
+    let q = randomInt(2, 9);
+    while (q === p) q = randomInt(2, 9);
+    const [small, large] = p < q ? [p, q] : [q, p];
+    const b = small + large;
+    const c = small * large;
+    return {
+      id: nextId(),
+      prompt: `x² - ${b}x + ${c} = 0`,
+      answer: small,
+      operands: [b, c],
+      secondaryAnswer: large,
+      secondaryFormat: "pair",
+      isEquation: true,
+    };
+  });
+}
+
+/** Complete the square: find the constant that turns x² + bx into a perfect-square trinomial. */
+export function generateCompleteTheSquare(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const half = randomInt(1, 9);
+    const b = half * 2;
+    return {
+      id: nextId(),
+      prompt: `x² + ${b}x + ___`,
+      answer: half * half,
+      operands: [b],
+    };
+  });
+}
+
+/** Compute the discriminant b² - 4c of x² - bx + c — determines the number of real roots. */
+export function generateDiscriminant(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const b = randomInt(2, 9);
+    let c = randomInt(-9, 9);
+    while (c === 0) c = randomInt(-9, 9);
+    return {
+      id: nextId(),
+      prompt: `x² - ${b}x ${c >= 0 ? "+" : "-"} ${Math.abs(c)}`,
+      answer: b * b - 4 * c,
+      operands: [b, c],
+      allowNegative: true,
+    };
+  });
+}
+
+/** Simplify a square root into coefficient√remainder form (already in lowest terms). */
+export function generateSimplifyRadical(count: number): Problem[] {
+  const squarefree = [2, 3, 5, 6, 7];
+  return withoutImmediateRepeats(count, () => {
+    const k = randomInt(2, 6);
+    const m = squarefree[randomInt(0, squarefree.length - 1)];
+    const n = k * k * m;
+    return {
+      id: nextId(),
+      prompt: `√${n}`,
+      answer: k,
+      operands: [n],
+      secondaryAnswer: m,
+      secondaryFormat: "radical",
+    };
+  });
+}
+
+/** Laws of exponents — multiplying or dividing same-base powers, find the resulting exponent n. */
+export function generateExponentRules(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const useMultiplication = Math.random() < 0.5;
+    if (useMultiplication) {
+      const a = randomInt(2, 9);
+      const b = randomInt(2, 9);
+      return {
+        id: nextId(),
+        prompt: `x${superscript(a)} × x${superscript(b)} = xⁿ`,
+        answer: a + b,
+        operands: [a, b],
+      };
+    }
+    const b = randomInt(1, 5);
+    const a = randomInt(b + 1, 9);
+    return {
+      id: nextId(),
+      prompt: `x${superscript(a)} ÷ x${superscript(b)} = xⁿ`,
+      answer: a - b,
+      operands: [a, b],
+    };
+  });
+}
+
+/** Solve a system of two linear equations (x + y = S, x - y = D) for x and y. */
+export function generateLinearSystem(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const x = randomInt(1, 9);
+    const y = randomInt(1, 9);
+    const sum = x + y;
+    const diff = x - y;
+    return {
+      id: nextId(),
+      prompt: `x + y = ${sum}, x - y = ${diff >= 0 ? diff : `-${Math.abs(diff)}`}`,
+      answer: x,
+      operands: [sum, diff],
+      secondaryAnswer: y,
+      secondaryFormat: "pair",
+      isEquation: true,
+      equationLabel: "x, y =",
+    };
+  });
+}
+
+/** Capstone: rearrange to standard form, then factor and solve — every Pre-Calculus skill in one problem. */
+export function generateRearrangeFactorSolve(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const p = randomInt(2, 9);
+    let q = randomInt(2, 9);
+    while (q === p) q = randomInt(2, 9);
+    const [small, large] = p < q ? [p, q] : [q, p];
+    const b = small + large;
+    const c = small * large;
+    return {
+      id: nextId(),
+      prompt: `x² - ${b}x = ${-c}`,
+      answer: small,
+      operands: [b, c],
+      secondaryAnswer: large,
+      secondaryFormat: "pair",
+      isEquation: true,
+    };
+  });
+}

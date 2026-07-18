@@ -14,6 +14,8 @@ interface UiStrings {
   correctAnswerRevealWithRemainder: (quotient: number, remainder: number) => string;
   correctAnswerRevealFraction: (numerator: number, denominator: number) => string;
   correctAnswerRevealDecimal: (whole: number, tenths: number) => string;
+  correctAnswerRevealPair: (a: number, b: number) => string;
+  correctAnswerRevealRadical: (coefficient: number, inside: number) => string;
   remainderLabel: string;
   exitDrillAria: string;
   resultsPassHeadline: string;
@@ -42,6 +44,8 @@ const en: UiStrings = {
   correctAnswerRevealWithRemainder: (q, r) => `Correct answer: ${q} R ${r} — try it again`,
   correctAnswerRevealFraction: (n, d) => `Correct answer: ${n}/${d} — try it again`,
   correctAnswerRevealDecimal: (w, t) => `Correct answer: ${w}.${t} — try it again`,
+  correctAnswerRevealPair: (a, b) => `Correct answer: ${a}, ${b} — try it again`,
+  correctAnswerRevealRadical: (c, i) => `Correct answer: ${c}√${i} — try it again`,
   remainderLabel: "R",
   exitDrillAria: "Exit drill",
   resultsPassHeadline: "Stripe earned!",
@@ -70,6 +74,8 @@ const pt: UiStrings = {
   correctAnswerRevealWithRemainder: (q, r) => `Resposta certa: ${q} R ${r} — tente de novo`,
   correctAnswerRevealFraction: (n, d) => `Resposta certa: ${n}/${d} — tente de novo`,
   correctAnswerRevealDecimal: (w, t) => `Resposta certa: ${w}.${t} — tente de novo`,
+  correctAnswerRevealPair: (a, b) => `Resposta certa: ${a}, ${b} — tente de novo`,
+  correctAnswerRevealRadical: (c, i) => `Resposta certa: ${c}√${i} — tente de novo`,
   remainderLabel: "R",
   exitDrillAria: "Sair do treino",
   resultsPassHeadline: "Grau conquistado!",
@@ -98,6 +104,8 @@ const es: UiStrings = {
   correctAnswerRevealWithRemainder: (q, r) => `Respuesta correcta: ${q} R ${r} — inténtalo de nuevo`,
   correctAnswerRevealFraction: (n, d) => `Respuesta correcta: ${n}/${d} — inténtalo de nuevo`,
   correctAnswerRevealDecimal: (w, t) => `Respuesta correcta: ${w}.${t} — inténtalo de nuevo`,
+  correctAnswerRevealPair: (a, b) => `Respuesta correcta: ${a}, ${b} — inténtalo de nuevo`,
+  correctAnswerRevealRadical: (c, i) => `Respuesta correcta: ${c}√${i} — inténtalo de nuevo`,
   remainderLabel: "R",
   exitDrillAria: "Salir del ejercicio",
   resultsPassHeadline: "¡Grado conseguido!",

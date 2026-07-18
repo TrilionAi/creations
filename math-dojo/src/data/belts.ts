@@ -89,6 +89,16 @@ import {
   generateEvaluateBasicQuadratic,
   generateEvaluateFullQuadratic,
   generateCombineFunctions,
+  generateFactorAreaReading,
+  generateFactorTrinomialPair,
+  generateSolveQuadraticByFactoring,
+  generateQuadraticFormula,
+  generateCompleteTheSquare,
+  generateDiscriminant,
+  generateSimplifyRadical,
+  generateExponentRules,
+  generateLinearSystem,
+  generateRearrangeFactorSolve,
 } from "../engine/problemGenerator";
 import type { Belt, LocalizedText } from "../types";
 
@@ -1870,6 +1880,11 @@ const equationsDegree = {
 const functionsDegree = {
   index: 5,
   name: { en: "Functions", pt: "Funções", es: "Funciones" } as LocalizedText,
+};
+
+const preCalcDegree = {
+  index: 6,
+  name: { en: "Pre-Calculus", pt: "Pré-Cálculo", es: "Precálculo" } as LocalizedText,
 };
 
 const blackBelt: Belt = {
@@ -4095,6 +4110,538 @@ const blackBelt: Belt = {
       },
       mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 24 },
       generate: generateCombineFunctions,
+    },
+    {
+      id: "black-51",
+      beltId: "black",
+      index: 1,
+      degree: preCalcDegree,
+      title: {
+        en: "What factoring means",
+        pt: "O que significa fatorar",
+        es: "Qué significa factorizar",
+      },
+      summary: {
+        en: "Multiplying two binomials fills a rectangle with four pieces.",
+        pt: "Multiplicar dois binômios preenche um retângulo com quatro partes.",
+        es: "Multiplicar dos binomios llena un rectángulo con cuatro partes.",
+      },
+      lesson: {
+        intro: {
+          en: "The area of the whole rectangle is x² plus the two middle strips plus the small corner — add the middle strips together to get the combined x-term.",
+          pt: "A área do retângulo inteiro é x² mais as duas faixas do meio mais o cantinho — some as faixas do meio para achar o termo x combinado.",
+          es: "El área del rectángulo completo es x² más las dos franjas del medio más la esquina — suma las franjas del medio para hallar el término x combinado.",
+        },
+        example: { id: "ex-black-51", prompt: "", answer: 7, operands: [3, 4] },
+        diagram: { kind: "factorArea", a: 3, b: 4 },
+        steps: [
+          {
+            text: {
+              en: "The two middle pieces are 3x and 4x — together they combine into one x-term.",
+              pt: "As duas partes do meio são 3x e 4x — juntas elas se combinam em um único termo x.",
+              es: "Las dos partes del medio son 3x y 4x — juntas se combinan en un solo término x.",
+            },
+          },
+          {
+            text: {
+              en: "3x + 4x = {{7}}x.",
+              pt: "3x + 4x = {{7}}x.",
+              es: "3x + 4x = {{7}}x.",
+            },
+          },
+          {
+            text: {
+              en: "(x + 3)(x + 4) = x² + 7x + 12.",
+              pt: "(x + 3)(x + 4) = x² + 7x + 12.",
+              es: "(x + 3)(x + 4) = x² + 7x + 12.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateFactorAreaReading,
+    },
+    {
+      id: "black-52",
+      beltId: "black",
+      index: 2,
+      degree: preCalcDegree,
+      title: {
+        en: "Factoring trinomials: finding the pair",
+        pt: "Fatorando trinômios: achando o par",
+        es: "Factorizando trinomios: hallando el par",
+      },
+      summary: {
+        en: "Find two numbers that multiply to c and add to b.",
+        pt: "Ache dois números que multiplicam para c e somam para b.",
+        es: "Halla dos números que multiplican para c y suman para b.",
+      },
+      lesson: {
+        intro: {
+          en: "This is the reverse of the area model: given x² - bx + c, find the two numbers whose product is c and whose sum is b.",
+          pt: "Isso é o inverso do modelo de área: dado x² - bx + c, ache os dois números cujo produto é c e cuja soma é b.",
+          es: "Esto es lo inverso del modelo de área: dado x² - bx + c, halla los dos números cuyo producto es c y cuya suma es b.",
+        },
+        example: {
+          id: "ex-black-52",
+          prompt: "x² - 7x + 12",
+          answer: 3,
+          secondaryAnswer: 4,
+          secondaryFormat: "pair",
+          operands: [7, 12],
+        },
+        steps: [
+          {
+            text: {
+              en: "Look for two numbers that multiply to 12: 3 × 4 = {{12}}.",
+              pt: "Procure dois números que multiplicam para 12: 3 × 4 = {{12}}.",
+              es: "Busca dos números que multiplican para 12: 3 × 4 = {{12}}.",
+            },
+          },
+          {
+            text: {
+              en: "Check that they also add to 7: 3 + 4 = 7.",
+              pt: "Confira que eles também somam 7: 3 + 4 = 7.",
+              es: "Comprueba que también suman 7: 3 + 4 = 7.",
+            },
+          },
+          {
+            text: {
+              en: "x² - 7x + 12 = (x - 3)(x - 4).",
+              pt: "x² - 7x + 12 = (x - 3)(x - 4).",
+              es: "x² - 7x + 12 = (x - 3)(x - 4).",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 16 },
+      generate: generateFactorTrinomialPair,
+    },
+    {
+      id: "black-53",
+      beltId: "black",
+      index: 3,
+      degree: preCalcDegree,
+      title: {
+        en: "Solving quadratic equations by factoring",
+        pt: "Resolvendo equações quadráticas por fatoração",
+        es: "Resolviendo ecuaciones cuadráticas por factorización",
+      },
+      summary: {
+        en: "Factor first, then each piece separately equals zero.",
+        pt: "Fatore primeiro, depois cada parte separadamente é igual a zero.",
+        es: "Factoriza primero, luego cada parte por separado es igual a cero.",
+      },
+      lesson: {
+        intro: {
+          en: "If two things multiply to zero, at least one of them must be zero. Factor the equation, then set each factor equal to zero on its own.",
+          pt: "Se duas coisas se multiplicam para dar zero, pelo menos uma delas precisa ser zero. Fatore a equação, depois iguale cada fator a zero separadamente.",
+          es: "Si dos cosas se multiplican y dan cero, al menos una de ellas debe ser cero. Factoriza la ecuación, luego iguala cada factor a cero por separado.",
+        },
+        example: {
+          id: "ex-black-53",
+          prompt: "x² - 7x + 12 = 0",
+          answer: 3,
+          secondaryAnswer: 4,
+          secondaryFormat: "pair",
+          isEquation: true,
+          operands: [7, 12],
+        },
+        steps: [
+          {
+            text: {
+              en: "Factor: x² - 7x + 12 = (x - 3)(x - 4).",
+              pt: "Fatore: x² - 7x + 12 = (x - 3)(x - 4).",
+              es: "Factoriza: x² - 7x + 12 = (x - 3)(x - 4).",
+            },
+          },
+          {
+            text: {
+              en: "For the product to be zero, one factor must be zero: x - 3 = 0 or x - 4 = 0.",
+              pt: "Para o produto ser zero, um fator precisa ser zero: x - 3 = 0 ou x - 4 = 0.",
+              es: "Para que el producto sea cero, un factor debe ser cero: x - 3 = 0 o x - 4 = 0.",
+            },
+          },
+          {
+            text: {
+              en: "x = 3 or x = {{4}}.",
+              pt: "x = 3 ou x = {{4}}.",
+              es: "x = 3 o x = {{4}}.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 18 },
+      generate: generateSolveQuadraticByFactoring,
+    },
+    {
+      id: "black-54",
+      beltId: "black",
+      index: 4,
+      degree: preCalcDegree,
+      title: {
+        en: "The quadratic formula",
+        pt: "A fórmula de Bhaskara",
+        es: "La fórmula cuadrática",
+      },
+      summary: {
+        en: "x = (b ± √(b² - 4c)) / 2 — a formula that always works.",
+        pt: "x = (b ± √(b² - 4c)) / 2 — uma fórmula que sempre funciona.",
+        es: "x = (b ± √(b² - 4c)) / 2 — una fórmula que siempre funciona.",
+      },
+      lesson: {
+        intro: {
+          en: "Factoring doesn't always come easily, but this formula always solves x² - bx + c = 0, no guessing required.",
+          pt: "Fatorar nem sempre é fácil, mas essa fórmula sempre resolve x² - bx + c = 0, sem precisar adivinhar.",
+          es: "Factorizar no siempre es fácil, pero esta fórmula siempre resuelve x² - bx + c = 0, sin necesidad de adivinar.",
+        },
+        example: {
+          id: "ex-black-54",
+          prompt: "x² - 7x + 12 = 0",
+          answer: 3,
+          secondaryAnswer: 4,
+          secondaryFormat: "pair",
+          isEquation: true,
+          operands: [7, 12],
+        },
+        steps: [
+          {
+            text: {
+              en: "Here b = 7 and c = 12. Compute the discriminant: b² - 4c = 49 - 48 = {{1}}.",
+              pt: "Aqui b = 7 e c = 12. Calcule o discriminante: b² - 4c = 49 - 48 = {{1}}.",
+              es: "Aquí b = 7 y c = 12. Calcula el discriminante: b² - 4c = 49 - 48 = {{1}}.",
+            },
+          },
+          {
+            text: {
+              en: "√1 = 1, so x = (7 ± 1) / 2.",
+              pt: "√1 = 1, então x = (7 ± 1) / 2.",
+              es: "√1 = 1, entonces x = (7 ± 1) / 2.",
+            },
+          },
+          {
+            text: {
+              en: "x = 8/2 = 4, or x = 6/2 = 3.",
+              pt: "x = 8/2 = 4, ou x = 6/2 = 3.",
+              es: "x = 8/2 = 4, o x = 6/2 = 3.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 20 },
+      generate: generateQuadraticFormula,
+    },
+    {
+      id: "black-55",
+      beltId: "black",
+      index: 5,
+      degree: preCalcDegree,
+      title: {
+        en: "Completing the square",
+        pt: "Completando o quadrado",
+        es: "Completando el cuadrado",
+      },
+      summary: {
+        en: "Add (b/2)² to turn x² + bx into a perfect square.",
+        pt: "Some (b/2)² para transformar x² + bx em um quadrado perfeito.",
+        es: "Suma (b/2)² para convertir x² + bx en un cuadrado perfecto.",
+      },
+      lesson: {
+        intro: {
+          en: "Take half of the x-coefficient and square it — that's always the constant that turns x² + bx into a perfect-square trinomial.",
+          pt: "Pegue metade do coeficiente de x e eleve ao quadrado — essa é sempre a constante que transforma x² + bx em um trinômio quadrado perfeito.",
+          es: "Toma la mitad del coeficiente de x y elévala al cuadrado — esa siempre es la constante que convierte x² + bx en un trinomio cuadrado perfecto.",
+        },
+        example: { id: "ex-black-55", prompt: "x² + 6x + ___", answer: 9, operands: [6] },
+        steps: [
+          {
+            text: {
+              en: "Take half of the x-coefficient: 6 ÷ 2 = {{3}}.",
+              pt: "Pegue metade do coeficiente de x: 6 ÷ 2 = {{3}}.",
+              es: "Toma la mitad del coeficiente de x: 6 ÷ 2 = {{3}}.",
+            },
+          },
+          {
+            text: {
+              en: "Square it: 3² = 9.",
+              pt: "Eleve ao quadrado: 3² = 9.",
+              es: "Elévala al cuadrado: 3² = 9.",
+            },
+          },
+          {
+            text: {
+              en: "x² + 6x + 9 = (x + 3)², a perfect square.",
+              pt: "x² + 6x + 9 = (x + 3)², um quadrado perfeito.",
+              es: "x² + 6x + 9 = (x + 3)², un cuadrado perfecto.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateCompleteTheSquare,
+    },
+    {
+      id: "black-56",
+      beltId: "black",
+      index: 6,
+      degree: preCalcDegree,
+      title: {
+        en: "The discriminant",
+        pt: "O discriminante",
+        es: "El discriminante",
+      },
+      summary: {
+        en: "b² - 4c tells you how many real roots there are.",
+        pt: "b² - 4c diz quantas raízes reais existem.",
+        es: "b² - 4c dice cuántas raíces reales hay.",
+      },
+      lesson: {
+        intro: {
+          en: "The discriminant is the part under the square root in the quadratic formula. Positive means two real roots, zero means one repeated root, negative means no real roots at all.",
+          pt: "O discriminante é a parte dentro da raiz quadrada na fórmula de Bhaskara. Positivo significa duas raízes reais, zero significa uma raiz repetida, negativo significa nenhuma raiz real.",
+          es: "El discriminante es la parte dentro de la raíz cuadrada en la fórmula cuadrática. Positivo significa dos raíces reales, cero significa una raíz repetida, negativo significa ninguna raíz real.",
+        },
+        example: { id: "ex-black-56", prompt: "x² - 5x + 3", answer: 13, operands: [5, 3] },
+        steps: [
+          {
+            text: {
+              en: "b = 5, c = 3. Square b: 5² = {{25}}.",
+              pt: "b = 5, c = 3. Eleve b ao quadrado: 5² = {{25}}.",
+              es: "b = 5, c = 3. Eleva b al cuadrado: 5² = {{25}}.",
+            },
+          },
+          {
+            text: {
+              en: "Multiply: 4 × 3 = 12.",
+              pt: "Multiplique: 4 × 3 = 12.",
+              es: "Multiplica: 4 × 3 = 12.",
+            },
+          },
+          {
+            text: {
+              en: "Discriminant = 25 - 12 = 13 — positive, so there are two real roots.",
+              pt: "Discriminante = 25 - 12 = 13 — positivo, então existem duas raízes reais.",
+              es: "Discriminante = 25 - 12 = 13 — positivo, así que hay dos raíces reales.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateDiscriminant,
+    },
+    {
+      id: "black-57",
+      beltId: "black",
+      index: 7,
+      degree: preCalcDegree,
+      title: {
+        en: "Simplifying square roots",
+        pt: "Simplificando raízes quadradas",
+        es: "Simplificando raíces cuadradas",
+      },
+      summary: {
+        en: "Pull the largest perfect square factor out from under the root.",
+        pt: "Tire o maior fator quadrado perfeito de dentro da raiz.",
+        es: "Saca el mayor factor cuadrado perfecto de debajo de la raíz.",
+      },
+      lesson: {
+        intro: {
+          en: "Split the number under the root into a perfect square times whatever's left, then pull the perfect square's root outside.",
+          pt: "Divida o número dentro da raiz em um quadrado perfeito vezes o que sobra, depois tire a raiz do quadrado perfeito para fora.",
+          es: "Divide el número bajo la raíz en un cuadrado perfecto por lo que queda, luego saca la raíz del cuadrado perfecto hacia afuera.",
+        },
+        example: {
+          id: "ex-black-57",
+          prompt: "√50",
+          answer: 5,
+          secondaryAnswer: 2,
+          secondaryFormat: "radical",
+          operands: [50],
+        },
+        steps: [
+          {
+            text: {
+              en: "50 = 25 × 2, and 25 is a perfect square: 5² = {{25}}.",
+              pt: "50 = 25 × 2, e 25 é um quadrado perfeito: 5² = {{25}}.",
+              es: "50 = 25 × 2, y 25 es un cuadrado perfecto: 5² = {{25}}.",
+            },
+          },
+          {
+            text: {
+              en: "Pull the 5 out from under the root: √50 = 5√2.",
+              pt: "Tire o 5 de dentro da raiz: √50 = 5√2.",
+              es: "Saca el 5 de debajo de la raíz: √50 = 5√2.",
+            },
+          },
+          {
+            text: {
+              en: "5√2 is already simplified — 2 has no more square factors.",
+              pt: "5√2 já está simplificado — 2 não tem mais fatores quadrados.",
+              es: "5√2 ya está simplificado — 2 no tiene más factores cuadrados.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 16 },
+      generate: generateSimplifyRadical,
+    },
+    {
+      id: "black-58",
+      beltId: "black",
+      index: 8,
+      degree: preCalcDegree,
+      title: {
+        en: "Laws of exponents",
+        pt: "Propriedades das potências",
+        es: "Leyes de los exponentes",
+      },
+      summary: {
+        en: "Multiplying same-base powers adds the exponents; dividing subtracts them.",
+        pt: "Multiplicar potências de mesma base soma os expoentes; dividir subtrai.",
+        es: "Multiplicar potencias de la misma base suma los exponentes; dividir los resta.",
+      },
+      lesson: {
+        intro: {
+          en: "When the base is the same, multiplying means adding the exponents, and dividing means subtracting them — no need to expand anything.",
+          pt: "Quando a base é a mesma, multiplicar significa somar os expoentes, e dividir significa subtraí-los — sem precisar expandir nada.",
+          es: "Cuando la base es la misma, multiplicar significa sumar los exponentes, y dividir significa restarlos — sin necesidad de expandir nada.",
+        },
+        example: { id: "ex-black-58", prompt: "x⁵ × x³ = xⁿ", answer: 8, operands: [5, 3] },
+        steps: [
+          {
+            text: {
+              en: "Same base (x), so add the exponents: 5 + 3 = {{8}}.",
+              pt: "Mesma base (x), então some os expoentes: 5 + 3 = {{8}}.",
+              es: "Misma base (x), así que suma los exponentes: 5 + 3 = {{8}}.",
+            },
+          },
+          {
+            text: {
+              en: "x⁵ × x³ = x⁸.",
+              pt: "x⁵ × x³ = x⁸.",
+              es: "x⁵ × x³ = x⁸.",
+            },
+          },
+          { text: { en: "n = 8.", pt: "n = 8.", es: "n = 8." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateExponentRules,
+    },
+    {
+      id: "black-59",
+      beltId: "black",
+      index: 9,
+      degree: preCalcDegree,
+      title: {
+        en: "Systems of linear equations",
+        pt: "Sistemas de equações lineares",
+        es: "Sistemas de ecuaciones lineales",
+      },
+      summary: {
+        en: "Add the equations together to cancel one variable.",
+        pt: "Some as equações para cancelar uma variável.",
+        es: "Suma las ecuaciones para cancelar una variable.",
+      },
+      lesson: {
+        intro: {
+          en: "When one equation has +y and the other has -y, adding them straight down cancels y completely, leaving a one-step equation for x.",
+          pt: "Quando uma equação tem +y e a outra tem -y, somá-las direto cancela o y completamente, deixando uma equação de um passo só para x.",
+          es: "Cuando una ecuación tiene +y y la otra tiene -y, sumarlas directamente cancela la y por completo, dejando una ecuación de un solo paso para x.",
+        },
+        example: {
+          id: "ex-black-59",
+          prompt: "x + y = 10, x - y = 4",
+          answer: 7,
+          secondaryAnswer: 3,
+          secondaryFormat: "pair",
+          isEquation: true,
+          equationLabel: "x, y =",
+          operands: [10, 4],
+        },
+        steps: [
+          {
+            text: {
+              en: "Add the two equations: (x + y) + (x - y) = 10 + 4, so 2x = {{14}}.",
+              pt: "Some as duas equações: (x + y) + (x - y) = 10 + 4, então 2x = {{14}}.",
+              es: "Suma las dos ecuaciones: (x + y) + (x - y) = 10 + 4, entonces 2x = {{14}}.",
+            },
+          },
+          {
+            text: {
+              en: "x = 14 ÷ 2 = 7.",
+              pt: "x = 14 ÷ 2 = 7.",
+              es: "x = 14 ÷ 2 = 7.",
+            },
+          },
+          {
+            text: {
+              en: "Substitute back: 7 + y = 10, so y = 3.",
+              pt: "Substitua de volta: 7 + y = 10, então y = 3.",
+              es: "Sustituye de vuelta: 7 + y = 10, entonces y = 3.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 20 },
+      generate: generateLinearSystem,
+    },
+    {
+      id: "black-60",
+      beltId: "black",
+      index: 10,
+      degree: preCalcDegree,
+      title: {
+        en: "Rearranging, factoring, and solving",
+        pt: "Reorganizando, fatorando e resolvendo",
+        es: "Reorganizando, factorizando y resolviendo",
+      },
+      summary: {
+        en: "Get everything on one side first, then factor and solve — every Pre-Calculus skill in one problem.",
+        pt: "Coloque tudo de um lado primeiro, depois fatore e resolva — todas as habilidades de Pré-Cálculo em um problema.",
+        es: "Pon todo de un lado primero, luego factoriza y resuelve — todas las habilidades de Precálculo en un problema.",
+      },
+      lesson: {
+        intro: {
+          en: "This pulls together everything from this degree: rearrange into standard form, factor the trinomial, then apply the zero-product property.",
+          pt: "Isso reúne tudo desta faixa: reorganize na forma padrão, fatore o trinômio, depois aplique a propriedade do produto zero.",
+          es: "Esto reúne todo de este cinturón: reorganiza en la forma estándar, factoriza el trinomio, luego aplica la propiedad del producto cero.",
+        },
+        example: {
+          id: "ex-black-60",
+          prompt: "x² - 7x = -12",
+          answer: 3,
+          secondaryAnswer: 4,
+          secondaryFormat: "pair",
+          isEquation: true,
+          operands: [7, -12],
+        },
+        steps: [
+          {
+            text: {
+              en: "Add 12 to both sides: x² - 7x + 12 = 0.",
+              pt: "Some 12 dos dois lados: x² - 7x + 12 = 0.",
+              es: "Suma 12 en ambos lados: x² - 7x + 12 = 0.",
+            },
+          },
+          {
+            text: {
+              en: "Factor: (x - 3)(x - 4) = 0.",
+              pt: "Fatore: (x - 3)(x - 4) = 0.",
+              es: "Factoriza: (x - 3)(x - 4) = 0.",
+            },
+          },
+          {
+            text: {
+              en: "x = 3 or x = {{4}}.",
+              pt: "x = 3 ou x = {{4}}.",
+              es: "x = 3 o x = {{4}}.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 24 },
+      generate: generateRearrangeFactorSolve,
     },
   ],
 };
