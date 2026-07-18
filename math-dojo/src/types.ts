@@ -17,10 +17,17 @@ export interface LessonStep {
   text: LocalizedText;
 }
 
+/** An optional visual grounding the lesson's worked example — dots clustered into
+ * groups (multiplication/division) or a hop-by-hop number line (addition/subtraction). */
+export type LessonDiagram =
+  | { kind: "groups"; groups: number; perGroup: number }
+  | { kind: "numberLine"; start: number; end: number };
+
 export interface Lesson {
   intro: LocalizedText;
   example: Problem;
   steps: LessonStep[];
+  diagram?: LessonDiagram;
 }
 
 export interface MasteryRequirement {
