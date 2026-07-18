@@ -29,6 +29,15 @@ function makeDifference(operands: number[]): Problem {
   };
 }
 
+function makeProduct(operands: number[]): Problem {
+  return {
+    id: nextId(),
+    prompt: operands.join(" × "),
+    answer: operands.reduce((product, n) => product * n, 1),
+    operands,
+  };
+}
+
 function pairKey(operands: number[]): string {
   return [...operands].sort((x, y) => x - y).join(",");
 }
@@ -302,5 +311,105 @@ export function generateThreeDigitMinusThreeDigitDoubleCarry(count: number): Pro
     const a = aHundreds * 100 + aTens * 10 + aUnits;
     const b = bHundreds * 100 + bTens * 10 + bUnits;
     return makeDifference([a, b]);
+  });
+}
+
+/** The ×2, ×5 and ×10 tables — related by doubling and halving. */
+export function generateFriendlyTables(count: number): Problem[] {
+  const tables = [2, 5, 10];
+  return withoutImmediateRepeats(count, () => {
+    const base = randomInt(2, 9);
+    const table = tables[randomInt(0, tables.length - 1)];
+    return makeProduct([base, table]);
+  });
+}
+
+/** The ×3 and ×4 tables. */
+export function generateTables3and4(count: number): Problem[] {
+  const tables = [3, 4];
+  return withoutImmediateRepeats(count, () => {
+    const other = randomInt(2, 9);
+    const table = tables[randomInt(0, tables.length - 1)];
+    return makeProduct([other, table]);
+  });
+}
+
+/** The ×6, ×7, ×8 and ×9 tables — the facts people struggle with most. */
+export function generateHardTables(count: number): Problem[] {
+  const tables = [6, 7, 8, 9];
+  return withoutImmediateRepeats(count, () => {
+    const other = randomInt(2, 9);
+    const table = tables[randomInt(0, tables.length - 1)];
+    return makeProduct([other, table]);
+  });
+}
+
+/** Every single-digit fact, 2 through 9, all mixed together. */
+export function generateAllTablesMixed(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 9);
+    const b = randomInt(2, 9);
+    return makeProduct([a, b]);
+  });
+}
+
+/** Multiplying a number by 10 or 100. */
+export function generateMultiplyBy10And100(count: number): Problem[] {
+  const multipliers = [10, 100];
+  return withoutImmediateRepeats(count, () => {
+    const base = randomInt(2, 99);
+    const mult = multipliers[randomInt(0, multipliers.length - 1)];
+    return makeProduct([base, mult]);
+  });
+}
+
+/** Two-digit × one-digit, neither column's product ever hits double digits. */
+export function generateTwoDigitByOneDigitNoCarry(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const b = randomInt(2, 9);
+    const maxDigit = Math.floor(9 / b);
+    const aUnits = randomInt(0, maxDigit);
+    const aTens = randomInt(1, maxDigit);
+    const a = aTens * 10 + aUnits;
+    return makeProduct([a, b]);
+  });
+}
+
+/** Two-digit × one-digit, the units product always carries into the tens. */
+export function generateTwoDigitByOneDigitWithCarry(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const b = randomInt(2, 9);
+    const minUnits = Math.min(Math.ceil(10 / b), 9);
+    const aUnits = randomInt(minUnits, 9);
+    const aTens = randomInt(1, 9);
+    const a = aTens * 10 + aUnits;
+    return makeProduct([a, b]);
+  });
+}
+
+/** Two-digit × two-digit — split the second factor into tens and units. */
+export function generateTwoDigitByTwoDigit(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(11, 89);
+    const b = randomInt(11, 89);
+    return makeProduct([a, b]);
+  });
+}
+
+/** Three-digit × one-digit. */
+export function generateThreeDigitByOneDigit(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(100, 999);
+    const b = randomInt(2, 9);
+    return makeProduct([a, b]);
+  });
+}
+
+/** Three-digit × two-digit — the same split-and-add technique, at full size. */
+export function generateThreeDigitByTwoDigit(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(100, 999);
+    const b = randomInt(11, 99);
+    return makeProduct([a, b]);
   });
 }

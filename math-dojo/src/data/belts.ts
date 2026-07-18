@@ -19,6 +19,16 @@ import {
   generateThreeDigitMinusThreeDigitNoCarry,
   generateThreeDigitMinusThreeDigitSingleCarry,
   generateThreeDigitMinusThreeDigitDoubleCarry,
+  generateFriendlyTables,
+  generateTables3and4,
+  generateHardTables,
+  generateAllTablesMixed,
+  generateMultiplyBy10And100,
+  generateTwoDigitByOneDigitNoCarry,
+  generateTwoDigitByOneDigitWithCarry,
+  generateTwoDigitByTwoDigit,
+  generateThreeDigitByOneDigit,
+  generateThreeDigitByTwoDigit,
 } from "../engine/problemGenerator";
 import type { Belt } from "../types";
 
@@ -919,8 +929,388 @@ const purpleBelt: Belt = {
     pt: "Tabuada até virar puro instinto.",
     es: "Tablas de multiplicar hasta que sean puro instinto.",
   },
-  stripes: [],
-  locked: true,
+  stripes: [
+    {
+      id: "purple-1",
+      beltId: "purple",
+      index: 1,
+      title: {
+        en: "The friendly tables: ×2, ×5, ×10",
+        pt: "As tabuadas fáceis: ×2, ×5, ×10",
+        es: "Las tablas fáciles: ×2, ×5, ×10",
+      },
+      summary: {
+        en: "Three tables that share an easy pattern.",
+        pt: "Três tabuadas que compartilham um padrão fácil.",
+        es: "Tres tablas que comparten un patrón fácil.",
+      },
+      lesson: {
+        intro: {
+          en: "×10 just adds a zero. ×5 is always half of that. ×2 is always double the number itself.",
+          pt: "×10 só adiciona um zero. ×5 é sempre a metade disso. ×2 é sempre o dobro do próprio número.",
+          es: "×10 solo agrega un cero. ×5 es siempre la mitad de eso. ×2 es siempre el doble del propio número.",
+        },
+        example: { id: "ex-purple-1", prompt: "8 × 10", answer: 80, operands: [8, 10] },
+        steps: [
+          {
+            text: {
+              en: "×10: add a zero. 8 becomes 80.",
+              pt: "×10: adicione um zero. 8 vira 80.",
+              es: "×10: agrega un cero. 8 se convierte en 80.",
+            },
+          },
+          {
+            text: {
+              en: "×5 is always half of ×10: 8 × 5 = 40.",
+              pt: "×5 é sempre a metade de ×10: 8 × 5 = 40.",
+              es: "×5 es siempre la mitad de ×10: 8 × 5 = 40.",
+            },
+          },
+          {
+            text: {
+              en: "×2 is always double the number: 8 × 2 = 16.",
+              pt: "×2 é sempre o dobro do número: 8 × 2 = 16.",
+              es: "×2 es siempre el doble del número: 8 × 2 = 16.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 5 },
+      generate: generateFriendlyTables,
+    },
+    {
+      id: "purple-2",
+      beltId: "purple",
+      index: 2,
+      title: { en: "Times tables 3 and 4", pt: "Tabuada do 3 e do 4", es: "Tablas del 3 y del 4" },
+      summary: {
+        en: "Skip-count to build up the answer.",
+        pt: "Conte de pouco em pouco para chegar na resposta.",
+        es: "Cuenta salteado para llegar a la respuesta.",
+      },
+      lesson: {
+        intro: {
+          en: "Multiplying means adding the same number again and again. Skip-count to find the answer.",
+          pt: "Multiplicar é somar o mesmo número várias vezes. Conte pulando para achar a resposta.",
+          es: "Multiplicar es sumar el mismo número varias veces. Cuenta salteado para encontrar la respuesta.",
+        },
+        example: { id: "ex-purple-2", prompt: "4 × 3", answer: 12, operands: [4, 3] },
+        steps: [
+          {
+            text: {
+              en: "4 × 3 means three groups of 4.",
+              pt: "4 × 3 significa três grupos de 4.",
+              es: "4 × 3 significa tres grupos de 4.",
+            },
+          },
+          { text: { en: "4 + 4 + 4 = 12.", pt: "4 + 4 + 4 = 12.", es: "4 + 4 + 4 = 12." } },
+          { text: { en: "4 × 3 = 12.", pt: "4 × 3 = 12.", es: "4 × 3 = 12." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 6 },
+      generate: generateTables3and4,
+    },
+    {
+      id: "purple-3",
+      beltId: "purple",
+      index: 3,
+      title: { en: "Times tables 6, 7, 8, 9", pt: "Tabuada do 6, 7, 8 e 9", es: "Tablas del 6, 7, 8 y 9" },
+      summary: {
+        en: "Break a hard fact into two easier ones.",
+        pt: "Quebre uma conta difícil em duas mais fáceis.",
+        es: "Divide una cuenta difícil en dos más fáciles.",
+      },
+      lesson: {
+        intro: {
+          en: "Split the harder number into a 5 plus the rest, solve both, then add.",
+          pt: "Separe o número mais difícil em 5 mais o resto, resolva os dois e some.",
+          es: "Separa el número más difícil en 5 más el resto, resuelve ambos y suma.",
+        },
+        example: { id: "ex-purple-3", prompt: "7 × 8", answer: 56, operands: [7, 8] },
+        steps: [
+          {
+            text: {
+              en: "Break 8 into 5 + 3.",
+              pt: "Separe o 8 em 5 + 3.",
+              es: "Separa el 8 en 5 + 3.",
+            },
+          },
+          {
+            text: {
+              en: "7 × 5 = 35 and 7 × 3 = 21.",
+              pt: "7 × 5 = 35 e 7 × 3 = 21.",
+              es: "7 × 5 = 35 y 7 × 3 = 21.",
+            },
+          },
+          { text: { en: "35 + 21 = 56.", pt: "35 + 21 = 56.", es: "35 + 21 = 56." } },
+          { text: { en: "7 × 8 = 56.", pt: "7 × 8 = 56.", es: "7 × 8 = 56." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 7 },
+      generate: generateHardTables,
+    },
+    {
+      id: "purple-4",
+      beltId: "purple",
+      index: 4,
+      title: {
+        en: "All single-digit tables, mixed",
+        pt: "Todas as tabuadas, misturadas",
+        es: "Todas las tablas, mezcladas",
+      },
+      summary: {
+        en: "Every fact from 2 to 9, no more sorting by table.",
+        pt: "Todas as contas de 2 a 9, sem separar por tabuada.",
+        es: "Todas las cuentas del 2 al 9, sin separar por tabla.",
+      },
+      lesson: {
+        intro: {
+          en: "Try to recall the fact directly. If you get stuck, use the ×9 trick: multiply by 10, then subtract the number.",
+          pt: "Tente lembrar a conta direto. Se travar, use o truque do ×9: multiplique por 10 e depois subtraia o número.",
+          es: "Intenta recordar la cuenta directo. Si te trabas, usa el truco del ×9: multiplica por 10 y luego resta el número.",
+        },
+        example: { id: "ex-purple-4", prompt: "6 × 9", answer: 54, operands: [6, 9] },
+        steps: [
+          {
+            text: {
+              en: "Stuck on ×9? Multiply by 10 first: 6 × 10 = 60.",
+              pt: "Travou no ×9? Multiplique por 10 primeiro: 6 × 10 = 60.",
+              es: "¿Te trabaste en el ×9? Multiplica por 10 primero: 6 × 10 = 60.",
+            },
+          },
+          {
+            text: {
+              en: "Then subtract the number once: 60 - 6 = 54.",
+              pt: "Depois subtraia o número uma vez: 60 - 6 = 54.",
+              es: "Luego resta el número una vez: 60 - 6 = 54.",
+            },
+          },
+          { text: { en: "6 × 9 = 54.", pt: "6 × 9 = 54.", es: "6 × 9 = 54." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 6 },
+      generate: generateAllTablesMixed,
+    },
+    {
+      id: "purple-5",
+      beltId: "purple",
+      index: 5,
+      title: {
+        en: "Multiplying by 10 and 100",
+        pt: "Multiplicar por 10 e por 100",
+        es: "Multiplicar por 10 y por 100",
+      },
+      summary: {
+        en: "The zero trick works on any number, not just single digits.",
+        pt: "O truque do zero funciona em qualquer número, não só nos de um dígito.",
+        es: "El truco del cero funciona con cualquier número, no solo con los de un dígito.",
+      },
+      lesson: {
+        intro: {
+          en: "Multiplying by 10 adds one zero. Multiplying by 100 adds two zeros — for any number.",
+          pt: "Multiplicar por 10 adiciona um zero. Multiplicar por 100 adiciona dois zeros — para qualquer número.",
+          es: "Multiplicar por 10 agrega un cero. Multiplicar por 100 agrega dos ceros — para cualquier número.",
+        },
+        example: { id: "ex-purple-5", prompt: "23 × 100", answer: 2300, operands: [23, 100] },
+        steps: [
+          { text: { en: "×100 adds two zeros.", pt: "×100 adiciona dois zeros.", es: "×100 agrega dos ceros." } },
+          { text: { en: "23 becomes 2300.", pt: "23 vira 2300.", es: "23 se convierte en 2300." } },
+          { text: { en: "23 × 100 = 2300.", pt: "23 × 100 = 2300.", es: "23 × 100 = 2300." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 5, passAccuracy: 0.8, targetTimeSec: 6 },
+      generate: generateMultiplyBy10And100,
+    },
+    {
+      id: "purple-6",
+      beltId: "purple",
+      index: 6,
+      title: {
+        en: "Two-digit × one-digit, no carrying",
+        pt: "Dois dígitos × um dígito, sem 'vai um'",
+        es: "Dos dígitos × un dígito, sin llevar",
+      },
+      summary: {
+        en: "Multiply the units and tens separately, then add.",
+        pt: "Multiplique unidade e dezena separadamente, depois some.",
+        es: "Multiplica unidad y decena por separado, luego suma.",
+      },
+      lesson: {
+        intro: {
+          en: "Multiply the units digit first, then the tens digit, then combine — no carrying needed yet.",
+          pt: "Multiplique a unidade primeiro, depois a dezena, e junte — ainda sem precisar de 'vai um'.",
+          es: "Multiplica la unidad primero, luego la decena, y júntalas — todavía sin necesitar acarreo.",
+        },
+        example: { id: "ex-purple-6", prompt: "21 × 4", answer: 84, operands: [21, 4] },
+        steps: [
+          {
+            text: {
+              en: "Multiply the units: 1 × 4 = 4.",
+              pt: "Multiplique a unidade: 1 × 4 = 4.",
+              es: "Multiplica la unidad: 1 × 4 = 4.",
+            },
+          },
+          {
+            text: {
+              en: "Multiply the tens: 2 × 4 = 8, meaning 80.",
+              pt: "Multiplique a dezena: 2 × 4 = 8, ou seja, 80.",
+              es: "Multiplica la decena: 2 × 4 = 8, o sea, 80.",
+            },
+          },
+          {
+            text: {
+              en: "Add them: 80 + 4 = 84.",
+              pt: "Some: 80 + 4 = 84.",
+              es: "Suma: 80 + 4 = 84.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 10 },
+      generate: generateTwoDigitByOneDigitNoCarry,
+    },
+    {
+      id: "purple-7",
+      beltId: "purple",
+      index: 7,
+      title: {
+        en: "Two-digit × one-digit, with carrying",
+        pt: "Dois dígitos × um dígito, com 'vai um'",
+        es: "Dos dígitos × un dígito, llevando",
+      },
+      summary: {
+        en: "When the units product hits double digits, carry into the tens.",
+        pt: "Quando a multiplicação das unidades passa de 9, leve para a dezena.",
+        es: "Cuando la multiplicación de las unidades pasa de 9, lleva a la decena.",
+      },
+      lesson: {
+        intro: {
+          en: "Multiply the units first. If the result is 10 or more, carry the extra into the tens multiplication.",
+          pt: "Multiplique a unidade primeiro. Se der 10 ou mais, leve o extra para a multiplicação da dezena.",
+          es: "Multiplica la unidad primero. Si da 10 o más, lleva el extra a la multiplicación de la decena.",
+        },
+        example: { id: "ex-purple-7", prompt: "24 × 3", answer: 72, operands: [24, 3] },
+        steps: [
+          {
+            text: {
+              en: "Multiply the units: 4 × 3 = 12. Write the 2, carry the 1.",
+              pt: "Multiplique a unidade: 4 × 3 = 12. Escreva o 2 e leve o 1.",
+              es: "Multiplica la unidad: 4 × 3 = 12. Escribe el 2 y lleva el 1.",
+            },
+          },
+          {
+            text: {
+              en: "Multiply the tens: 2 × 3 = 6, plus the carried 1 = 7.",
+              pt: "Multiplique a dezena: 2 × 3 = 6, mais o 1 que veio = 7.",
+              es: "Multiplica la decena: 2 × 3 = 6, más el 1 que llevaste = 7.",
+            },
+          },
+          { text: { en: "24 × 3 = 72.", pt: "24 × 3 = 72.", es: "24 × 3 = 72." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 14 },
+      generate: generateTwoDigitByOneDigitWithCarry,
+    },
+    {
+      id: "purple-8",
+      beltId: "purple",
+      index: 8,
+      title: { en: "Two-digit × two-digit", pt: "Dois dígitos × dois dígitos", es: "Dos dígitos × dos dígitos" },
+      summary: {
+        en: "Break the second number into tens and units, multiply each, then add.",
+        pt: "Separe o segundo número em dezena e unidade, multiplique cada um e some.",
+        es: "Separa el segundo número en decena y unidad, multiplica cada uno y suma.",
+      },
+      lesson: {
+        intro: {
+          en: "Split the second number into tens plus units. Multiply the first number by each part, then add the results.",
+          pt: "Separe o segundo número em dezena mais unidade. Multiplique o primeiro número por cada parte e some os resultados.",
+          es: "Divide el segundo número en decena más unidad. Multiplica el primer número por cada parte y suma los resultados.",
+        },
+        example: { id: "ex-purple-8", prompt: "23 × 12", answer: 276, operands: [23, 12] },
+        steps: [
+          { text: { en: "Break 12 into 10 + 2.", pt: "Separe o 12 em 10 + 2.", es: "Separa el 12 en 10 + 2." } },
+          { text: { en: "23 × 10 = 230.", pt: "23 × 10 = 230.", es: "23 × 10 = 230." } },
+          { text: { en: "23 × 2 = 46.", pt: "23 × 2 = 46.", es: "23 × 2 = 46." } },
+          { text: { en: "230 + 46 = 276.", pt: "230 + 46 = 276.", es: "230 + 46 = 276." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 20 },
+      generate: generateTwoDigitByTwoDigit,
+    },
+    {
+      id: "purple-9",
+      beltId: "purple",
+      index: 9,
+      title: { en: "Three-digit × one-digit", pt: "Três dígitos × um dígito", es: "Tres dígitos × un dígito" },
+      summary: {
+        en: "Same carrying method, one more column.",
+        pt: "Mesmo método do 'vai um', só mais uma coluna.",
+        es: "Mismo método del acarreo, una columna más.",
+      },
+      lesson: {
+        intro: {
+          en: "Multiply units, then tens, then hundreds — carrying into the next column whenever a product hits double digits.",
+          pt: "Multiplique unidade, depois dezena, depois centena — levando para a próxima coluna sempre que der 10 ou mais.",
+          es: "Multiplica unidad, luego decena, luego centena — llevando a la siguiente columna cada vez que dé 10 o más.",
+        },
+        example: { id: "ex-purple-9", prompt: "213 × 4", answer: 852, operands: [213, 4] },
+        steps: [
+          {
+            text: {
+              en: "Multiply the units: 3 × 4 = 12. Write the 2, carry the 1.",
+              pt: "Multiplique a unidade: 3 × 4 = 12. Escreva o 2 e leve o 1.",
+              es: "Multiplica la unidad: 3 × 4 = 12. Escribe el 2 y lleva el 1.",
+            },
+          },
+          {
+            text: {
+              en: "Multiply the tens: 1 × 4 = 4, plus the carried 1 = 5.",
+              pt: "Multiplique a dezena: 1 × 4 = 4, mais o 1 que veio = 5.",
+              es: "Multiplica la decena: 1 × 4 = 4, más el 1 que llevaste = 5.",
+            },
+          },
+          {
+            text: {
+              en: "Multiply the hundreds: 2 × 4 = 8.",
+              pt: "Multiplique a centena: 2 × 4 = 8.",
+              es: "Multiplica la centena: 2 × 4 = 8.",
+            },
+          },
+          { text: { en: "213 × 4 = 852.", pt: "213 × 4 = 852.", es: "213 × 4 = 852." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 18 },
+      generate: generateThreeDigitByOneDigit,
+    },
+    {
+      id: "purple-10",
+      beltId: "purple",
+      index: 10,
+      title: { en: "Three-digit × two-digit", pt: "Três dígitos × dois dígitos", es: "Tres dígitos × dos dígitos" },
+      summary: {
+        en: "The same split-and-add trick, at full size.",
+        pt: "O mesmo truque de separar e somar, em tamanho grande.",
+        es: "El mismo truco de separar y sumar, a tamaño completo.",
+      },
+      lesson: {
+        intro: {
+          en: "Split the two-digit number into tens plus units. Multiply the three-digit number by each part, then add.",
+          pt: "Separe o número de dois dígitos em dezena mais unidade. Multiplique o número de três dígitos por cada parte e some.",
+          es: "Divide el número de dos dígitos en decena más unidad. Multiplica el número de tres dígitos por cada parte y suma.",
+        },
+        example: { id: "ex-purple-10", prompt: "213 × 24", answer: 5112, operands: [213, 24] },
+        steps: [
+          { text: { en: "Break 24 into 20 + 4.", pt: "Separe o 24 em 20 + 4.", es: "Separa el 24 en 20 + 4." } },
+          { text: { en: "213 × 20 = 4260.", pt: "213 × 20 = 4260.", es: "213 × 20 = 4260." } },
+          { text: { en: "213 × 4 = 852.", pt: "213 × 4 = 852.", es: "213 × 4 = 852." } },
+          { text: { en: "4260 + 852 = 5112.", pt: "4260 + 852 = 5112.", es: "4260 + 852 = 5112." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 30 },
+      generate: generateThreeDigitByTwoDigit,
+    },
+  ],
 };
 
 const brownBelt: Belt = {
