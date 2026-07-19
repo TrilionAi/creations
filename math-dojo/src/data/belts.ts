@@ -99,6 +99,16 @@ import {
   generateExponentRules,
   generateLinearSystem,
   generateRearrangeFactorSolve,
+  generateLimitLinearConcept,
+  generateLimitQuadratic,
+  generateLimitFactoring,
+  generateDerivativeLinearConcept,
+  generateDerivativePowerRule,
+  generateDerivativeAtPoint,
+  generateAreaBarsReading,
+  generateAntiderivativePowerRule,
+  generateDefiniteIntegral,
+  generateCalculusCapstone,
 } from "../engine/problemGenerator";
 import type { Belt, LocalizedText } from "../types";
 
@@ -4657,8 +4667,489 @@ const coralBelt: Belt = {
     pt: "A faixa mais rara. Limites, derivadas e integrais.",
     es: "El rango más raro. Límites, derivadas e integrales.",
   },
-  stripes: [],
-  locked: true,
+  stripes: [
+    {
+      id: "coral-1",
+      beltId: "coral",
+      index: 1,
+      title: {
+        en: "What a limit means",
+        pt: "O que significa um limite",
+        es: "Qué significa un límite",
+      },
+      summary: {
+        en: "A limit is what f(x) approaches as x gets closer and closer to a point.",
+        pt: "Um limite é o que f(x) se aproxima conforme x chega mais perto de um ponto.",
+        es: "Un límite es lo que f(x) se acerca conforme x se acerca a un punto.",
+      },
+      lesson: {
+        intro: {
+          en: "As x hops closer and closer to a target value, watch what happens to f(x) — that's the limit. For a smooth function like this one, you can just substitute the target value directly.",
+          pt: "Conforme x salta cada vez mais perto de um valor alvo, observe o que acontece com f(x) — isso é o limite. Para uma função suave como essa, você pode simplesmente substituir o valor alvo direto.",
+          es: "Conforme x salta cada vez más cerca de un valor objetivo, observa qué le pasa a f(x) — eso es el límite. Para una función suave como esta, puedes simplemente sustituir el valor objetivo directamente.",
+        },
+        example: { id: "ex-coral-1", prompt: "lim(x→2) 3x + 2", answer: 8, operands: [3, 2, 2] },
+        diagram: { kind: "numberLine", start: 5, end: 2 },
+        steps: [
+          {
+            text: {
+              en: "x is getting closer and closer to {{2}}.",
+              pt: "x está chegando cada vez mais perto de {{2}}.",
+              es: "x se está acercando cada vez más a {{2}}.",
+            },
+          },
+          {
+            text: {
+              en: "Since this line has no breaks or holes, just substitute: 3 × 2 + 2.",
+              pt: "Como essa reta não tem quebras ou buracos, é só substituir: 3 × 2 + 2.",
+              es: "Como esta recta no tiene cortes ni huecos, solo sustituye: 3 × 2 + 2.",
+            },
+          },
+          { text: { en: "3 × 2 + 2 = 8.", pt: "3 × 2 + 2 = 8.", es: "3 × 2 + 2 = 8." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateLimitLinearConcept,
+    },
+    {
+      id: "coral-2",
+      beltId: "coral",
+      index: 2,
+      title: {
+        en: "Evaluating limits by direct substitution",
+        pt: "Avaliando limites por substituição direta",
+        es: "Evaluando límites por sustitución directa",
+      },
+      summary: {
+        en: "Smooth functions let you just plug in the target value.",
+        pt: "Funções suaves deixam você simplesmente substituir o valor alvo.",
+        es: "Las funciones suaves te dejan simplemente sustituir el valor objetivo.",
+      },
+      lesson: {
+        intro: {
+          en: "The same substitution trick works for any polynomial, not just lines — plug the target value in for x and simplify.",
+          pt: "O mesmo truque de substituição funciona para qualquer polinômio, não só retas — substitua o valor alvo no lugar de x e simplifique.",
+          es: "El mismo truco de sustitución funciona para cualquier polinomio, no solo rectas — sustituye el valor objetivo por x y simplifica.",
+        },
+        example: { id: "ex-coral-2", prompt: "lim(x→2) x² - 3x + 1", answer: -1, operands: [2, -3, 1] },
+        steps: [
+          {
+            text: {
+              en: "Substitute x = 2 directly: 2² - 3 × 2 + 1.",
+              pt: "Substitua x = 2 direto: 2² - 3 × 2 + 1.",
+              es: "Sustituye x = 2 directamente: 2² - 3 × 2 + 1.",
+            },
+          },
+          {
+            text: {
+              en: "Square first: 2² = {{4}}.",
+              pt: "Eleve ao quadrado primeiro: 2² = {{4}}.",
+              es: "Eleva al cuadrado primero: 2² = {{4}}.",
+            },
+          },
+          { text: { en: "4 - 6 + 1 = -1.", pt: "4 - 6 + 1 = -1.", es: "4 - 6 + 1 = -1." } },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 14 },
+      generate: generateLimitQuadratic,
+    },
+    {
+      id: "coral-3",
+      beltId: "coral",
+      index: 3,
+      title: {
+        en: "Evaluating limits algebraically",
+        pt: "Avaliando limites algebricamente",
+        es: "Evaluando límites algebraicamente",
+      },
+      summary: {
+        en: "Factor first to cancel the part that's causing 0/0.",
+        pt: "Fatore primeiro para cancelar a parte que está causando 0/0.",
+        es: "Factoriza primero para cancelar la parte que causa 0/0.",
+      },
+      lesson: {
+        intro: {
+          en: "Plugging in directly gives 0/0 here — that's a sign to factor the top first. The matching factor cancels, leaving something you CAN substitute into.",
+          pt: "Substituir direto dá 0/0 aqui — isso é um sinal para fatorar o de cima primeiro. O fator que combina cancela, deixando algo em que você PODE substituir.",
+          es: "Sustituir directamente da 0/0 aquí — esa es la señal para factorizar arriba primero. El factor que coincide se cancela, dejando algo en lo que SÍ puedes sustituir.",
+        },
+        example: {
+          id: "ex-coral-3",
+          prompt: "lim(x→3) (x² + 4x - 21) / (x - 3)",
+          answer: 10,
+          operands: [3, 7],
+        },
+        steps: [
+          {
+            text: {
+              en: "Direct substitution gives 0/0 — factor the numerator instead: x² + 4x - 21 = (x - 3)(x + 7).",
+              pt: "Substituição direta dá 0/0 — fatore o numerador: x² + 4x - 21 = (x - 3)(x + 7).",
+              es: "La sustitución directa da 0/0 — factoriza el numerador: x² + 4x - 21 = (x - 3)(x + 7).",
+            },
+          },
+          {
+            text: {
+              en: "Cancel the (x - 3) from top and bottom, leaving just (x + 7).",
+              pt: "Cancele o (x - 3) de cima e de baixo, deixando só (x + 7).",
+              es: "Cancela el (x - 3) de arriba y de abajo, dejando solo (x + 7).",
+            },
+          },
+          {
+            text: {
+              en: "Now substitute: 3 + 7 = {{10}}.",
+              pt: "Agora substitua: 3 + 7 = {{10}}.",
+              es: "Ahora sustituye: 3 + 7 = {{10}}.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 18 },
+      generate: generateLimitFactoring,
+    },
+    {
+      id: "coral-4",
+      beltId: "coral",
+      index: 4,
+      title: {
+        en: "What a derivative means",
+        pt: "O que significa uma derivada",
+        es: "Qué significa una derivada",
+      },
+      summary: {
+        en: "A derivative is the slope of the tangent line.",
+        pt: "Uma derivada é a inclinação da reta tangente.",
+        es: "Una derivada es la pendiente de la recta tangente.",
+      },
+      lesson: {
+        intro: {
+          en: "A derivative measures how steeply a function is climbing at each point. For a straight line, the steepness never changes — it's just the slope, same as you found back in Functions.",
+          pt: "Uma derivada mede o quão íngreme uma função está subindo em cada ponto. Para uma reta, a inclinação nunca muda — é só a inclinação, igual você achou lá em Funções.",
+          es: "Una derivada mide qué tan empinada está subiendo una función en cada punto. Para una recta, la inclinación nunca cambia — es solo la pendiente, igual que hallaste en Funciones.",
+        },
+        example: { id: "ex-coral-4", prompt: "f(x) = 4x + 3, f'(x) = n", answer: 4, operands: [4, 3] },
+        diagram: { kind: "slopeStaircase", rise: 4, run: 1 },
+        steps: [
+          {
+            text: {
+              en: "This line's slope is rise/run = 4/1 = {{4}}.",
+              pt: "A inclinação dessa reta é subida/avanço = 4/1 = {{4}}.",
+              es: "La pendiente de esta recta es subida/avance = 4/1 = {{4}}.",
+            },
+          },
+          {
+            text: {
+              en: "A straight line's steepness never changes.",
+              pt: "A inclinação de uma reta nunca muda.",
+              es: "La inclinación de una recta nunca cambia.",
+            },
+          },
+          {
+            text: {
+              en: "f'(x) = 4, for every x.",
+              pt: "f'(x) = 4, para todo x.",
+              es: "f'(x) = 4, para todo x.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateDerivativeLinearConcept,
+    },
+    {
+      id: "coral-5",
+      beltId: "coral",
+      index: 5,
+      title: {
+        en: "The power rule for derivatives",
+        pt: "A regra do poder para derivadas",
+        es: "La regla de la potencia para derivadas",
+      },
+      summary: {
+        en: "Bring the exponent down as a multiplier, then subtract one from it.",
+        pt: "Traga o expoente para baixo como multiplicador, depois subtraia um dele.",
+        es: "Baja el exponente como multiplicador, luego réstale uno.",
+      },
+      lesson: {
+        intro: {
+          en: "For any power of x, the derivative follows the same pattern every time: the exponent becomes the new coefficient, and the exponent itself drops by one.",
+          pt: "Para qualquer potência de x, a derivada segue o mesmo padrão sempre: o expoente vira o novo coeficiente, e o expoente em si diminui em um.",
+          es: "Para cualquier potencia de x, la derivada sigue el mismo patrón siempre: el exponente se convierte en el nuevo coeficiente, y el exponente mismo baja en uno.",
+        },
+        example: { id: "ex-coral-5", prompt: "f(x) = x⁵, f'(x) = n·x⁴", answer: 5, operands: [5] },
+        steps: [
+          {
+            text: {
+              en: "The exponent is {{5}} — bring it down in front as a multiplier.",
+              pt: "O expoente é {{5}} — traga-o para frente como multiplicador.",
+              es: "El exponente es {{5}} — bájalo al frente como multiplicador.",
+            },
+          },
+          {
+            text: {
+              en: "Subtract one from the exponent: 5 - 1 = 4.",
+              pt: "Subtraia um do expoente: 5 - 1 = 4.",
+              es: "Resta uno al exponente: 5 - 1 = 4.",
+            },
+          },
+          {
+            text: {
+              en: "f'(x) = 5x⁴, so n = 5.",
+              pt: "f'(x) = 5x⁴, então n = 5.",
+              es: "f'(x) = 5x⁴, entonces n = 5.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateDerivativePowerRule,
+    },
+    {
+      id: "coral-6",
+      beltId: "coral",
+      index: 6,
+      title: {
+        en: "Differentiating polynomials",
+        pt: "Derivando polinômios",
+        es: "Derivando polinomios",
+      },
+      summary: {
+        en: "Apply the power rule to each term, then substitute.",
+        pt: "Aplique a regra do poder em cada termo, depois substitua.",
+        es: "Aplica la regla de la potencia a cada término, luego sustituye.",
+      },
+      lesson: {
+        intro: {
+          en: "Differentiate each term on its own using the power rule, combine them, then evaluate the result at the given point — same layered approach as evaluating any other expression.",
+          pt: "Derive cada termo separadamente usando a regra do poder, combine-os, depois avalie o resultado no ponto dado — a mesma abordagem em camadas de avaliar qualquer outra expressão.",
+          es: "Deriva cada término por separado usando la regla de la potencia, combínalos, luego evalúa el resultado en el punto dado — el mismo enfoque en capas de evaluar cualquier otra expresión.",
+        },
+        example: { id: "ex-coral-6", prompt: "f(x) = 3x² + 4x; f'(2)", answer: 16, operands: [3, 4, 2] },
+        steps: [
+          {
+            text: {
+              en: "Differentiate each term: the derivative of 3x² is 6x, and the derivative of 4x is 4.",
+              pt: "Derive cada termo: a derivada de 3x² é 6x, e a derivada de 4x é 4.",
+              es: "Deriva cada término: la derivada de 3x² es 6x, y la derivada de 4x es 4.",
+            },
+          },
+          {
+            text: {
+              en: "f'(x) = 6x + 4.",
+              pt: "f'(x) = 6x + 4.",
+              es: "f'(x) = 6x + 4.",
+            },
+          },
+          {
+            text: {
+              en: "f'(2) = 6 × 2 + 4 = {{16}}.",
+              pt: "f'(2) = 6 × 2 + 4 = {{16}}.",
+              es: "f'(2) = 6 × 2 + 4 = {{16}}.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 18 },
+      generate: generateDerivativeAtPoint,
+    },
+    {
+      id: "coral-7",
+      beltId: "coral",
+      index: 7,
+      title: {
+        en: "What an integral means",
+        pt: "O que significa uma integral",
+        es: "Qué significa una integral",
+      },
+      summary: {
+        en: "Add up thin rectangles to approximate the area under a curve.",
+        pt: "Some retângulos finos para aproximar a área sob uma curva.",
+        es: "Suma rectángulos delgados para aproximar el área bajo una curva.",
+      },
+      lesson: {
+        intro: {
+          en: "Each bar's area is just its height times a width of 1. Add all the bars together and you get an approximation of the total area under the curve — that's the core idea behind an integral.",
+          pt: "A área de cada barra é só a altura dela vezes uma largura de 1. Some todas as barras e você tem uma aproximação da área total sob a curva — essa é a ideia central de uma integral.",
+          es: "El área de cada barra es solo su altura por un ancho de 1. Suma todas las barras y obtienes una aproximación del área total bajo la curva — esa es la idea central de una integral.",
+        },
+        example: { id: "ex-coral-7", prompt: "", answer: 20, operands: [3, 5, 4, 6, 2] },
+        diagram: { kind: "areaBars", heights: [3, 5, 4, 6, 2] },
+        steps: [
+          {
+            text: {
+              en: "Each bar has width 1, so its area is just its height.",
+              pt: "Cada barra tem largura 1, então a área dela é só a altura.",
+              es: "Cada barra tiene ancho 1, así que su área es solo la altura.",
+            },
+          },
+          {
+            text: {
+              en: "Add up all five heights: 3 + 5 + 4 + 6 + 2.",
+              pt: "Some as cinco alturas: 3 + 5 + 4 + 6 + 2.",
+              es: "Suma las cinco alturas: 3 + 5 + 4 + 6 + 2.",
+            },
+          },
+          {
+            text: {
+              en: "3 + 5 + 4 + 6 + 2 = {{20}}.",
+              pt: "3 + 5 + 4 + 6 + 2 = {{20}}.",
+              es: "3 + 5 + 4 + 6 + 2 = {{20}}.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 6, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateAreaBarsReading,
+    },
+    {
+      id: "coral-8",
+      beltId: "coral",
+      index: 8,
+      title: {
+        en: "Basic integration",
+        pt: "Integração básica",
+        es: "Integración básica",
+      },
+      summary: {
+        en: "Integration reverses the power rule — add one to the exponent, then divide by it.",
+        pt: "Integração inverte a regra do poder — some um ao expoente, depois divida por ele.",
+        es: "La integración invierte la regla de la potencia — suma uno al exponente, luego divide entre él.",
+      },
+      lesson: {
+        intro: {
+          en: "Integration undoes differentiation: instead of bringing the exponent down, you raise it by one, then divide by that same new number.",
+          pt: "A integração desfaz a derivação: em vez de trazer o expoente para baixo, você aumenta ele em um, depois divide por esse mesmo número novo.",
+          es: "La integración deshace la derivación: en lugar de bajar el exponente, lo subes en uno, luego divides entre ese mismo número nuevo.",
+        },
+        example: { id: "ex-coral-8", prompt: "∫x² dx = xⁿ/n", answer: 3, operands: [2] },
+        steps: [
+          {
+            text: {
+              en: "Add one to the exponent: 2 + 1 = {{3}}.",
+              pt: "Some um ao expoente: 2 + 1 = {{3}}.",
+              es: "Suma uno al exponente: 2 + 1 = {{3}}.",
+            },
+          },
+          {
+            text: {
+              en: "Divide by that same new exponent.",
+              pt: "Divida por esse mesmo expoente novo.",
+              es: "Divide entre ese mismo exponente nuevo.",
+            },
+          },
+          {
+            text: {
+              en: "∫x² dx = x³/3, so n = 3.",
+              pt: "∫x² dx = x³/3, então n = 3.",
+              es: "∫x² dx = x³/3, entonces n = 3.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 7, passAccuracy: 0.8, targetTimeSec: 12 },
+      generate: generateAntiderivativePowerRule,
+    },
+    {
+      id: "coral-9",
+      beltId: "coral",
+      index: 9,
+      title: {
+        en: "Definite integrals",
+        pt: "Integrais definidas",
+        es: "Integrales definidas",
+      },
+      summary: {
+        en: "Find the antiderivative, then evaluate it at both bounds and subtract.",
+        pt: "Ache a antiderivada, depois avalie nos dois limites e subtraia.",
+        es: "Halla la antiderivada, luego evalúala en ambos límites y resta.",
+      },
+      lesson: {
+        intro: {
+          en: "A definite integral has two bounds. Find the antiderivative first, then evaluate it at the top bound and subtract its value at the bottom bound — that difference is the actual area.",
+          pt: "Uma integral definida tem dois limites. Ache a antiderivada primeiro, depois avalie no limite de cima e subtraia o valor no limite de baixo — essa diferença é a área de verdade.",
+          es: "Una integral definida tiene dos límites. Halla la antiderivada primero, luego evalúala en el límite superior y resta su valor en el límite inferior — esa diferencia es el área real.",
+        },
+        example: { id: "ex-coral-9", prompt: "∫[1, 4] 2x dx", answer: 15, operands: [1, 1, 4] },
+        steps: [
+          {
+            text: {
+              en: "The antiderivative of 2x is x².",
+              pt: "A antiderivada de 2x é x².",
+              es: "La antiderivada de 2x es x².",
+            },
+          },
+          {
+            text: {
+              en: "Evaluate at the top bound: 4² = {{16}}.",
+              pt: "Avalie no limite de cima: 4² = {{16}}.",
+              es: "Evalúa en el límite superior: 4² = {{16}}.",
+            },
+          },
+          {
+            text: {
+              en: "Subtract the bottom bound: 16 - 1² = 15.",
+              pt: "Subtraia o limite de baixo: 16 - 1² = 15.",
+              es: "Resta el límite inferior: 16 - 1² = 15.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 18 },
+      generate: generateDefiniteIntegral,
+    },
+    {
+      id: "coral-10",
+      beltId: "coral",
+      index: 10,
+      title: {
+        en: "Derivatives and integrals together",
+        pt: "Derivadas e integrais juntas",
+        es: "Derivadas e integrales juntas",
+      },
+      summary: {
+        en: "Differentiate and evaluate, then integrate and evaluate — every Coral Belt skill in one problem.",
+        pt: "Derive e avalie, depois integre e avalie — todas as habilidades da Faixa Coral em um problema.",
+        es: "Deriva y evalúa, luego integra y evalúa — todas las habilidades del Cinturón Coral en un problema.",
+      },
+      lesson: {
+        intro: {
+          en: "This pulls together everything from this belt: differentiate a polynomial and evaluate it at a point, then find a definite integral, and add the two results together.",
+          pt: "Isso reúne tudo desta faixa: derive um polinômio e avalie num ponto, depois ache uma integral definida, e some os dois resultados.",
+          es: "Esto reúne todo de este cinturón: deriva un polinomio y evalúalo en un punto, luego halla una integral definida, y suma los dos resultados.",
+        },
+        example: {
+          id: "ex-coral-10",
+          prompt: "f(x) = 2x² + 3x; f'(1) + ∫[0, 3] 2x dx",
+          answer: 16,
+          operands: [2, 3, 1, 1, 3],
+        },
+        steps: [
+          {
+            text: {
+              en: "Differentiate: f'(x) = 4x + 3. Evaluate at 1: 4 + 3 = {{7}}.",
+              pt: "Derive: f'(x) = 4x + 3. Avalie em 1: 4 + 3 = {{7}}.",
+              es: "Deriva: f'(x) = 4x + 3. Evalúa en 1: 4 + 3 = {{7}}.",
+            },
+          },
+          {
+            text: {
+              en: "Integrate: ∫2x dx = x². Evaluate from 0 to 3: 9 - 0 = 9.",
+              pt: "Integre: ∫2x dx = x². Avalie de 0 a 3: 9 - 0 = 9.",
+              es: "Integra: ∫2x dx = x². Evalúa de 0 a 3: 9 - 0 = 9.",
+            },
+          },
+          {
+            text: {
+              en: "Add the two results: 7 + 9 = 16.",
+              pt: "Some os dois resultados: 7 + 9 = 16.",
+              es: "Suma los dos resultados: 7 + 9 = 16.",
+            },
+          },
+        ],
+      },
+      mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 26 },
+      generate: generateCalculusCapstone,
+    },
+  ],
 };
 
 export const belts: Belt[] = [whiteBelt, blueBelt, purpleBelt, brownBelt, blackBelt, coralBelt];

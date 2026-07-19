@@ -16,9 +16,11 @@ export type SecondaryAnswerFormat = "remainder" | "fraction" | "decimal" | "pair
  * mapping), a rise-over-run staircase (functions — shows what slope means), a
  * handful of plotted points forming a U (functions — the shape of a parabola),
  * or a 2×2 area grid for (x+a)(x+b) (pre-calculus — the "box method" for
- * factoring, showing x², ax, bx, ab as the four partial areas). Used both on
- * lesson worked examples and, optionally, on individual drill problems where
- * reading a picture *is* the skill. */
+ * factoring, showing x², ax, bx, ab as the four partial areas), or a row of
+ * thin vertical bars (calculus — a Riemann sum, summing rectangle areas to
+ * approximate the area under a curve). Used both on lesson worked examples
+ * and, optionally, on individual drill problems where reading a picture
+ * *is* the skill. */
 export type Diagram =
   | { kind: "groups"; groups: number; perGroup: number }
   | { kind: "numberLine"; start: number; end: number }
@@ -28,7 +30,8 @@ export type Diagram =
   | { kind: "functionMachine"; input: number; rule: string; output: number }
   | { kind: "slopeStaircase"; rise: number; run: number }
   | { kind: "parabola"; points: { x: number; y: number }[] }
-  | { kind: "factorArea"; a: number; b: number };
+  | { kind: "factorArea"; a: number; b: number }
+  | { kind: "areaBars"; heights: number[] };
 
 export interface Problem {
   id: string;

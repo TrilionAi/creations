@@ -1590,3 +1590,172 @@ export function generateRearrangeFactorSolve(count: number): Problem[] {
     };
   });
 }
+
+/** Renders x to a given power using superscript notation, with the exp === 0
+ * and exp === 1 special cases collapsed to "1" and "x" like real notation does. */
+function xPower(exp: number): string {
+  if (exp === 0) return "1";
+  if (exp === 1) return "x";
+  return `x${superscript(exp)}`;
+}
+
+/** A limit of a linear function, evaluated by direct substitution — the
+ * gentlest first case, since a line has no jumps or holes to worry about. */
+export function generateLimitLinearConcept(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const m = randomInt(2, 9);
+    const b = randomInt(0, 9);
+    const a = randomInt(1, 6);
+    return {
+      id: nextId(),
+      prompt: `lim(x→${a}) ${m}x + ${b}`,
+      answer: m * a + b,
+      operands: [m, b, a],
+      diagram: { kind: "numberLine" as const, start: a + 3, end: a },
+    };
+  });
+}
+
+/** A limit of a quadratic, still by direct substitution — same technique, harder function. */
+export function generateLimitQuadratic(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const t = randomInt(-6, 6);
+    const b = (Math.random() < 0.5 ? 1 : -1) * randomInt(2, 9);
+    const c = randomInt(-9, 9);
+    return {
+      id: nextId(),
+      prompt: `lim(x→${t}) x² ${b >= 0 ? "+" : "-"} ${Math.abs(b)}x ${c >= 0 ? "+" : "-"} ${Math.abs(c)}`,
+      answer: t * t + b * t + c,
+      operands: [t, b, c],
+      allowNegative: true,
+    };
+  });
+}
+
+/** A limit that's a 0/0 form until you factor and cancel the shared root first. */
+export function generateLimitFactoring(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const r = randomInt(2, 9);
+    const offset = randomInt(2, 6);
+    let k = Math.random() < 0.5 ? r + offset : r - offset;
+    if (k < 1) k = r + offset;
+    const bCoef = k - r;
+    const cConst = -r * k;
+    return {
+      id: nextId(),
+      prompt: `lim(x→${r}) (x² ${bCoef >= 0 ? "+" : "-"} ${Math.abs(bCoef)}x ${cConst >= 0 ? "+" : "-"} ${Math.abs(cConst)}) / (x - ${r})`,
+      answer: r + k,
+      operands: [r, k],
+      allowNegative: true,
+    };
+  });
+}
+
+/** The derivative of a line is just its slope — a direct callback to Functions' rise/run. */
+export function generateDerivativeLinearConcept(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const m = randomInt(2, 9);
+    const b = randomInt(0, 9);
+    return {
+      id: nextId(),
+      prompt: `f(x) = ${m}x + ${b}, f'(x) = n`,
+      answer: m,
+      operands: [m, b],
+      diagram: { kind: "slopeStaircase" as const, rise: m, run: 1 },
+    };
+  });
+}
+
+/** The power rule, symbolically: d/dx[xᵃ] = a·xᵃ⁻¹ — find the coefficient a. */
+export function generateDerivativePowerRule(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const origExp = randomInt(2, 9);
+    const derivExp = origExp - 1;
+    return {
+      id: nextId(),
+      prompt: `f(x) = ${xPower(origExp)}, f'(x) = n·${xPower(derivExp)}`,
+      answer: origExp,
+      operands: [origExp],
+    };
+  });
+}
+
+/** Differentiate a two-term polynomial, then evaluate the derivative at a point. */
+export function generateDerivativeAtPoint(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 9);
+    const b = (Math.random() < 0.5 ? 1 : -1) * randomInt(2, 9);
+    const xVal = randomInt(-6, 6);
+    return {
+      id: nextId(),
+      prompt: `f(x) = ${a}x² ${b >= 0 ? "+" : "-"} ${Math.abs(b)}x; f'(${xVal})`,
+      answer: 2 * a * xVal + b,
+      operands: [a, b, xVal],
+      allowNegative: true,
+    };
+  });
+}
+
+/** Reads a Riemann sum — add up each bar's height to approximate the area under a curve. */
+export function generateAreaBarsReading(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const heights = Array.from({ length: 5 }, () => randomInt(1, 9));
+    return {
+      id: nextId(),
+      prompt: "",
+      answer: heights.reduce((sum, h) => sum + h, 0),
+      operands: heights,
+      diagram: { kind: "areaBars" as const, heights },
+    };
+  });
+}
+
+/** The power rule in reverse: ∫xᵃdx = xᵃ⁺¹/d — find the denominator d. */
+export function generateAntiderivativePowerRule(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const origExp = randomInt(0, 8);
+    const newExp = origExp + 1;
+    return {
+      id: nextId(),
+      prompt: `∫${xPower(origExp)} dx = xⁿ/n`,
+      answer: newExp,
+      operands: [origExp],
+    };
+  });
+}
+
+/** A definite integral of a line through the origin — the Fundamental Theorem, evaluated at both bounds. */
+export function generateDefiniteIntegral(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const c = randomInt(1, 9);
+    const a = randomInt(0, 5);
+    const b = randomInt(a + 1, 9);
+    return {
+      id: nextId(),
+      prompt: `∫[${a}, ${b}] ${2 * c}x dx`,
+      answer: c * (b * b - a * a),
+      operands: [c, a, b],
+    };
+  });
+}
+
+/** Capstone: differentiate and evaluate at a point, then add a definite integral —
+ * synthesizes every earlier Coral Belt stripe. */
+export function generateCalculusCapstone(count: number): Problem[] {
+  return withoutImmediateRepeats(count, () => {
+    const a = randomInt(2, 6);
+    const b = (Math.random() < 0.5 ? 1 : -1) * randomInt(2, 9);
+    const xVal = randomInt(-6, 6);
+    const derivPart = 2 * a * xVal + b;
+    const c = randomInt(1, 6);
+    const bound = randomInt(1, 6);
+    const integralPart = c * bound * bound;
+    return {
+      id: nextId(),
+      prompt: `f(x) = ${a}x² ${b >= 0 ? "+" : "-"} ${Math.abs(b)}x; f'(${xVal}) + ∫[0, ${bound}] ${2 * c}x dx`,
+      answer: derivPart + integralPart,
+      operands: [a, b, xVal, c, bound],
+      allowNegative: true,
+    };
+  });
+}
