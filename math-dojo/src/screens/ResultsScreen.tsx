@@ -1,4 +1,7 @@
-import type { Belt, SessionSummary } from "../types";
+import { useEffect } from "react";
+import type { Belt, ProgressState, SessionSummary } from "../types";
+import { computeGrade } from "../engine/grading";
+import { playFanfare } from "../engine/sound";
 import { useLocale } from "../i18n/LocaleContext";
 import { UI_STRINGS } from "../i18n/ui";
 import styles from "./ResultsScreen.module.css";
@@ -6,16 +9,23 @@ import styles from "./ResultsScreen.module.css";
 interface ResultsScreenProps {
   summary: SessionSummary;
   belts: Belt[];
+  progress: ProgressState;
   onRetry: () => void;
   onContinue: () => void;
 }
 
-export function ResultsScreen({ summary, belts, onRetry, onContinue }: ResultsScreenProps) {
+export function ResultsScreen({ summary, belts, progress, onRetry, onContinue }: ResultsScreenProps) {
   const { locale } = useLocale();
   const t = UI_STRINGS[locale];
   const belt = belts.find((b) => b.id === summary.stripe.beltId);
   const isLastStripeOfBelt = belt ? belt.stripes[belt.stripes.length - 1]?.id === summary.stripe.id : false;
   const beltEarned = summary.passed && isLastStripeOfBelt;
+  const grade = computeGrade(summary.stripe, progress.stripeResults[summary.stripe.id]);
+
+  useEffect(() => {
+    if (summary.passed) playFanfare();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const accuracyPct = Math.round(summary.accuracy * 100);
   const outcomeClass = summary.passed ? styles.pass : styles.fail;
@@ -28,6 +38,11 @@ export function ResultsScreen({ summary, belts, onRetry, onContinue }: ResultsSc
       <p className={styles.sub}>
         {summary.passed ? t.resultsPassSub(stripeTitle) : t.resultsFailSub(stripeTitle)}
       </p>
+      {grade && (
+        <div className={[styles.gradePill, styles[`gradePill${grade}`]].join(" ")}>
+          {t.gradeEarned(grade)}
+        </div>
+      )}
 
       <div className={styles.statRow}>
         <div className={[styles.stat, outcomeClass].join(" ")}>

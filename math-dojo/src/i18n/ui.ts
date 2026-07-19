@@ -1,4 +1,5 @@
 import type { Locale } from "../types";
+import type { Grade } from "../engine/grading";
 
 interface UiStrings {
   tagline: string;
@@ -27,6 +28,17 @@ interface UiStrings {
   beltEarned: (beltName: string) => string;
   continue: string;
   tryAgain: string;
+  muteAria: string;
+  unmuteAria: string;
+  gradeTitle: (grade: Grade) => string;
+  gradeEarned: (grade: Grade) => string;
+  statsNav: string;
+  statsTitle: string;
+  statBeltsEarned: string;
+  statStripesMastered: string;
+  statDayStreak: string;
+  statSessions: string;
+  statGradeHint: string;
 }
 
 const en: UiStrings = {
@@ -57,6 +69,22 @@ const en: UiStrings = {
   beltEarned: (beltName) => `🏆 ${beltName} earned! On to the next belt.`,
   continue: "Continue",
   tryAgain: "Try again",
+  muteAria: "Mute sound",
+  unmuteAria: "Unmute sound",
+  gradeTitle: (grade) =>
+    grade === "S"
+      ? "S rank — blazing fast and accurate"
+      : grade === "A"
+        ? "A rank — strong pace"
+        : "B rank — passed",
+  gradeEarned: (grade) => `${grade} Rank earned!`,
+  statsNav: "Stats",
+  statsTitle: "Hall of Fame",
+  statBeltsEarned: "Belts earned",
+  statStripesMastered: "Stripes mastered",
+  statDayStreak: "Day streak",
+  statSessions: "Practice sessions",
+  statGradeHint: "S = blazing fast · A = strong pace · B = passed",
 };
 
 const pt: UiStrings = {
@@ -87,6 +115,22 @@ const pt: UiStrings = {
   beltEarned: (beltName) => `🏆 ${beltName} conquistada! Hora da próxima faixa.`,
   continue: "Continuar",
   tryAgain: "Tentar de novo",
+  muteAria: "Silenciar som",
+  unmuteAria: "Ativar som",
+  gradeTitle: (grade) =>
+    grade === "S"
+      ? "Rank S — muito rápido e preciso"
+      : grade === "A"
+        ? "Rank A — bom ritmo"
+        : "Rank B — aprovado",
+  gradeEarned: (grade) => `Rank ${grade} conquistado!`,
+  statsNav: "Estatísticas",
+  statsTitle: "Hall da Fama",
+  statBeltsEarned: "Faixas conquistadas",
+  statStripesMastered: "Graus dominados",
+  statDayStreak: "Sequência de dias",
+  statSessions: "Sessões de prática",
+  statGradeHint: "S = muito rápido · A = bom ritmo · B = aprovado",
 };
 
 const es: UiStrings = {
@@ -117,6 +161,22 @@ const es: UiStrings = {
   beltEarned: (beltName) => `🏆 ¡${beltName} conseguido! A por el siguiente cinturón.`,
   continue: "Continuar",
   tryAgain: "Intentar de nuevo",
+  muteAria: "Silenciar sonido",
+  unmuteAria: "Activar sonido",
+  gradeTitle: (grade) =>
+    grade === "S"
+      ? "Rango S — muy rápido y preciso"
+      : grade === "A"
+        ? "Rango A — buen ritmo"
+        : "Rango B — aprobado",
+  gradeEarned: (grade) => `¡Rango ${grade} conseguido!`,
+  statsNav: "Estadísticas",
+  statsTitle: "Salón de la Fama",
+  statBeltsEarned: "Cinturones conseguidos",
+  statStripesMastered: "Grados dominados",
+  statDayStreak: "Racha de días",
+  statSessions: "Sesiones de práctica",
+  statGradeHint: "S = muy rápido · A = buen ritmo · B = aprobado",
 };
 
 export const UI_STRINGS: Record<Locale, UiStrings> = { en, pt, es };

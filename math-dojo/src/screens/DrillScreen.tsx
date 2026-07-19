@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { AttemptRecord, Problem, SessionSummary, Stripe } from "../types";
 import { evaluateSession } from "../engine/progress";
+import { isMuted, playCorrect, playIncorrect, playPageComplete, playStreakMilestone, setMuted } from "../engine/sound";
 import { NumPad } from "../components/NumPad";
 import { ProgressBar } from "../components/ProgressBar";
 import { GroupDiagram } from "../components/GroupDiagram";
@@ -39,6 +40,8 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [solvedCount, setSolvedCount] = useState(0);
   const [pageBreak, setPageBreak] = useState<number | null>(null);
+  const [streak, setStreak] = useState(0);
+  const [muted, setMutedFlag] = useState(() => isMuted());
 
   const attemptsRef = useRef<Map<string, AttemptRecord>>(new Map());
   const firstShownAtRef = useRef<Map<string, number>>(new Map());
@@ -107,6 +110,12 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
     setIsNegative((v) => !v);
   }
 
+  function handleToggleMute() {
+    const next = !muted;
+    setMutedFlag(next);
+    setMuted(next);
+  }
+
   function handleSubmit() {
     if (!current || lockRef.current) return;
     if (input === "" || (hasSecondary && secondaryInput === "")) return;
@@ -129,6 +138,17 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
       const isLastProblem = newSolved === totalCount;
       const pageJustCompleted = justFinishedPage && !isLastProblem ? newSolved / problemsPerPage : null;
 
+      const newStreak = streak + 1;
+      setStreak(newStreak);
+      const isStreakMilestone = newStreak === 3 || (newStreak >= 5 && newStreak % 5 === 0);
+      if (pageJustCompleted !== null) {
+        playPageComplete();
+      } else if (isStreakMilestone) {
+        playStreakMilestone();
+      } else {
+        playCorrect();
+      }
+
       window.setTimeout(() => {
         setQueue((q) => q.slice(1));
         setInput("");
@@ -146,6 +166,8 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
     } else {
       record.mistakeCount += 1;
       setFeedback("incorrect");
+      setStreak(0);
+      playIncorrect();
       window.setTimeout(() => {
         setQueue((q) => {
           const [first, ...rest] = q;
@@ -221,6 +243,19 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
         <div className={styles.progressWrap}>
           <ProgressBar value={inPageSolved} max={problemsPerPage} />
         </div>
+        {streak >= 2 && (
+          <span key={streak} className={styles.streakBadge}>
+            🔥 {streak}
+          </span>
+        )}
+        <button
+          type="button"
+          className={styles.muteBtn}
+          onClick={handleToggleMute}
+          aria-label={muted ? t.unmuteAria : t.muteAria}
+        >
+          {muted ? "🔇" : "🔊"}
+        </button>
         <span className={styles.count}>{t.pageLabel(currentPageNumber, pagesToMaster)}</span>
       </div>
 

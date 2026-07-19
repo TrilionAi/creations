@@ -119,6 +119,10 @@ export interface StripeResult {
 
 export interface ProgressState {
   stripeResults: Record<string, StripeResult>;
+  /** ISO "YYYY-MM-DD" dates (local time), one per day a drill session was completed —
+   * deduped, used to compute the daily practice streak on the stats screen. Optional
+   * for backward compatibility with progress saved before this field existed. */
+  practiceDays?: string[];
 }
 
 export interface AttemptRecord {

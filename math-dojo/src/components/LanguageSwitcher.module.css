@@ -9,6 +9,9 @@
 }
 
 .option {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   background: none;
   border: none;
   border-radius: var(--radius-pill);
@@ -17,10 +20,27 @@
   font-weight: 700;
   letter-spacing: 0.02em;
   color: var(--color-ink-soft);
-  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  opacity: 0.6;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+
+.option:hover {
+  opacity: 0.85;
+}
+
+.flag {
+  font-size: 1.05rem;
+  line-height: 1;
 }
 
 .optionActive {
   background: var(--color-primary);
   color: var(--color-primary-ink);
+  opacity: 1;
+  transform: scale(1.04);
+}
+
+.optionActive:hover {
+  opacity: 1;
 }
