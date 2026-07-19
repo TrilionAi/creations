@@ -10,6 +10,7 @@ import { FunctionMachineDiagram } from "../components/FunctionMachineDiagram";
 import { SlopeStaircaseDiagram } from "../components/SlopeStaircaseDiagram";
 import { ParabolaDiagram } from "../components/ParabolaDiagram";
 import { FactorAreaDiagram } from "../components/FactorAreaDiagram";
+import { AreaBarsDiagram } from "../components/AreaBarsDiagram";
 import styles from "./LessonScreen.module.css";
 
 interface LessonScreenProps {
@@ -134,6 +135,7 @@ export function LessonScreen({ stripe, onBack, onStart }: LessonScreenProps) {
             {lesson.diagram.kind === "factorArea" && (
               <FactorAreaDiagram a={lesson.diagram.a} b={lesson.diagram.b} />
             )}
+            {lesson.diagram.kind === "areaBars" && <AreaBarsDiagram heights={lesson.diagram.heights} />}
           </div>
         )}
 

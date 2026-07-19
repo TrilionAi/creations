@@ -1,0 +1,36 @@
+.wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  max-width: 260px;
+  height: 110px;
+  margin: var(--sp-2) auto;
+  padding: 0 var(--sp-2);
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  flex: 1;
+  height: 100%;
+}
+
+.bar {
+  width: 100%;
+  max-width: 28px;
+  min-height: 6px;
+  background: var(--color-secondary);
+  border-radius: 4px 4px 0 0;
+}
+
+.label {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--color-ink-soft);
+  font-variant-numeric: tabular-nums;
+}

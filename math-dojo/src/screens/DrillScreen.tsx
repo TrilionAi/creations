@@ -12,6 +12,7 @@ import { FunctionMachineDiagram } from "../components/FunctionMachineDiagram";
 import { SlopeStaircaseDiagram } from "../components/SlopeStaircaseDiagram";
 import { ParabolaDiagram } from "../components/ParabolaDiagram";
 import { FactorAreaDiagram } from "../components/FactorAreaDiagram";
+import { AreaBarsDiagram } from "../components/AreaBarsDiagram";
 import { useLocale } from "../i18n/LocaleContext";
 import { UI_STRINGS } from "../i18n/ui";
 import styles from "./DrillScreen.module.css";
@@ -273,6 +274,7 @@ export function DrillScreen({ stripe, onComplete, onExit }: DrillScreenProps) {
                   {current.diagram.kind === "factorArea" && (
                     <FactorAreaDiagram a={current.diagram.a} b={current.diagram.b} />
                   )}
+                  {current.diagram.kind === "areaBars" && <AreaBarsDiagram heights={current.diagram.heights} />}
                 </div>
               )}
               <div className={styles.equalsRow}>
