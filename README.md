@@ -3,6 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS-lightgrey)](https://github.com/TrilionAi/creations/releases)
 [![Releases](https://img.shields.io/github/v/release/TrilionAi/creations?label=latest%20release)](https://github.com/TrilionAi/creations/releases)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D0J123HIA2)
 
 A collection of lightweight desktop utilities built for everyday productivity — sticky notes, floating timers, screen annotation, and system monitoring. Each tool is designed to stay out of your way while keeping important info always visible, and ships with automated cross-platform builds (Windows + macOS) via GitHub Actions.
 
@@ -90,6 +91,33 @@ Lightweight system performance monitoring overlay that stays on top of everythin
 
 ---
 
+### [BlockApp](blockapp/)
+
+Block distractions. Build discipline. A focus tool that enforces its own rules with intentional friction, not willpower — block an app, website, or folder for a fixed duration or a recurring weekly schedule, and once confirmed it's locked in until tomorrow.
+
+- **Three block types** — apps (process killed on launch), websites (blocked system-wide via the `hosts` file), folders (OS-level permission denial)
+- **Graduated confirmation** — 2 steps for short blocks, an extra warning + 3 steps for 5h+ blocks
+- **Same-day lock** — no undo until the next calendar day
+- **Anti-impulse lockout** — one wrong master password freezes all changes for 24 hours
+- **Split-process architecture** — a background guardian enforces rules independently of the UI; closing the window doesn't lift a block
+- **Tamper-evident storage** — HMAC-signed rules file with atomic writes and self-healing backup restore
+- **Stack:** Python, Tkinter, psutil, PyInstaller
+
+**Tips:**
+- Needs administrator/elevated privileges to edit the hosts file and reliably terminate processes
+- The Windows build requests elevation automatically via UAC
+- See [blockapp/README.md](blockapp/README.md) for the full engineering write-up
+
+---
+
+## Also Live On the Web
+
+### [Math Dojo](https://playmathdojo.com) · [source](https://github.com/TrilionAi/math-dojo)
+
+A free, belt-ranked math practice game inspired by the Kumon method — earn your way from White Belt (basic addition) to Coral Belt (Calculus I), one small step at a time. 110 stripes across 6 belts, English/Portuguese/Spanish, optional account for syncing progress across devices. No install needed — it's a web app, not a desktop download like the others in this repo, so it now lives in [its own repository](https://github.com/TrilionAi/math-dojo).
+
+---
+
 ## Download
 
 Head to the [Releases](https://github.com/TrilionAi/creations/releases) page and grab the latest version for your platform:
@@ -100,8 +128,11 @@ Head to the [Releases](https://github.com/TrilionAi/creations/releases) page and
 | Float Timer | `.exe` installer | `.dmg` disk image |
 | Universal Editor | `.exe` installer + Chrome `.zip` | Coming soon |
 | Perf Overlay | Portable `.exe` | Coming soon |
+| BlockApp | Portable `.exe` | `.dmg` disk image |
 
 > Just download, install, and run. No setup or configuration needed.
+>
+> Math Dojo isn't in this table — it's a web app, just open [playmathdojo.com](https://playmathdojo.com).
 
 ### Antivirus / False Positive Warning
 
@@ -162,6 +193,7 @@ creations/
 ├── float-timer/         # Python circular timer widget
 ├── universal-editor/    # Python drawing overlay + Chrome extension
 ├── perf-overlay/        # Python system performance monitor
+├── blockapp/            # Python focus/distraction-blocking tool
 ├── .github/workflows/   # CI/CD builds for all apps
 ├── CONTRIBUTING.md      # How to contribute
 └── LICENSE              # MIT License
@@ -172,8 +204,9 @@ creations/
 **Lucas Morosov** — Software Developer
 
 [![GitHub](https://img.shields.io/badge/GitHub-TrilionAi-181717?logo=github)](https://github.com/TrilionAi)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/D0J123HIA2)
 
-Creator and maintainer of all projects in this repository. Designed, built, and tested every app from scratch — from architecture and UI to CI/CD pipelines and cross-platform packaging.
+Creator and maintainer of all projects in this repository. Everything here is free — if one of these tools helped you and you'd like to say thanks, a tip is always welcome, but never the point. Designed, built, and tested every app from scratch — from architecture and UI to CI/CD pipelines and cross-platform packaging.
 
 Development assisted by [Claude Code](https://claude.ai/code) (Anthropic).
 
