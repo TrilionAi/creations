@@ -3144,7 +3144,7 @@ const blackBelt: Belt = {
           },
         ],
       },
-      mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 20 },
+      mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 24 },
       generate: generateMultiStepExpression,
     },
     {
@@ -3603,7 +3603,7 @@ const blackBelt: Belt = {
           },
         ],
       },
-      mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 24 },
+      mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 28 },
       generate: generateMultiStepEquation,
     },
     {
@@ -4118,7 +4118,7 @@ const blackBelt: Belt = {
           },
         ],
       },
-      mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 24 },
+      mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 28 },
       generate: generateCombineFunctions,
     },
     {
@@ -4224,7 +4224,7 @@ const blackBelt: Belt = {
           },
         ],
       },
-      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 16 },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 19 },
       generate: generateFactorTrinomialPair,
     },
     {
@@ -4281,7 +4281,7 @@ const blackBelt: Belt = {
           },
         ],
       },
-      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 18 },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 21 },
       generate: generateSolveQuadraticByFactoring,
     },
     {
@@ -4338,7 +4338,7 @@ const blackBelt: Belt = {
           },
         ],
       },
-      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 20 },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 26 },
       generate: generateQuadraticFormula,
     },
     {
@@ -4492,7 +4492,7 @@ const blackBelt: Belt = {
           },
         ],
       },
-      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 16 },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 18 },
       generate: generateSimplifyRadical,
     },
     {
@@ -4593,7 +4593,7 @@ const blackBelt: Belt = {
           },
         ],
       },
-      mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 20 },
+      mastery: { problemsPerPage: 12, pagesToMaster: 9, passAccuracy: 0.8, targetTimeSec: 23 },
       generate: generateLinearSystem,
     },
     {
@@ -4650,7 +4650,7 @@ const blackBelt: Belt = {
           },
         ],
       },
-      mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 24 },
+      mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 30 },
       generate: generateRearrangeFactorSolve,
     },
   ],
@@ -4803,7 +4803,7 @@ const coralBelt: Belt = {
           },
         ],
       },
-      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 18 },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 21 },
       generate: generateLimitFactoring,
     },
     {
@@ -4948,7 +4948,7 @@ const coralBelt: Belt = {
           },
         ],
       },
-      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 18 },
+      mastery: { problemsPerPage: 12, pagesToMaster: 8, passAccuracy: 0.8, targetTimeSec: 20 },
       generate: generateDerivativeAtPoint,
     },
     {
@@ -5146,7 +5146,7 @@ const coralBelt: Belt = {
           },
         ],
       },
-      mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 26 },
+      mastery: { problemsPerPage: 12, pagesToMaster: 10, passAccuracy: 0.8, targetTimeSec: 36 },
       generate: generateCalculusCapstone,
     },
   ],
