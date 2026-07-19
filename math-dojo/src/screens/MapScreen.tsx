@@ -1,5 +1,6 @@
 import type { Belt, ProgressState, Stripe, StripeDegree } from "../types";
 import { isStripeUnlocked } from "../engine/progress";
+import { computeGrade } from "../engine/grading";
 import { BeltStrip } from "../components/BeltStrip";
 import { LanguageSwitcher } from "../components/LanguageSwitcher";
 import { useLocale } from "../i18n/LocaleContext";
@@ -10,6 +11,7 @@ interface MapScreenProps {
   belts: Belt[];
   progress: ProgressState;
   onSelectStripe: (stripeId: string) => void;
+  onOpenStats: () => void;
 }
 
 interface StripeGroup {
@@ -32,13 +34,16 @@ function groupByDegree(stripes: Stripe[]): StripeGroup[] {
   return groups;
 }
 
-export function MapScreen({ belts, progress, onSelectStripe }: MapScreenProps) {
+export function MapScreen({ belts, progress, onSelectStripe, onOpenStats }: MapScreenProps) {
   const { locale } = useLocale();
   const t = UI_STRINGS[locale];
 
   return (
     <div className={styles.page}>
       <div className={styles.langRow}>
+        <button type="button" className={styles.statsBtn} onClick={onOpenStats}>
+          🏆 {t.statsNav}
+        </button>
         <LanguageSwitcher />
       </div>
 
@@ -75,7 +80,9 @@ export function MapScreen({ belts, progress, onSelectStripe }: MapScreenProps) {
                     <div className={styles.stripeRow}>
                       {group.stripes.map((stripe) => {
                         const unlocked = isStripeUnlocked(stripe, belts, progress);
-                        const passed = progress.stripeResults[stripe.id]?.passed ?? false;
+                        const result = progress.stripeResults[stripe.id];
+                        const passed = result?.passed ?? false;
+                        const grade = computeGrade(stripe, result);
                         return (
                           <button
                             key={stripe.id}
@@ -88,7 +95,19 @@ export function MapScreen({ belts, progress, onSelectStripe }: MapScreenProps) {
                               unlocked && !passed ? styles.stripeCurrent : "",
                             ].join(" ")}
                           >
-                            {passed ? "✓" : unlocked ? "" : "🔒"} {stripe.index}. {stripe.title[locale]}
+                            {grade ? (
+                              <span
+                                className={[styles.gradeBadge, styles[`grade${grade}`]].join(" ")}
+                                title={t.gradeTitle(grade)}
+                              >
+                                {grade}
+                              </span>
+                            ) : unlocked ? (
+                              ""
+                            ) : (
+                              "🔒"
+                            )}{" "}
+                            {stripe.index}. {stripe.title[locale]}
                           </button>
                         );
                       })}

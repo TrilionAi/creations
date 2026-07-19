@@ -5,12 +5,39 @@ const STORAGE_KEY = "math-dojo:progress:v1";
 export function loadProgress(): ProgressState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { stripeResults: {} };
+    if (!raw) return { stripeResults: {}, practiceDays: [] };
     const parsed = JSON.parse(raw) as ProgressState;
-    return parsed.stripeResults ? parsed : { stripeResults: {} };
+    if (!parsed.stripeResults) return { stripeResults: {}, practiceDays: [] };
+    return { ...parsed, practiceDays: parsed.practiceDays ?? [] };
   } catch {
-    return { stripeResults: {} };
+    return { stripeResults: {}, practiceDays: [] };
   }
+}
+
+function dateToIso(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+/** Consecutive-day practice streak ending today (or ending yesterday if today's
+ * session hasn't happened yet, so the streak doesn't drop to 0 before the person
+ * has had a chance to practice). */
+export function computeDayStreak(practiceDays: string[] | undefined): number {
+  if (!practiceDays || practiceDays.length === 0) return 0;
+  const days = new Set(practiceDays);
+  const cursor = new Date();
+  if (!days.has(dateToIso(cursor))) {
+    cursor.setDate(cursor.getDate() - 1);
+    if (!days.has(dateToIso(cursor))) return 0;
+  }
+  let streak = 0;
+  while (days.has(dateToIso(cursor))) {
+    streak += 1;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  return streak;
 }
 
 export function saveProgress(progress: ProgressState): void {
@@ -63,8 +90,13 @@ export function recordSessionResult(progress: ProgressState, summary: SessionSum
         : summary.avgTimeSec,
     attempts: (existing?.attempts ?? 0) + 1,
   };
+  const today = dateToIso(new Date());
+  const practiceDays = progress.practiceDays?.includes(today)
+    ? progress.practiceDays
+    : [...(progress.practiceDays ?? []), today];
   const next: ProgressState = {
     stripeResults: { ...progress.stripeResults, [summary.stripe.id]: nextResult },
+    practiceDays,
   };
   saveProgress(next);
   return next;
