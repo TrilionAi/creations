@@ -145,4 +145,6 @@ Development assisted by [Claude Code](https://claude.ai/code) (Anthropic).
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT — see the [LICENSE](LICENSE) file for details. Free to use, fork, and build on, commercially or not.
+
+If you do build something on top of one of these, a credit is appreciated. It isn't required and the licence doesn't ask for it — it's just good to know where a thing ended up.
