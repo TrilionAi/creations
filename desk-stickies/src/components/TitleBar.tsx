@@ -49,20 +49,14 @@ export default function TitleBar({ id, title, isPinned, isShaded, onTitleChange,
   return (
     <div className={`titlebar ${isShaded ? 'shaded' : ''}`} data-tauri-drag-region>
       <div className="titlebar-left">{children}</div>
+      {/* All styling lives in .titlebar-title — an inline `font: inherit`
+          here silently overrode the CSS and the title rendered as plain
+          body text instead of a heading. */}
       <input
         className="titlebar-title"
         value={title}
         onChange={(e) => onTitleChange(e.target.value)}
         placeholder="Untitled"
-        style={{
-          border: 'none',
-          background: 'transparent',
-          outline: 'none',
-          color: 'inherit',
-          font: 'inherit',
-          width: '100%',
-          cursor: 'text',
-        }}
         data-tauri-drag-region="false"
       />
       <div className="titlebar-buttons">

@@ -40,17 +40,18 @@ pub fn setup_tray(app: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
                         let _ = window.show();
                         let _ = window.unminimize();
                         let _ = window.set_focus();
-                    } else {
-                        let _ = tauri::WebviewWindowBuilder::new(
-                            app,
-                            "hub",
-                            tauri::WebviewUrl::App("index.html".into()),
-                        )
-                        .title("Desk Stickies — Notes & Trash")
-                        .inner_size(400.0, 560.0)
-                        .min_inner_size(320.0, 400.0)
-                        .center()
-                        .build();
+                    } else if let Ok(window) = tauri::WebviewWindowBuilder::new(
+                        app,
+                        "hub",
+                        tauri::WebviewUrl::App("index.html".into()),
+                    )
+                    .title("Desk Stickies — Notes & Trash")
+                    .inner_size(400.0, 560.0)
+                    .min_inner_size(320.0, 400.0)
+                    .center()
+                    .build()
+                    {
+                        crate::shutdown::install(&window);
                     }
                 }
                 "show_all" => {

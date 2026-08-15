@@ -735,7 +735,7 @@ dependencies = [
 
 [[package]]
 name = "desk-stickies"
-version = "1.2.2"
+version = "1.2.3"
 dependencies = [
  "serde",
  "serde_json",
@@ -747,6 +747,7 @@ dependencies = [
  "tauri-plugin-sql",
  "uuid",
  "window-vibrancy 0.7.1",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]

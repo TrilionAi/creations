@@ -66,10 +66,14 @@
 }
 .titlebar:active { cursor: grabbing; }
 
+/* Reads as a heading: clearly bigger and heavier than the 13.5px body text */
 .titlebar-title {
-  flex: 1; font-size: 12.5px; font-weight: 600; opacity: 1; padding: 0 6px; letter-spacing: 0.02em;
+  flex: 1; min-width: 0; font-size: 15px; font-weight: 700; opacity: 1; padding: 0 6px;
+  letter-spacing: -0.01em;
+  font-family: inherit;
   color: var(--paper-text, #2c2c2c);
   background: transparent; border: none; outline: none;
+  cursor: text;
 }
 .titlebar-title::placeholder {
   color: var(--paper-text-placeholder, rgba(0, 0, 0, 0.3));

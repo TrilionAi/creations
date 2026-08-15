@@ -1,5 +1,6 @@
 mod commands;
 mod database;
+mod shutdown;
 mod tray;
 mod vibrancy;
 mod windows;
@@ -29,7 +30,7 @@ pub fn run() {
         ])
         .setup(|app| {
             // Create the hidden manager window
-            let _manager_window = tauri::WebviewWindowBuilder::new(
+            let manager_window = tauri::WebviewWindowBuilder::new(
                 app,
                 "manager",
                 tauri::WebviewUrl::App("index.html".into()),
@@ -37,6 +38,7 @@ pub fn run() {
             .title("Manager")
             .visible(false)
             .build()?;
+            shutdown::install(&manager_window);
 
             // Setup system tray
             tray::setup_tray(app.handle())?;

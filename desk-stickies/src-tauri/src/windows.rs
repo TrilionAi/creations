@@ -10,7 +10,7 @@ pub fn create_postit_window(
 ) -> Result<(), String> {
     let label = format!("postit-{}", id);
 
-    WebviewWindowBuilder::new(app, &label, WebviewUrl::App("index.html".into()))
+    let window = WebviewWindowBuilder::new(app, &label, WebviewUrl::App("index.html".into()))
         .title("Post-it")
         .inner_size(width, height)
         .position(x, y)
@@ -24,6 +24,7 @@ pub fn create_postit_window(
         .skip_taskbar(true)
         .build()
         .map_err(|e| e.to_string())?;
+    crate::shutdown::install(&window);
 
     Ok(())
 }
